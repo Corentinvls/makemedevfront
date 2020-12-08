@@ -27,18 +27,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignUp(props) {
+export default function SignIn(props) {
     const classes = useStyles();
-
+    const {open, onClose, toggleSignDialogs} = props;
     return (
         <Dialog
             style={{textAlign: 'center'}}
-            open={props.open}
-            onClose={props.onClose}
+            open={open}
+            onClose={onClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description">
             <DialogTitle id="simple-dialog-title" col={12}>
-                <Typography variant={"h2"}>Sign up</Typography>
+                <Typography variant={"h2"}>Sign In</Typography>
             </DialogTitle>
             <DialogContent>
                 <form className={classes.form} noValidate>
@@ -51,21 +51,11 @@ export default function SignUp(props) {
                                 required
                                 fullWidth
                                 id="username"
-                                label="User Name"
+                                label="User Name or Email"
                                 autoFocus
                             />
                         </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
-                            />
-                        </Grid>
+
                         <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
@@ -86,12 +76,12 @@ export default function SignUp(props) {
                         color="primary"
                         className={classes.submit}
                     >
-                        Sign Up
+                        Sign In
                     </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
-                            <Link onClick={props.toggleSignDialogs} variant="body2">
-                                Already have an account? Sign in
+                            <Link onClick={toggleSignDialogs} variant="body2">
+                                No account? Sign Up
                             </Link>
                         </Grid>
                     </Grid>

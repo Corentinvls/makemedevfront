@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
 import {ThemeProvider} from '@material-ui/core/styles';
-import mainTheme from "./style/MainTheme";
+import mainTheme from "./assets/style/MainTheme";
 
 
 function App() {

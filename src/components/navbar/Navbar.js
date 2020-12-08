@@ -11,8 +11,9 @@ import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import {Link} from "react-router-dom";
-import {ReactComponent as BrandName} from "../../title.svg"
+import {ReactComponent as BrandName} from "../../assets/image/title.svg"
 import SignUp from "../register/SignUp";
+import SignIn from "../register/SignIn";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -77,6 +78,7 @@ export default function Navbar(props) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [displaySignUp, setDisplaySignUp] = React.useState(false);
+    const [displaySignIn, setDisplaySignIn] = React.useState(false);
 
     const isMenuOpen = Boolean(anchorEl);
 
@@ -86,8 +88,21 @@ export default function Navbar(props) {
 
     const handleMenuClose = () => {
         setAnchorEl(null);
+    }
+
+    const handleSignIn = () => {
+        setDisplaySignIn(!displaySignIn);
+        setAnchorEl(null);
+    }
+    const handleSignUp = () => {
+        setDisplaySignUp (!displaySignUp);
+        setAnchorEl(null);
     };
 
+    const toggleSignDialogs = () => {
+        setDisplaySignUp(!displaySignUp);
+        setDisplaySignIn(!displaySignIn);
+    }
 
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
@@ -101,12 +116,14 @@ export default function Navbar(props) {
             onClose={handleMenuClose}
         >
             {props.isLog ?
-            <><MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-                <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-            </>:
-                <><MenuItem onClick={handleMenuClose}>Log in</MenuItem>
-                    <MenuItem onClick={()=>setDisplaySignUp(true)}>Sign in</MenuItem>
-                </>
+                [<MenuItem onClick={handleMenuClose}>Profile</MenuItem>,
+                    <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+                ]
+                :
+                [<MenuItem onClick={handleSignIn}>Sign in</MenuItem>,
+                    <MenuItem onClick={handleSignUp}>Sign Up</MenuItem>
+                ]
+
             }
 
         </Menu>
@@ -157,7 +174,10 @@ export default function Navbar(props) {
                 </Toolbar>
             </AppBar>
             {renderMenu}
-            {displaySignUp && <SignUp/>}
+            <SignUp open={displaySignUp} onClose={handleSignUp}
+                    toggleSignDialogs={toggleSignDialogs}/>
+            <SignIn open={displaySignIn} onClose={handleSignIn}
+                    toggleSignDialogs={toggleSignDialogs}/>
         </div>
     );
 }

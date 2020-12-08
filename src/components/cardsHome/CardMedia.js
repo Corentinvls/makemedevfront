@@ -38,7 +38,7 @@ const {title,description,buttonLabel,link,image}=props
             </CardActionArea>
             <CardActions>
                 <Button size="small" color="primary">
-                    Learn More
+                    {buttonLabel}
                 </Button>
             </CardActions>
         </Card>

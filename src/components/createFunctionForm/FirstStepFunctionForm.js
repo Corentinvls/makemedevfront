@@ -5,9 +5,6 @@ import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
 import CustomDraft from "../../utils/components/CustomDraft";
 import ChipInput from 'material-ui-chip-input'
-import BackspaceIcon from '@material-ui/icons/Backspace';
-import IconButton from "@material-ui/core/IconButton";
-
 
 const useStyles = makeStyles((theme) => ({
     paper: {

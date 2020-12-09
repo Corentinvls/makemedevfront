@@ -3,10 +3,6 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
-import CustomDraft from "./CustomDraft";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import InputLabel from "@material-ui/core/InputLabel";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import {Button} from "@material-ui/core";
 

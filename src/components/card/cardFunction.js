@@ -4,30 +4,25 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Typography from '@material-ui/core/Typography';
 import CommentIcon from '@material-ui/icons/Comment';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
-import Paper from "@material-ui/core/Paper";
 import generateChipsLink from "../../utils/generateChipsLink";
 import generateChipsTooltip from "../../utils/generateChipsTooltip";
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import responsiveFontSizes from "@material-ui/core/styles/responsiveFontSizes";
 
 
 const tags = [
 "js ","php ","react"
 ];
 
-const props = [
-    "Bob", 4, "split"
-]
-
-
 const useStyles = makeStyles((theme) => ({
     root: {
         minWidth: 345,
-        maxWidth: 645,
+        maxWidth: 445,
         borderRadius: 20,
 
     },
@@ -50,11 +45,30 @@ const useStyles = makeStyles((theme) => ({
         borderBottom:"solid",
         borderBottomWidth:1,
     },
-    inline:{
+    row:{
         display:"flex",
-        justifyContent:"space-around"
+        alignItems:"center",
+        justifyContent: "space-around"
+    },
+    rowContain:{
+        display:"flex",
+        justifyContent: "space-between"
+    },
+    alignLeft:{
+        textAlign: "left",
+        wordBreak: "break-all"
+    },
+    contentPL:{
+        textAlign: "left",
+        wordBreak: "break-all",
+        paddingLeft : '10%'
     }
 }));
+
+let themeFont = createMuiTheme();
+
+themeFont = responsiveFontSizes(themeFont);
+
 
 export default function RecipeReviewCard() {
     const classes = useStyles();
@@ -84,9 +98,40 @@ export default function RecipeReviewCard() {
     },{
         name: "Bob",
         type: "string",
-        description: "zaeazeaea",
+        description: "Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.Praesent non nunc mollis, fermentum neque at, semper arcu.Nullam eget est sed sem iaculis gravida eget vitae justo",
         defaultValue: "null"
     }];
+
+    const post = [
+        {
+            "id": "",
+            "description": "Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.Praesent non nunc mollis, fermentum neque at, semper arcu.Nullam eget est sed sem iaculis gravida eget vitae justo",
+            "author": {
+                "pseudo": "",
+                "avatar": "",
+                "creationDate": ""
+            },
+            "function": "Ma function",
+            "like": 0,
+            "dislike": 0,
+            "commentary": [
+                {
+                    "pseudo": "",
+                    "commentary": "",
+                    "date": ""
+                }
+            ]
+        }
+    ]
+
+    function getChipToolTip(array) {
+        return <>
+            {generateChipsTooltip(array).map((component, index) => {
+                return <span key={index}> {index === 0 ? null : ','} {component} </span>
+            })}
+        </>;
+    }
+
     return (
 
         <Card className={classes.root} elevation={2}>
@@ -96,27 +141,39 @@ export default function RecipeReviewCard() {
                 subheader={generateChipsLink(tags)}
             />
             <CardContent>
-                <Typography variant="h4">
-                    ({generateChipsTooltip(params)}){accoladeOpen}
-                </Typography>
-                <Typography variant="h4">
-                    return {generateChipsTooltip(returnvalue)} {accoladeClose};
-                </Typography>
+                <h4 className={classes.alignLeft}>
+                    {post[0].function}({getChipToolTip(params)}){accoladeOpen}
+                </h4>
+                <p className={classes.contentPL}>
+                    {post[0].description}
+                </p>
+                <h4 className={classes.contentPL}>
+                    return {getChipToolTip(returnvalue)} {accoladeClose};
+                </h4>
             </CardContent>
-            <CardContent className={classes.inline}>
+            <CardContent className={classes.rowContain}>
+                <CardContent className={classes.row}>
                 <Icon aria-label="Comment">
-                    <CommentIcon />
+                    <CommentIcon/>
                 </Icon>
+                <p>
+                    {post[0].like}
+                </p>
                 <Icon aria-label="UpVote">
-                    <ThumbUpIcon />
+                    <ThumbUpIcon/>
                 </Icon>
+                <p>
+                    {post[0].dislike}
+                </p>
                 <Icon aria-label="DownVote">
-                    <ThumbDownIcon />
+                    <ThumbDownIcon/>
                 </Icon>
+                </CardContent>
                 <CardActions>
                     <Button size="small">Learn More</Button>
                 </CardActions>
             </CardContent>
+
         </Card>
     );
 }

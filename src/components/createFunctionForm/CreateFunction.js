@@ -11,6 +11,7 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import FirstStepFunctionForm from "./FirstStepFunctionForm";
+import SecondStepFunctionForm from "./SecondStepFunctionForm";
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -56,7 +57,7 @@ function getStepContent(step) {
         case 0:
             return <FirstStepFunctionForm/>;
         case 1:
-            return <p>enchate</p>;
+            return <SecondStepFunctionForm/>;
         case 2:
             return <p>tu pars?</p>;
         case 3:

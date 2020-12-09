@@ -12,6 +12,7 @@ import Card from "./components/cards/cardFunction/cardFunction"
 import {ThemeProvider} from '@material-ui/core/styles';
 import mainTheme from "./assets/style/MainTheme";
 import Home from "./View/Home";
+import CreateFunctionView from "./View/CreateFunctionView";
 
 
 function App() {
@@ -25,12 +26,12 @@ function App() {
                             <About/>
                             <Card/>
                         </Route>
-                        <Route path="/">
-                            <Home/>
-                        </Route>
                         <Route path="/create">
-                            <Home/>
+                            <CreateFunctionView/>
                         </Route>
+                        <Route path="/">
+                        <Home/>
+                    </Route>
                     </Switch>
                 </div>
             </ThemeProvider>

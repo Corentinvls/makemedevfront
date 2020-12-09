@@ -28,6 +28,9 @@ function App() {
                         <Route path="/">
                             <Home/>
                         </Route>
+                        <Route path="/create">
+                            <Home/>
+                        </Route>
                     </Switch>
                 </div>
             </ThemeProvider>

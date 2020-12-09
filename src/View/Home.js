@@ -3,7 +3,7 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import SignUp from "../components/register/SignUp";
 import SignIn from "../components/register/SignIn";
-import MediaCard from "../components/cardsHome/CardMedia";
+import MediaCard from "../components/cards/cardsHome/CardMedia";
 
 export default function Home() {
     const [displaySignUp, setDisplaySignUp] = React.useState(false);

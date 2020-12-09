@@ -8,7 +8,7 @@ import {
     Link
 } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
-import Card from "./components/card/cardFunction"
+import Card from "./components/cards/cardFunction/cardFunction"
 import {ThemeProvider} from '@material-ui/core/styles';
 import mainTheme from "./assets/style/MainTheme";
 import Home from "./View/Home";
@@ -28,9 +28,7 @@ function App() {
                         <Route path="/">
                             <Home/>
                         </Route>
-
                     </Switch>
-
                 </div>
             </ThemeProvider>
         </Router>

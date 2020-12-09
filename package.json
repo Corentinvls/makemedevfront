@@ -28,7 +28,9 @@
     "react-start": "BROWSER=none react-scripts start",
     "pack": "build --dir",
     "dist": "npm run build && build",
-    "postinstall": "install-app-deps"
+    "postinstall": "install-app-deps",
+    "storybook": "start-storybook -p 6006 -s public --no-dll",
+    "build-storybook": "build-storybook -s public --no-dll"
   },
   "eslintConfig": {
     "extends": [
@@ -49,8 +51,17 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.12.9",
     "@material-ui/icons": "^4.11.2",
+    "@storybook/addon-actions": "^6.1.10",
+    "@storybook/addon-essentials": "^6.1.10",
+    "@storybook/addon-links": "^6.1.10",
+    "@storybook/node-logger": "^6.1.10",
+    "@storybook/preset-create-react-app": "^3.1.5",
+    "@storybook/react": "^6.1.10",
+    "babel-loader": "^8.2.2",
     "electron-builder": "^22.9.1",
+    "react-is": "^17.0.1",
     "react-router-dom": "^5.2.0"
   },
   "build": {

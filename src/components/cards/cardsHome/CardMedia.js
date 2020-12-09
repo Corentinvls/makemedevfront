@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -20,24 +20,24 @@ const useStyles = makeStyles({
 
 export default function MediaCard(props) {
     const classes = useStyles();
-const {title,description,buttonLabel,link,image,children}=props
+    const {title, description, buttonLabel, link, image, children} = props
     return (
         <Card className={classes.root}>
-                {image &&
-                <CardMedia
-                    className={classes.media}
-                    image={image}
-                />
-                }
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        {title}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        {description}
-                        {children}
-                    </Typography>
-                </CardContent>
+            {image &&
+            <CardMedia
+                className={classes.media}
+                image={image}
+            />
+            }
+            <CardContent>
+                <Typography gutterBottom variant="h5" component="h2">
+                    {title}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                    {description}
+                    {children}
+                </Typography>
+            </CardContent>
             <CardActions>
                 <Grid
                     container

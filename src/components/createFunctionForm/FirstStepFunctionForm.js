@@ -44,7 +44,7 @@ export default function FirstStepFunctionForm(props) {
                     </Grid>
                     <Grid item xs={12}>
                         <ChipInput
-                            value={tags}
+                            defaultValue={tags}
                             name="tags"
                             required
                             variant="outlined"

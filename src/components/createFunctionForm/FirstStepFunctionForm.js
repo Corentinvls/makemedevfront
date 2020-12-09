@@ -3,7 +3,10 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
-import CustomDraft from "./CustomDraft";
+import CustomDraft from "../../utils/components/CustomDraft";
+import ChipInput from 'material-ui-chip-input'
+import BackspaceIcon from '@material-ui/icons/Backspace';
+import IconButton from "@material-ui/core/IconButton";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -25,6 +28,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FirstStepFunctionForm(props) {
     const classes = useStyles();
+    const [tags,setTags]=React.useState([]);
+
     return (
         <>
             <form className={classes.form} noValidate>
@@ -41,13 +46,19 @@ export default function FirstStepFunctionForm(props) {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField
-                            variant="outlined"
+                        <ChipInput
+                            value={tags}
+                            name="tags"
                             required
+                            variant="outlined"
                             fullWidth
                             id="tags"
                             label="Tags"
-                            name="tags"
+                            newChipKeyCodes={[13,32,10]}
+                            newChipKeys={[",",";"]}
+                            onChange={(chips)=> {
+                                setTags(chips)
+                            }}
                         />
                     </Grid>
                     <Grid item xs={12}>

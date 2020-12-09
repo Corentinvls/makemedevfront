@@ -8,6 +8,7 @@ import {
     Link
 } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
+import Card from "./components/card/cardFunction"
 import {ThemeProvider} from '@material-ui/core/styles';
 import mainTheme from "./assets/style/MainTheme";
 import Home from "./View/Home";
@@ -22,6 +23,7 @@ function App() {
                     <Switch>
                         <Route path="/about">
                             <About/>
+                            <Card/>
                         </Route>
                         <Route path="/">
                             <Home/>

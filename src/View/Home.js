@@ -3,6 +3,7 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import SignUp from "../components/register/SignUp";
 import SignIn from "../components/register/SignIn";
+import MediaCard from "../components/cardsHome/CardMedia";
 
 export default function Home() {
     const [displaySignUp, setDisplaySignUp] = React.useState(false);
@@ -13,7 +14,7 @@ export default function Home() {
     }
     const bigTitle = "We <3 people who share code"
     return (
-        <header className="App-header">
+        <><header className="App-header">
             <h1>{bigTitle}</h1>
             <h3>We build for you a solution to share optimized code <br/>
                 and connect with a community of passionate developers<br/>
@@ -27,6 +28,12 @@ export default function Home() {
             <SignIn open={displaySignIn} onClose={()=>setDisplaySignIn(!displaySignIn)}
                     toggleSignDialogs={toggleSignDialogs}/>
         </header>
+        <section>
+            <MediaCard title={"TEST"} buttonLabel={"buttonTest"} image={"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fthumbs.dreamstime.com%2Ft%2Fmaterial-design-background-mountain-landscape-vector-blue-illustration-92941969.jpg&f=1&nofb=1"}>
+                test
+            </MediaCard>
+        </section>
+        </>
         
 
     )

@@ -11,8 +11,6 @@ import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import generateChipsLink from "../../../utils/generateChipsLink";
 import generateChipsTooltip from "../../../utils/generateChipsTooltip";
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
-import responsiveFontSizes from "@material-ui/core/styles/responsiveFontSizes";
 
 
 const tags = [
@@ -65,9 +63,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-let themeFont = createMuiTheme();
 
-themeFont = responsiveFontSizes(themeFont);
 
 
 export default function RecipeReviewCard() {

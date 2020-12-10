@@ -6,8 +6,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import {Button} from "@material-ui/core";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import generateChipsTooltipEditable from "../../utils/generateChipsTooltipEditable";
 import GenerateChipsTooltipEditable from "../../utils/generateChipsTooltipEditable";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SecondStepFunctionForm(props) {
     const classes = useStyles();
     const type = [
+        '',
         'String',
         'Number',
         'Boolean',
@@ -45,11 +46,15 @@ export default function SecondStepFunctionForm(props) {
         'Other',
     ];
 
-    function useInput(initialValue) {
+    function useInput(initialValue,stateSaver) {
         const [value, setValue] = React.useState(initialValue);
 
         function handleChange(e) {
             setValue(e.target.value);
+            if(stateSaver){
+                 stateSaver()
+            }
+
         }
 
         function resetValue() {
@@ -64,16 +69,28 @@ export default function SecondStepFunctionForm(props) {
     const [paramsDescription, handleParamsDescription, resetParamsDescription, setParamsDescription] = useInput('');
     const [paramsType, setParamsType] = React.useState('');
     const [paramsDefaultValue, handleParamsDefaultValue, resetParamsDefaultValue, setParamsDefaultValue] = useInput('');
-
-    const [returnValue, setReturnValue] = React.useState([]);
     const [paramsIndex, setParamsIndex] = React.useState(0);
-    const [returnValueIndex, setReturnValueIndex] = React.useState(0);
+    const [showParamsChips, setShowParamsChips] = React.useState(false);
+
+    const [returnValue, setReturnValue] = React.useState({name: "", type: "", defaultValue: "", description: ""});
+    const [returnValueName, handleReturnValueName] = useInput('',()=>updateReturnValue());
+    const [returnValueDescription, handleReturnValueDescription] = useInput('',()=>updateReturnValue());
+    const [returnValueType, setReturnValueType] = React.useState('');
+    const [returnValueDefaultValue, handleReturnValueDefaultValue] = useInput('',()=>updateReturnValue());
+
     let [, setState] = React.useState();
 
     function handleDelete(index) {
         params.splice(index, 1)
         setParams(params);
         setState({});
+    }
+
+    function resetParams() {
+        resetParamsName()
+        resetParamsDescription()
+        resetParamsDefaultValue()
+        setParamsType("")
     }
 
     function updateParams() {
@@ -84,12 +101,21 @@ export default function SecondStepFunctionForm(props) {
             description: paramsDescription
         });
         setParams(params)
-        resetParamsName()
-        resetParamsDescription()
-        resetParamsDefaultValue()
-        setParamsType("")
+        resetParams()
         setParamsIndex(params.length)
+        setShowParamsChips(true)
         setState({});
+    }
+
+     function updateReturnValue() {
+        let returnValue = {
+            name:returnValueName,
+            description:returnValueDescription,
+            type:returnValueType,
+            defaultValue:returnValueDefaultValue
+
+        };
+        setReturnValue(returnValue);
     }
 
     function reEditParams(index) {
@@ -106,15 +132,20 @@ export default function SecondStepFunctionForm(props) {
                 <h2>Params</h2>
 
                 <Grid container spacing={2}>
-                    <Grid item xs={12} spacing={2}>
+
+                    {showParamsChips &&
+                    <Grid container direction="row"
+                          justify="flex-start"
+                          alignItems="center" spacing={1} >
                         <GenerateChipsTooltipEditable id={"chips"} chips={params} handleDelete={handleDelete}
                                                       handleClick={reEditParams}/>
                     </Grid>
+                    }
+
                     <Grid item xs={4}>
                         <TextField
                             name="params"
                             variant="outlined"
-                            required
                             fullWidth
                             label="Name"
                             autoFocus
@@ -127,12 +158,12 @@ export default function SecondStepFunctionForm(props) {
                             options={type}
                             getOptionLabel={(option) => option}
                             getOptionSelected={(option, value) => option === value}
-                            value={paramsType}
                             renderInput={(params) =>
                                 <TextField {...params} label="Type *" variant="outlined"/>}
                             onChange={(event, value) => {
                                 setParamsType(value)
                             }}
+                            value={paramsType}
                         />
                     </Grid>
                     <Grid item xs={4}>
@@ -149,7 +180,6 @@ export default function SecondStepFunctionForm(props) {
                         <TextField
                             variant="outlined"
                             fullWidth
-                            required
                             multiline
                             rows={4}
                             label="Description"
@@ -167,12 +197,14 @@ export default function SecondStepFunctionForm(props) {
                             size="small"
                             className={classes.button}
                             startIcon={<AddCircleIcon/>}
-                            sub
                             onClick={updateParams}
                         >
-                            Save
+                            Add
                         </Button>
                     </Grid>
+                    <FormHelperText>
+                    Don't forget to click on ADD if you want to save the params
+                </FormHelperText>
                 </Grid>
             </form>
             <h2>Return value</h2>
@@ -181,9 +213,10 @@ export default function SecondStepFunctionForm(props) {
                     <TextField
                         name="name"
                         variant="outlined"
-                        required
                         fullWidth
                         label="Name"
+                        value={returnValueName}
+                        onChange={handleReturnValueName}
                     />
                 </Grid>
                 <Grid item xs={4}>
@@ -191,15 +224,21 @@ export default function SecondStepFunctionForm(props) {
                         options={type}
                         getOptionLabel={(option) => option}
                         renderInput={(params) => <TextField {...params} label="Type *" variant="outlined"/>}
+                        onChange={(event, value) => {
+                            setReturnValueType(value)
+                            updateReturnValue()
+                        }}
+                        value={returnValueType}
                     />
                 </Grid>
                 <Grid item xs={4}>
                     <TextField
                         variant="outlined"
                         fullWidth
-
                         label="Default value"
                         name="dafaultValue"
+                        value={returnValueDefaultValue}
+                        onChange={handleReturnValueDefaultValue}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -209,11 +248,15 @@ export default function SecondStepFunctionForm(props) {
                         required
                         multiline
                         rows={4}
-
                         label="Description"
                         name="description"
+                        value={returnValueDescription}
+                        onChange={handleReturnValueDescription}
                     />
                 </Grid>
+                <FormHelperText>
+                    Only one RETURN value if your return is ok click NEXT
+                </FormHelperText>
             </Grid>
         </>
     );

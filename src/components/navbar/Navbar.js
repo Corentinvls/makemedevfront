@@ -116,12 +116,12 @@ export default function Navbar(props) {
             onClose={handleMenuClose}
         >
             {props.isLog ?
-                [<MenuItem onClick={handleMenuClose}>Profile</MenuItem>,
-                    <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+                [<MenuItem key={"profile"} onClick={handleMenuClose}>Profile</MenuItem>,
+                    <MenuItem key={"account"} onClick={handleMenuClose}>My account</MenuItem>
                 ]
                 :
-                [<MenuItem onClick={handleSignIn}>Sign in</MenuItem>,
-                    <MenuItem onClick={handleSignUp}>Sign Up</MenuItem>
+                [<MenuItem key={"log"} onClick={handleSignIn}>Log in</MenuItem>,
+                    <MenuItem  key={"Sign"} onClick={handleSignUp}>Sign Up</MenuItem>
                 ]
 
             }

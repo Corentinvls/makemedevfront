@@ -50,46 +50,103 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const steps = ['What is your function','What are your params and return value', 'Is it ok ?'];
 
-function getStepContent(step) {
-    switch (step) {
-        case 0:
-            return <FirstStepFunctionForm/>;
-        case 1:
-            return <SecondStepFunctionForm/>;
-        case 2:
-            return <p>tu pars?</p>;
-        default:
-            throw new Error('Unknown step');
-    }
-}
-export default function FirstStepForm() {
+export default function MultiStepFunctionForm(props) {
     const classes = useStyles();
+    const defaultProps = {
+        "name": "testName",
+        "author": {
+            "pseudo": "",
+            "avatar": ""
+        },
+        "params": [
+            {
+                "name": "",
+                "type": "",
+                "description": "",
+                "defaultValue": ""
+            }
+        ],
+        "return":
+            {
+                "name": "",
+                "type": "",
+                "description": "",
+                "defaultValue": ""
+            },
+        "tag": ["test", "tags"],
+        "post":
+            {
+                "description": "tstDesc",
+                "author": {
+                    "pseudo": "",
+                    "avatar": ""
+                },
+                "function": ""
+            }
+    }
     const [activeStep, setActiveStep] = React.useState(0);
+    const [functionData, setFunctionData] = React.useState({});
 
+    const steps = ['What is your function', 'What are your params and return value', 'Is it ok ?'];
     const handleNext = () => {
         setActiveStep(activeStep + 1);
+        console.log(functionData);
     };
 
     const handleBack = () => {
         setActiveStep(activeStep - 1);
     };
+    const saveData = (step, data) => {
+        switch (step) {
+            case 0:
+                functionData.name = data.name;
+                functionData.tags = data.tags;
+                if (functionData.post) {
+                   functionData.post.description = data.description;
+                } else {
+               functionData.post = {
+                        "description": data.description,
+                        "author": {
+                            "pseudo": "",
+                            "avatar": ""
+                        },
+                        "function": ""
+                    };
+                }
+                setFunctionData(functionData)
+                break;
+
+        }
+    }
+
+    function getStepContent(step) {
+        switch (step) {
+            case 0:
+                return <FirstStepFunctionForm {...functionData} saveData={(value) => saveData(step, value)}/>;
+            case 1:
+                return <SecondStepFunctionForm/>;
+            case 2:
+                return <p>tu pars?</p>;
+            default:
+                throw new Error('Unknown step');
+        }
+    }
 
     return (
         <React.Fragment>
-            <CssBaseline />
+            <CssBaseline/>
             <AppBar position="absolute" color="default" className={classes.appBar}>
                 <Toolbar>
                     <Typography variant="h6" color="inherit" noWrap>
-                       Create your function
+                        Create your function
                     </Typography>
                 </Toolbar>
             </AppBar>
             <main className={classes.layout}>
                 <Paper className={classes.paper}>
-                   <Typography component="h1" variant="h4" align="center">
-                       {steps[activeStep]}
+                    <Typography component="h1" variant="h4" align="center">
+                        {steps[activeStep]}
                     </Typography>
                     <Stepper activeStep={activeStep} className={classes.stepper}>
                         {steps.map((label) => (
@@ -102,10 +159,11 @@ export default function FirstStepForm() {
                         {activeStep === steps.length ? (
                             <React.Fragment>
                                 <Typography variant="h5" gutterBottom>
-                                   Thanks for your contribution
+                                    Thanks for your contribution
                                 </Typography>
                                 <Typography variant="subtitle1">
-                                    Your function will be visible in a minutes, you can find it in your profile (TODO put a link).
+                                    Your function will be visible in a minutes, you can find it in your profile (TODO
+                                    put a link).
                                 </Typography>
                             </React.Fragment>
                         ) : (

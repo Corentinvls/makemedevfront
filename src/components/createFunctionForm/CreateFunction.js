@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const steps = ['What is your function','What are your params and return value', 'What does your function do', 'Is it ok ?'];
+const steps = ['What is your function','What are your params and return value', 'Is it ok ?'];
 
 function getStepContent(step) {
     switch (step) {
@@ -59,8 +59,6 @@ function getStepContent(step) {
         case 1:
             return <SecondStepFunctionForm/>;
         case 2:
-            return <p>tu pars?</p>;
-        case 3:
             return <p>tu pars?</p>;
         default:
             throw new Error('Unknown step');

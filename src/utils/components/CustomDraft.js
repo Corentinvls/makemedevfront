@@ -12,17 +12,17 @@ const converter = new Showdown.Converter({
     tasklists: true
 });
 
-export default function CustomDraft() {
-    const [value, setValue] = React.useState("**Hello world!!!**");
+export default function CustomDraft(props) {
+    const [value, setValue] = React.useState("*** HelloWorld ***");
     const [selectedTab, setSelectedTab] = React.useState("write");
-
+const tools=props.isCode?[["header","bold","italic","strikethrough"], ["code","link","quote"] ,["unordered-list","ordered-list","checked-list"]]:[["header","bold","italic","strikethrough"], ["link","quote"] ,["unordered-list","ordered-list","checked-list"]]
     return (
             <ReactMde
                 value={value}
                 onChange={setValue}
                 selectedTab={selectedTab}
                 onTabChange={setSelectedTab}
-                toolbarCommands={[["header","bold","italic","strikethrough"], ["code","link","quote"] ,["unordered-list","ordered-list","checked-list"]]}
+                toolbarCommands={tools}
                 generateMarkdownPreview={(markdown) =>
                     Promise.resolve(converter.makeHtml(markdown))
                 }
@@ -34,5 +34,4 @@ export default function CustomDraft() {
 
             />
 
-    );
-}
+    );}

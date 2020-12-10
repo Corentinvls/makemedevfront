@@ -1,6 +1,7 @@
 import React from 'react';
 
 import TextField from '@material-ui/core/TextField';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
 import CustomDraft from "../../utils/components/CustomDraft";
@@ -56,10 +57,14 @@ export default function FirstStepFunctionForm(props) {
                             onChange={(chips)=> {
                                 setTags(chips)
                             }}
+
                         />
                     </Grid>
                     <Grid item xs={12}>
-                       <CustomDraft/>
+                        <CustomDraft />
+                        <FormHelperText>
+                           this is like the commentaries of your function, you have to write your function in the third step
+                        </FormHelperText>
                     </Grid>
                 </Grid>
             </form>

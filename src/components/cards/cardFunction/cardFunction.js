@@ -153,7 +153,7 @@ export default function RecipeReviewCard() {
             </CardContent>
             <CardContent className={classes.rowContain}>
                 <CardContent className={classes.row}>
-                <Icon aria-label="Comment">
+                <Icon aria-label="Comments">
                     <CommentIcon/>
                 </Icon>
                 <p>

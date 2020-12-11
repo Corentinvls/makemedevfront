@@ -13,13 +13,12 @@ const converter = new Showdown.Converter({
 });
 
 export default function CustomDraft(props) {
-    const [value, setValue] = React.useState("*** HelloWorld ***");
-    const [selectedTab, setSelectedTab] = React.useState("write");
+     const [selectedTab, setSelectedTab] = React.useState("write");
 const tools=props.isCode?[["header","bold","italic","strikethrough"], ["code","link","quote"] ,["unordered-list","ordered-list","checked-list"]]:[["header","bold","italic","strikethrough"], ["link","quote"] ,["unordered-list","ordered-list","checked-list"]]
     return (
             <ReactMde
-                value={value}
-                onChange={setValue}
+                value={props.value}
+                onChange={props.onChange}
                 selectedTab={selectedTab}
                 onTabChange={setSelectedTab}
                 toolbarCommands={tools}

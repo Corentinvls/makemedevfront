@@ -12,6 +12,10 @@ import Button from "@material-ui/core/Button";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import FirstStepFunctionForm from "./FirstStepFunctionForm";
 import SecondStepFunctionForm from "./SecondStepFunctionForm";
+import {testFunctionNameJs, testParams, testTags} from "../../utils/regex";
+import * as Showdown from "showdown";
+import ReactQuill from "react-quill";
+import ThirdStepFunctionForm from "./ThirdStepFunctionForm";
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -87,25 +91,65 @@ export default function MultiStepFunctionForm(props) {
     }
     const [activeStep, setActiveStep] = React.useState(0);
     const [functionData, setFunctionData] = React.useState({});
+    const [firstStepDone, setFirstStepDone] = React.useState(false);
+  /*  const [secondStepDone, setSecondStepDone] = React.useState(false);*/
 
-    const steps = ['What is your function', 'What are your params and return value', 'Is it ok ?'];
+
+    const steps = ['What is your function', 'What are your params and return value', 'Your function'];
     const handleNext = () => {
         setActiveStep(activeStep + 1);
-        console.log(functionData);
     };
 
     const handleBack = () => {
         setActiveStep(activeStep - 1);
     };
+
+    const checkTags = (tags) => {
+        return (tags.length > 0 && tags.length <= 5 && testTags(tags) === true)
+    }
+
+    const checkName = (name) => {
+        return (name.length > 0 && testFunctionNameJs(name) === true)
+    }
+    const checkDescription = (description) => {
+        return (description.length > 1)
+    }
+   /* const checkParams = (params) => {
+         if(params.length === 0) {
+             return true;
+         }else{
+             return  testParams(params);
+         }
+    }*/
+    /*const checkReturnValue = (returnValue) => {
+        if(returnValue.length === 0) {
+            return true;
+        }else{
+            return  testParams(returnValue);
+        }
+    }*/
+
+    const isFirstStepDone = (data) => {
+        let nameOk = checkName(data.name);
+        let tagsOk = checkTags(data.tags);
+        let descOk = checkDescription(data.description);
+        setFirstStepDone(nameOk && tagsOk && descOk);
+    }
+    /*const isSecondStepDone = (data) => {
+        let paramsOk = checkParams(data.params);
+       /!* let returnOk = checkReturnValue(data.returnValue);*!/
+        setSecondStepDone(paramsOk);
+    }*/
+
     const saveData = (step, data) => {
         switch (step) {
             case 0:
                 functionData.name = data.name;
                 functionData.tags = data.tags;
                 if (functionData.post) {
-                   functionData.post.description = data.description;
+                    functionData.post.description = data.description;
                 } else {
-               functionData.post = {
+                    functionData.post = {
                         "description": data.description,
                         "author": {
                             "pseudo": "",
@@ -116,6 +160,11 @@ export default function MultiStepFunctionForm(props) {
                 }
                 setFunctionData(functionData)
                 break;
+            case 1:
+                functionData.params = data.params;
+                functionData.returnValue = data.returnValue;
+                setFunctionData(functionData)
+                break;
 
         }
     }
@@ -123,11 +172,13 @@ export default function MultiStepFunctionForm(props) {
     function getStepContent(step) {
         switch (step) {
             case 0:
-                return <FirstStepFunctionForm {...functionData} saveData={(value) => saveData(step, value)}/>;
+                return <FirstStepFunctionForm {...functionData} saveData={(value) => saveData(step, value)}
+                                              isFirstStepDone={(value) => isFirstStepDone(value)}/>;
             case 1:
-                return <SecondStepFunctionForm/>;
+                return <SecondStepFunctionForm {...functionData} saveData={(value) => saveData(step, value)}
+                                               /*isSecondStepDone={(value) => isSecondStepDone(value)}*//>;
             case 2:
-                return <p>tu pars?</p>;
+               return <ThirdStepFunctionForm {...functionData} saveData={(value) => saveData(step, value)}/>
             default:
                 throw new Error('Unknown step');
         }
@@ -180,6 +231,7 @@ export default function MultiStepFunctionForm(props) {
                                         color="primary"
                                         onClick={handleNext}
                                         className={classes.button}
+                                        disabled={(activeStep === 0 && !firstStepDone)}
                                     >
                                         {activeStep === steps.length - 1 ? 'Publish my function' : 'Next'}
                                     </Button>

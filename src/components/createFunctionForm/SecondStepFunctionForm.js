@@ -31,28 +31,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function SecondStepFunctionForm(props) {
     const classes = useStyles();
-    const type = [
-        '',
-        'String',
-        'Number',
-        'Boolean',
-        'Null',
-        'Undefined',
-        'Object',
-        'BigInt',
-        'Function',
-        'Symbol',
-        'Array',
-        'Other',
-    ];
+    const type = ['', 'String', 'Number', 'Boolean', 'Array', 'Object', 'Function', 'BigInt', 'Null', 'Symbol', 'Other', 'Undefined'];
 
-    function useInput(initialValue,stateSaver) {
+    function useInput(initialValue, stateSaver) {
         const [value, setValue] = React.useState(initialValue);
 
         function handleChange(e) {
             setValue(e.target.value);
-            if(stateSaver){
-                 stateSaver()
+            if (stateSaver) {
+                stateSaver()
             }
 
         }
@@ -64,19 +51,19 @@ export default function SecondStepFunctionForm(props) {
         return [value, handleChange, resetValue, setValue];
     }
 
-    const [params, setParams] = React.useState([{name: "", type: "", defaultValue: "", description: ""}]);
+    const [params, setParams] = React.useState(props.params ? props.params :[{name: "", type: "", defaultValue: "", description: ""}]);
     const [paramsName, handleParamsName, resetParamsName, setParamsName] = useInput('');
     const [paramsDescription, handleParamsDescription, resetParamsDescription, setParamsDescription] = useInput('');
     const [paramsType, setParamsType] = React.useState('');
     const [paramsDefaultValue, handleParamsDefaultValue, resetParamsDefaultValue, setParamsDefaultValue] = useInput('');
     const [paramsIndex, setParamsIndex] = React.useState(0);
-    const [showParamsChips, setShowParamsChips] = React.useState(false);
+    const [showParamsChips, setShowParamsChips] = React.useState(!!props.params);
 
-    const [returnValue, setReturnValue] = React.useState({name: "", type: "", defaultValue: "", description: ""});
-    const [returnValueName, handleReturnValueName] = useInput('',()=>updateReturnValue());
-    const [returnValueDescription, handleReturnValueDescription] = useInput('',()=>updateReturnValue());
+    const [returnValue, setReturnValue] = React.useState(props.returnValue ? props.returnValue :[{name: "", type: "", defaultValue: "", description: ""}]);
+    const [returnValueName, handleReturnValueName] = useInput('', () => updateReturnValue());
+    const [returnValueDescription, handleReturnValueDescription] = useInput('', () => updateReturnValue());
     const [returnValueType, setReturnValueType] = React.useState('');
-    const [returnValueDefaultValue, handleReturnValueDefaultValue] = useInput('',()=>updateReturnValue());
+    const [returnValueDefaultValue, handleReturnValueDefaultValue] = useInput('', () => updateReturnValue());
 
     let [, setState] = React.useState();
 
@@ -107,13 +94,12 @@ export default function SecondStepFunctionForm(props) {
         setState({});
     }
 
-     function updateReturnValue() {
+    function updateReturnValue() {
         let returnValue = {
-            name:returnValueName,
-            description:returnValueDescription,
-            type:returnValueType,
-            defaultValue:returnValueDefaultValue
-
+            name: returnValueName,
+            description: returnValueDescription,
+            type: returnValueType,
+            defaultValue: returnValueDefaultValue
         };
         setReturnValue(returnValue);
     }
@@ -126,6 +112,10 @@ export default function SecondStepFunctionForm(props) {
         setParamsDefaultValue(params[index].defaultValue)
     }
 
+    React.useEffect(() => {
+        props.saveData({params: params, returnValue: returnValue})
+       /* props.isSecondStepDone({params: params, returnValue: returnValue})*/
+    }, [params, returnValue]);
     return (
         <>
             <form className={classes.form}>
@@ -136,7 +126,7 @@ export default function SecondStepFunctionForm(props) {
                     {showParamsChips &&
                     <Grid container direction="row"
                           justify="flex-start"
-                          alignItems="center" spacing={1} >
+                          alignItems="center" spacing={1}>
                         <GenerateChipsTooltipEditable id={"chips"} chips={params} handleDelete={handleDelete}
                                                       handleClick={reEditParams}/>
                     </Grid>
@@ -203,8 +193,8 @@ export default function SecondStepFunctionForm(props) {
                         </Button>
                     </Grid>
                     <FormHelperText>
-                    Don't forget to click on ADD if you want to save the params
-                </FormHelperText>
+                        Don't forget to click on ADD if you want to save the params
+                    </FormHelperText>
                 </Grid>
             </form>
             <h2>Return value</h2>

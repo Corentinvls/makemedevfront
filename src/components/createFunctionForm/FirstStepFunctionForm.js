@@ -1,10 +1,11 @@
-import React,{useState} from 'react';
+import React, {useState} from 'react';
 
 import TextField from '@material-ui/core/TextField';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
 import ChipInput from 'material-ui-chip-input'
+import CustomDraft from "../../utils/components/CustomDraft";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -29,14 +30,16 @@ export default function FirstStepFunctionForm(props) {
     const [name, setName] = useState(props.name ? props.name : "");
     const [tags, setTags] = useState(props.tags ? props.tags : []);
     const [description, setDescription] = useState(props.post ? props.post.description : "");
+
     React.useEffect(() => {
-        props.saveData({name:name,tags:tags,description:description})
-    }, [name,tags,description]);
+        props.saveData({name: name, tags: tags, description: description})
+        props.isFirstStepDone({name: name, tags: tags, description: description})
+    }, [name, tags, description]);
 
     return (
         <>
             <form className={classes.form} noValidate>
-                <Grid container spacing={2}>
+                <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <TextField
                             name="name"
@@ -66,27 +69,18 @@ export default function FirstStepFunctionForm(props) {
                             onChange={(chips) => {
                                 setTags(chips)
                             }}
+                            helperText={"One required | Max five tags | Only AlphaNumeric and '.' '-' "}
                         />
-                        <FormHelperText>
-                            One required
-                        </FormHelperText>
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField
-                            variant="outlined"
-                            fullWidth
-                            multiline
-                            required
-                            rows={4}
-                            label="Description"
-                            name="description"
+                        <CustomDraft
                             value={description}
-                            onChange={(e) => {
-                                setDescription(e.target.value);
+                            onChange={(value) => {
+                                setDescription(value);
                             }}
                         />
                         <FormHelperText>
-                            It's like the commentaries of your function, you will write your function in the third step
+                            Explain your function here, you will write your function in the third step
                         </FormHelperText>
                     </Grid>
                 </Grid>

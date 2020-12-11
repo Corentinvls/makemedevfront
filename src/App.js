@@ -28,8 +28,8 @@ function App() {
                             <CreateFunctionView/>
                         </Route>
                         <Route path="/">
-                            <Home/>
-                        </Route>
+                        <Home/>
+                    </Route>
                     </Switch>
                 </div>
             </ThemeProvider>

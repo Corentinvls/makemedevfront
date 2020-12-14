@@ -15,7 +15,8 @@ const useStyles = makeStyles((theme) => ({
 export default function ShowComments() {
     const classes = useStyles();
     const [comments, setComments] = useState({success: []});
-    const fetchUrl = 'http://185.163.126.173:4021/api/post?search={?}'
+    const fetchUrl = 'http://185.163.126.173:4021/api/post?search={?}';
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,8 +33,11 @@ export default function ShowComments() {
                 </hr>
                 {comment.post[0].commentary.length > 0 ?
                     <div className={classes.divComm}>
+                        {console.log(comment.post[0].commentary[0].date)}
+                        {console.log(comment)}
                         <p> Pseudo : {comment.post[0].commentary[0].pseudo} , answered
                             : {comment.post[0].commentary[0].date}</p>
+                        {/*new Date(comment.post[0].commentary[0].date * 1000)*/}
                         <Box component="p" p={2} ml={6}
                              bgcolor={'lightgrey'}>{comment.post[0].commentary[0].commentary}
                         </Box>

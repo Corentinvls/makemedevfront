@@ -12,6 +12,7 @@ import LikeDislikeVote from "./LikeDislikeVote";
 import DisplayFunction from "./DisplayFunction";
 import ParamsReturn from "./ParamsReturn";
 import CreationBar from "./CreationBar";
+import ShowComments from "../comments/ShowComments";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -38,6 +39,14 @@ export default function DetailsFunction(props) {
             </Grid>
             <Grid item xs={2}>
                 <ParamsReturn {...props}/>
+            </Grid>
+            <Grid item xs={2}>
+            </Grid>
+            <Grid item xs={10}>
+                <div>
+                    <ShowComments>
+                    </ShowComments>
+                </div>
             </Grid>
         </Grid>
 

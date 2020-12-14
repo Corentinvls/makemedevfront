@@ -2,7 +2,8 @@ import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import Comments from "./Comments";
+import CreateComments from "../comments/CreateComments";
+import ShowComments from "../comments/ShowComments";
 const useStyles = makeStyles((theme) => ({
     inline: {
         display: "flex",
@@ -34,7 +35,7 @@ export default function DisplayFunction(props) {
                 <Button onClick={onClick}>
                     Add a comment !
                 </Button>
-                { showResults ? <Comments /> : null }
+                {/*{ showResults ? <CreateComments {...props} /> : null }*/}
             </div>
         </Grid>
     )

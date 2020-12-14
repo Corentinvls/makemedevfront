@@ -3,7 +3,6 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import SignUp from "../components/register/SignUp";
 import SignIn from "../components/register/SignIn";
-import MediaCard from "../components/cards/cardsHome/CardMedia";
 import HeaderHome from "../components/home/HeaderHome";
 import BodyHome from "../components/home/BodyHome";
 

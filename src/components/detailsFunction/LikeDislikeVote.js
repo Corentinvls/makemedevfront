@@ -48,13 +48,13 @@ export default function LikeDislikeVote(props){
                     <IconButton size="small" aria-label={'up vote'} onClick={() => userVote(1)}>
                         <ThumbUpIcon/>
                     </IconButton>
-                    <p className={classes.p}>{post[0].like + vote === (post[0].like + 1) ? (post[0].like + 1) : post[0].like}</p>
+                    <p className={classes.p}>{post.like}</p>
                 </div>
                 <div className={classes.flexRow}>
                     <IconButton size="small" aria-label={'down vote'} onClick={() => userVote(-1)}>
                         <ThumbDownIcon/>
                     </IconButton>
-                    <p className={classes.p}>{post[0].dislike + vote === (post[0].dislike - 1) ? (post[0].dislike + 1) : post[0].dislike}</p>
+                    <p className={classes.p}>{post.dislike}</p>
                 </div>
                 <div>
                     <IconButton size="small">

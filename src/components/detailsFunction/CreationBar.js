@@ -25,10 +25,10 @@ export default function DisplayFunction(props) {
                     Improve this version
                 </Button>
                 <div>
-                    <p>Asked: {post[0].author.creationDate}</p>
+                    <p>Asked: {post.author.creationDate}</p>
                 </div>
                 <div>
-                    <p>Created by: <a href='#' target='_blank'>{post[0].author.pseudo}</a></p>
+                    <p>Created by: <a href='#' target='_blank'>{post.author.pseudo}</a></p>
                 </div>
             </div>
             <div>

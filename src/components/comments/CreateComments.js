@@ -26,10 +26,8 @@ export default function CreateComments() {
         e.preventDefault()
         axios.post(fetchUrl, comments)
             .then(function (response) {
-                console.log(response)
             })
             .catch(function (error) {
-                console.log(error)
             })
     }
 

@@ -13,6 +13,7 @@ import DisplayFunction from "./DisplayFunction";
 import ParamsReturn from "./ParamsReturn";
 import CreationBar from "./CreationBar";
 import ShowComments from "../comments/ShowComments";
+import {connect} from "react-redux";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function DetailsFunction(props) {
+function DetailsFunction(props) {
 
     const classes = useStyles();
 
@@ -44,8 +45,7 @@ export default function DetailsFunction(props) {
             </Grid>
             <Grid item xs={10}>
                 <div>
-                    <ShowComments>
-                    </ShowComments>
+                    <ShowComments commentary={props.post.commentary}/>
                 </div>
             </Grid>
         </Grid>
@@ -53,3 +53,5 @@ export default function DetailsFunction(props) {
 
     );
 }
+
+export default DetailsFunction

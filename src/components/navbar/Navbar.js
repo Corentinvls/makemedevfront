@@ -108,7 +108,7 @@ export default function Navbar(props) {
     };
 
     const handleClick = () =>{
-        history.push([{pathname: '/results'}])
+        history.push("/results/" + search)
     }
 
     const toggleSignDialogs = () => {

@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ParamsReturn(props){
     const classes = useStyles();
-    const {tag, params, returnvalue, name} = props;
+    const {tag, params, returns, name} = props;
     function getChipToolTip(array) {
         return <>
             {generateChipsTooltip(array).map((component, index) => {
@@ -24,7 +24,7 @@ export default function ParamsReturn(props){
             <h2>Params</h2>
             <p>{getChipToolTip(params)}</p>
             <h2>Return</h2>
-            <p>{getChipToolTip(returnvalue)}</p>
+            <p>{getChipToolTip(returns)}</p>
         </div>
     )
 }

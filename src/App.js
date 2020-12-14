@@ -14,6 +14,7 @@ import mainTheme from "./assets/style/MainTheme";
 import Home from "./View/Home";
 import CreateFunctionView from "./View/CreateFunctionView";
 import DetailsFunctionView from "./View/DetailsFunctionView";
+import Results from "./View/Results";
 
 
 function App() {
@@ -73,6 +74,9 @@ function App() {
                 <div className="App">
                     <Navbar/>
                     <Switch>
+                        <Route path='/results'>
+                            <Results/>
+                        </Route>
                         <Route path="/about">
                             <About/>
                             <Card/>

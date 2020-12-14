@@ -9,11 +9,12 @@ import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-
+import {useHistory, useParams} from "react-router-dom";
 import {Link} from "react-router-dom";
 import {ReactComponent as BrandName} from "../../assets/image/title.svg"
 import SignUp from "../register/SignUp";
 import SignIn from "../register/SignIn";
+import Results from "../../View/Results";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -76,9 +77,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Navbar(props) {
     const classes = useStyles();
+    const history = useHistory();
+    let { slug } = useParams()
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [displaySignUp, setDisplaySignUp] = React.useState(false);
     const [displaySignIn, setDisplaySignIn] = React.useState(false);
+    const [search, setSearch] = React.useState('');
 
     const isMenuOpen = Boolean(anchorEl);
 
@@ -98,6 +102,14 @@ export default function Navbar(props) {
         setDisplaySignUp (!displaySignUp);
         setAnchorEl(null);
     };
+
+    const handleChange = (event) =>{
+        setSearch(event.target.value)
+    };
+
+    const handleClick = () =>{
+        history.push([{pathname: '/results'}])
+    }
 
     const toggleSignDialogs = () => {
         setDisplaySignUp(!displaySignUp);
@@ -143,19 +155,24 @@ export default function Navbar(props) {
                     <Link style={{textDecoration: 'none'}} to={"/"}>
                         <BrandName className={classes.iconDesktop}/>
                     </Link>
+
                     <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <SearchIcon/>
-                        </div>
+                        <form>
+                        <IconButton type="submit" className={classes.searchIcon} aria-label="search" onClick={handleClick}>
+                            <SearchIcon />
+                        </IconButton>
                         <InputBase
                             placeholder="Search…"
+                            onChange={handleChange}
                             classes={{
                                 root: classes.inputRoot,
                                 input: classes.inputInput,
                             }}
                             inputProps={{'aria-label': 'search'}}
                         />
+                        </form>
                     </div>
+
                     <div className={classes.grow}/>
 
                     <Link to="/about">About</Link>

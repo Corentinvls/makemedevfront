@@ -2,11 +2,15 @@ import React from 'react';
 
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
+
+import ChipInput from "material-ui-chip-input";
+import CustomDraft from "../../utils/components/CustomDraft";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import GenerateChipsTooltipEditable from "../../utils/generateChipsTooltipEditable";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {Button} from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+
 import {useFormik} from "formik";
 import * as yup from "yup";
 import {regexFunctionName} from "../../utils/regex";
@@ -41,7 +45,7 @@ export default function SecondStepFunction(props) {
 
 
     const validationSchemaParams = yup.object({
-            params: yup.array().of(
+            params: yup.array(
                 yup.object({
                     name: yup.string('Enter a name').matches(regexFunctionName, 'Enter a valid parameter name').required("A name is required"),
                     type: yup.string("Enter a type").required("A type is required"),
@@ -62,16 +66,15 @@ export default function SecondStepFunction(props) {
         },
         validationSchema: validationSchemaParams,
         onSubmit: (values) => {
-            console.log(formikParams.values.params)
             formikParams.values.params.push({
                 name: "",
                 type: "",
                 defaultValue: "",
                 description: ""
-            });
-            formikParams.values.params[0] ? setParamsChips(formikParams.values.params[0].name !== "") : setParamsChips(false);
-            setTimeout(() => { setParamsIndex(formikParams.values.params.length - 1);
-            setState({}) }, 500);
+            })
+            formikParams.values.params[0] ? setParamsChips(formikParams.values.params[0].name !== "") : setParamsChips(false)
+            setParamsIndex(formikParams.values.params.length - 1)
+            setState({});
         },
     });
 
@@ -89,14 +92,20 @@ export default function SecondStepFunction(props) {
 
     function reEdit(valueToEdit, index) {
         if (valueToEdit === "params") {
-            Promise.resolve().then(setParamsIndex(index)).then(setState({}))
+            setParamsIndex(index)
         }
         /* if (valueToEdit === "returnValue") {
              setReturnValueIndex(index)
              setState({});
          }*/
-
     }
+    React.useEffect(() => {
+       setState({})
+        console.log(formikParams.touched.params);
+        console.log(Boolean(formikParams.errors.params));
+
+        console.log(paramsIndex);
+    }, [paramsIndex]);
 
     return (
         <form onSubmit={formikParams.handleSubmit}>
@@ -121,8 +130,8 @@ export default function SecondStepFunction(props) {
                         autoFocus
                         value={formikParams.values.params[paramsIndex].name}
                         onChange={formikParams.handleChange}
-                        error={(formikParams.touched.params && Boolean(formikParams.errors.params)) && Boolean(formikParams.errors.params.name)}
-                        helperText={(formikParams.touched.params && Boolean(formikParams.errors.params)) && formikParams.errors.params.name}
+                        error={(formikParams.touched.params && Boolean(formikParams.errors.params)) }
+                        helperText={(formikParams.touched.params && Boolean(formikParams.errors.params)) && 'Enter a valid parameter name'}
                     />
                 </Grid>
                 <Grid item xs={4}>
@@ -171,8 +180,8 @@ export default function SecondStepFunction(props) {
                         label="Description"
                         value={formikParams.values.params[paramsIndex].description}
                         onChange={formikParams.handleChange}
-                        error={(formikParams.touched.params && Boolean(formikParams.errors.params)) && Boolean(formikParams.errors.params.description)}
-                        helperText={(formikParams.touched.params && Boolean(formikParams.errors.params)) && formikParams.errors.params.description}
+                        error={(formikParams.touched.params && Boolean(formikParams.errors.params)) }
+                        helperText={(formikParams.touched.params && Boolean(formikParams.errors.params)) }
 
                     />
                 </Grid>

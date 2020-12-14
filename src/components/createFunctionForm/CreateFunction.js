@@ -11,7 +11,7 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import FirstStepFunctionForm from "./FirstStep";
-import SecondStepFunctionForm from "./SecondStepFunctionForm";
+import SecondStepFunctionForm from "./SecondStep";
 import {regexFunctionName, regexTags} from "../../utils/regex";
 
 import ThirdStepFunctionForm from "./ThirdStepFunctionForm";
@@ -92,37 +92,37 @@ export default function MultiStepFunctionForm(props) {
     const validationSchema = yup.object({
         name: yup
             .string('Enter a function name')
-            .matches(regexFunctionName , 'Enter a valid function name')
+            .matches(regexFunctionName, 'Enter a valid function name')
             .required('Function name is required'),
         tags: yup
-            .array( yup.string().matches(regexTags , 'Enter a valid Tag name'))
-            .min(1,"One tags required")
-            .max(5,"5 tags max")
+            .array(yup.string().matches(regexTags, 'Enter a valid Tag name'))
+            .min(1, "One tags required")
+            .max(5, "5 tags max")
             .required('tags is required'),
         post: yup
             .object()
             .shape({
-            description: yup.string('Enter a description').required("A description is required"),
+                description: yup.string('Enter a description').required("A description is required"),
 
-            })
+            }),
+        params: yup.array()
     });
 
     const formik = useFormik({
         initialValues: {
             name: props.name ? props.name : "",
             tags: props.tags ? props.tags : [],
-            post: props.post ? props.post :  {
+            post: props.post ? props.post : {
                 description: "",
                 author: {
                     pseudo: "",
                     avatar: ""
                 },
                 "function": ""
-            }
+            },
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2));
             setFunctionData(values)
             handleNext()
         },
@@ -135,30 +135,32 @@ export default function MultiStepFunctionForm(props) {
 
     const steps = ['What is your function', 'What are your params and return value', 'Your function'];
     const handleNext = () => {
-       setActiveStep(activeStep + 1);
+        setActiveStep(activeStep + 1);
     }
 
     const handleBack = () => {
         setActiveStep(activeStep - 1);
     };
 
-    const ButtonsStepper=()=>{return <React.Fragment>
-        <div className={classes.buttons}>
-            {activeStep !== 0 && (
-                <Button onClick={handleBack} className={classes.button}>
-                    Back
+    const ButtonsStepper = () => {
+        return <React.Fragment>
+            <div className={classes.buttons}>
+                {activeStep !== 0 && (
+                    <Button onClick={handleBack} className={classes.button}>
+                        Back
+                    </Button>
+                )}
+                <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    type="submit"
+                >
+                    {activeStep === steps.length - 1 ? 'Publish my function' : 'Next'}
                 </Button>
-            )}
-            <Button
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                type="submit"
-            >
-                {activeStep === steps.length - 1 ? 'Publish my function' : 'Next'}
-            </Button>
-        </div>
-    </React.Fragment>}
+            </div>
+        </React.Fragment>
+    }
 
 
     const saveData = (step, data) => {
@@ -194,8 +196,7 @@ export default function MultiStepFunctionForm(props) {
             case 0:
                 return <FirstStepFunctionForm {...functionData} formik={formik} stepper={<ButtonsStepper/>}/>;
             case 1:
-                return <SecondStepFunctionForm {...functionData} saveData={(value) => saveData(step, value)}
-                    /*isSecondStepDone={(value) => isSecondStepDone(value)}*//>;
+                return <SecondStepFunctionForm  {...functionData} formik={formik} stepper={<ButtonsStepper/>} />;
             case 2:
                 return <ThirdStepFunctionForm {...functionData} saveData={(value) => saveData(step, value)}/>
             default:
@@ -237,7 +238,7 @@ export default function MultiStepFunctionForm(props) {
                                     put a link).
                                 </Typography>
                             </React.Fragment>
-                        ):getStepContent(activeStep)}
+                        ) : getStepContent(activeStep)}
 
                     </React.Fragment>
                 </Paper>

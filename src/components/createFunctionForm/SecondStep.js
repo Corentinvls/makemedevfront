@@ -41,30 +41,53 @@ export default function SecondStepFunction(props) {
     const [, setState] = React.useState();
     const [showParamsChips, setParamsChips] = React.useState(props.params ? props.params[0].name !== "" : false);
     const [paramsIndex, setParamsIndex] = React.useState(0);
+    const [showReturnValueChips, setReturnValueChips] = React.useState(props.returnValue ? props.returnValue[0].name !== "" : false);
+    const [returnValueIndex, setReturnValueIndex] = React.useState(0);
 
 
-    const validationSchemaParams = yup.object({
+    const validationSchema = yup.object({
         params: yup.array(
             yup.object({
-                name: yup.string('Enter a name').matches(regexFunctionName, 'Enter a valid parameter name').required("A name is required"),
+                name: yup.string('Enter a name').matches(regexFunctionName, 'Enter a valid name').required("A name is required"),
                 type: yup.string("Enter a type").required("A type is required"),
                 description: yup.string('Enter a description').required("A description is required"),
                 defaultValue: yup.string('Enter a default value')
             }))
     });
-    const isError = (index, field) => {
-        if (formikParams.errors) {
-            if (formikParams.errors.params) {
-                if (formikParams.errors.params[index]) {
-                    if (formikParams.errors.params[index][field]) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-    const whichError = (index, field) => {
+    const validationSchemaReturn = yup.object({
+        returnValue: yup.array(
+            yup.object({
+                name: yup.string('Enter a name').matches(regexFunctionName, 'Enter a valid name').required("A name is required"),
+                type: yup.string("Enter a type").required("A type is required"),
+                description: yup.string('Enter a description').required("A description is required"),
+                defaultValue: yup.string('Enter a default value')
+            }))
+    });
+
+
+
+    const formikParams = useFormik({
+        initialValues: {
+            params: props.params ? props.params : [{
+                name: "",
+                type: "String",
+                description: "",
+                defaultValue: ""
+            }]
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            formikParams.values.params.push({
+                name: "",
+                type: "",
+                defaultValue: "",
+                description: ""
+            })
+            formikParams.values.params[0] ? setParamsChips(formikParams.values.params[0].name !== "") : setParamsChips(false)
+            setParamsIndex(formikParams.values.params.length - 1)
+        },
+    });
+    const whichErrorParams = (index, field) => {
         if (formikParams.errors) {
             if (formikParams.errors.params) {
                 if (formikParams.errors.params[index]) {
@@ -76,55 +99,84 @@ export default function SecondStepFunction(props) {
         }
         return null;
     }
-    const formikParams = useFormik({
+    const isErrorParams = (index, field) => {
+        if (formikParams.errors) {
+            if (formikParams.errors.params) {
+                if (formikParams.errors.params[index]) {
+                    if (formikParams.errors.params[index][field]) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    function handleDeleteParams(index) {
+        formikParams.values.params.splice(index, 1)
+        setParamsIndex(formikParams.values.params.length - 1)
+    }
+    function reEditParams(index) {
+        setParamsIndex(index)
+    }
+
+    const formikReturnValue = useFormik({
         initialValues: {
-            params: props.params ? props.params : [{
+            returnValue: props.returnValue ? props.returnValue : [{
                 name: "",
                 type: "String",
                 description: "",
                 defaultValue: ""
             }]
         },
-        validationSchema: validationSchemaParams,
+        validationSchema: validationSchemaReturn,
         onSubmit: (values) => {
-            formikParams.values.params.push({
+            formikReturnValue.values.returnValue.push({
                 name: "",
                 type: "",
                 defaultValue: "",
                 description: ""
             })
-            formikParams.values.params[0] ? setParamsChips(formikParams.values.params[0].name !== "") : setParamsChips(false)
-            setParamsIndex(formikParams.values.params.length - 1)
-            setState({});
+            formikReturnValue.values.returnValue[0] ? setReturnValueChips(formikReturnValue.values.returnValue[0].name !== "") : setReturnValueChips(false)
+            setReturnValueIndex(formikReturnValue.values.returnValue.length - 1)
         },
     });
-
-    function handleDelete(valueToDelete, index) {
-        if (valueToDelete === "params") {
-            formikParams.values.params(index, 1)
-            setState({});
+    const isErrorReturnValue = (index, field) => {
+        if (formikReturnValue.errors) {
+            if (formikReturnValue.errors.returnValue) {
+                if (formikReturnValue.errors.returnValue[index]) {
+                    if (formikReturnValue.errors.returnValue[index][field]) {
+                        return true;
+                    }
+                }
+            }
         }
-        if (valueToDelete === "returnValue") {
-            formikParams.values.returnValue(index, 1)
-            setState({});
-        }
-
+        return false;
     }
-
-    function reEdit( index) {
-            setParamsIndex(index)
-
-        /* if (valueToEdit === "returnValue") {
+    const whichErrorReturnValue = (index, field) => {
+        if (formikParams.errors) {
+            if (formikParams.errors.returnValue) {
+                if (formikParams.errors.returnValue[index]) {
+                    if (formikParams.errors.returnValue[index][field]) {
+                        return formikParams.errors.returnValue[index][field];
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    function handleDeleteReturnValue(index) {
+        formikReturnValue.values.returnValue.splice(index, 1)
+        setReturnValueIndex(formikReturnValue.values.returnValue.length - 1)
+    }
+    function reEditReturnValue(index) {
         setReturnValueIndex(index)
-        setState({});
-        }*/
     }
 
     React.useEffect(() => {
         setState({})
-    }, [paramsIndex]);
+    }, [paramsIndex,returnValueIndex]);
 
-    return (
+    return (<>
         <form onSubmit={formikParams.handleSubmit}>
             <h2>Params</h2>
             <Grid container spacing={2}>
@@ -134,8 +186,8 @@ export default function SecondStepFunction(props) {
                       alignItems="center" spacing={1}>
                     <GenerateChipsTooltipEditable id={"chips"} chips={formikParams.values.params}
                                                   valueToEdit={"params"}
-                                                  handleDelete={handleDelete}
-                                                  handleClick={reEdit}/>
+                                                  handleDelete={handleDeleteParams}
+                                                  handleClick={reEditParams}/>
                 </Grid>
                 }
 
@@ -148,8 +200,8 @@ export default function SecondStepFunction(props) {
                         autoFocus
                         value={formikParams.values.params[paramsIndex].name}
                         onChange={formikParams.handleChange}
-                        error={formikParams.touched.params && isError(paramsIndex, "name")}
-                        helperText={formikParams.touched.params && whichError(paramsIndex, "name")}
+                        error={formikParams.touched.params && isErrorParams(paramsIndex, "name")}
+                        helperText={formikParams.touched.params && whichErrorParams(paramsIndex, "name")}
                     />
                 </Grid>
                 <Grid item xs={4}>
@@ -232,6 +284,111 @@ export default function SecondStepFunction(props) {
                 </FormHelperText>
             </Grid>
         </form>
+    <form onSubmit={formikReturnValue.handleSubmit}>
+        <h2>Params</h2>
+        <Grid container spacing={2}>
+            {showReturnValueChips &&
+            <Grid container direction="row"
+                  justify="flex-start"
+                  alignItems="center" spacing={1}>
+                <GenerateChipsTooltipEditable id={"chips"} chips={formikReturnValue.values.returnValue}
+
+                                              handleDelete={handleDeleteReturnValue}
+                                              handleClick={reEditReturnValue}/>
+            </Grid>
+            }
+
+            <Grid item xs={4}>
+                <TextField
+                    name={`returnValue[${returnValueIndex}].name`}
+                    variant="outlined"
+                    fullWidth
+                    label="Name"
+                    autoFocus
+                    value={formikReturnValue.values.returnValue[returnValueIndex].name}
+                    onChange={formikReturnValue.handleChange}
+                    error={formikReturnValue.touched.returnValue && isErrorReturnValue(returnValueIndex, "name")}
+                    helperText={formikReturnValue.touched.returnValue && whichErrorReturnValue(returnValueIndex, "name")}
+                />
+            </Grid>
+            <Grid item xs={4}>
+                <Autocomplete
+                    id={`returnValue[${returnValueIndex}].type`}
+                    name={`returnValue[${returnValueIndex}].type`}
+                    options={type}
+                    getOptionLabel={option => option}
+                    getOptionSelected={(option,value) => option === value}
+                    value={formikReturnValue.values.returnValue[returnValueIndex].type}
+                    onChange={(e, value) => {
+                        formikReturnValue.setFieldValue(
+                            `returnValue[${returnValueIndex}].type`,
+                            value
+                        );
+                    }}
+                    renderInput={params => (
+                        <TextField
+                            label="Type"
+                            fullWidth
+                            required
+                            variant="outlined"
+                            name={`returnValue[${returnValueIndex}].type`}
+                            {...params}
+                        />
+                    )}
+                />
+
+            </Grid>
+            <Grid item xs={4}>
+                <TextField
+                    name={`returnValue[${returnValueIndex}].defaultValue`}
+                    variant="outlined"
+                    fullWidth
+                    label="Default value"
+                    value={formikReturnValue.values.returnValue[returnValueIndex].defaultValue}
+                    onChange={formikReturnValue.handleChange}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <TextField
+                    name={`returnValue[${returnValueIndex}].description`}
+                    variant="outlined"
+                    fullWidth
+                    multiline
+                    required
+                    rows={4}
+                    label="Description"
+                    value={formikReturnValue.values.returnValue[returnValueIndex].description}
+                    onChange={formikReturnValue.handleChange}
+                    error={formikReturnValue.touched.returnValue && isErrorReturnValue(returnValueIndex, "description")}
+                    helperText={formikReturnValue.touched.returnValue && isErrorReturnValue(returnValueIndex, "description")}
+                />
+            </Grid>
+            <Grid container direction="row"
+                  justify="flex-end"
+                  alignItems="flex-start">
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    className={classes.button}
+                    startIcon={returnValueIndex !== formikReturnValue.values.returnValue.length - 1 ? <DoneIcon/> :
+                        <AddCircleIcon/>}
+                    type={returnValueIndex !== formikReturnValue.values.returnValue.length - 1 ? null : "submit"}
+                    onClick={() => {
+                        if (returnValueIndex !== formikReturnValue.values.returnValue.length - 1) {
+                            setReturnValueIndex(formikReturnValue.values.returnValue.length - 1)
+                        }
+                        console.log(formikReturnValue.values.returnValue)
+                    }}
+                >
+                    {returnValueIndex !== formikReturnValue.values.returnValue.length - 1 ? "Save" : "Add"}
+                </Button>
+            </Grid>
+            <FormHelperText>
+                Don't forget to click on ADD if you want to save the return
+            </FormHelperText>
+        </Grid>
+    </form></>
     );
 }
 

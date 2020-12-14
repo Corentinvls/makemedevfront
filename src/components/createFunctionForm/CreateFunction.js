@@ -92,13 +92,27 @@ export default function MultiStepFunctionForm(props) {
     const [activeStep, setActiveStep] = React.useState(0);
     const [functionData, setFunctionData] = React.useState({});
     const [firstStepDone, setFirstStepDone] = React.useState(false);
-  /*  const [secondStepDone, setSecondStepDone] = React.useState(false);*/
+    /*  const [secondStepDone, setSecondStepDone] = React.useState(false);*/
 
 
     const steps = ['What is your function', 'What are your params and return value', 'Your function'];
     const handleNext = () => {
-        setActiveStep(activeStep + 1);
-    };
+        if (activeStep === 1) {
+            if (functionData.params.length === 1) {
+                if (functionData.params[0].name === "") {
+                    functionData.params.pop()
+                    setFunctionData(functionData)
+                }
+            }
+            if (functionData.returnValue.length === 1) {
+                if (functionData.returnValue[0].name === "") {
+                    functionData.returnValue.pop()
+                    setFunctionData(functionData)
+                }
+            }
+
+        }  setActiveStep(activeStep + 1);
+    }
 
     const handleBack = () => {
         setActiveStep(activeStep - 1);
@@ -114,13 +128,13 @@ export default function MultiStepFunctionForm(props) {
     const checkDescription = (description) => {
         return (description.length > 1)
     }
-   /* const checkParams = (params) => {
-         if(params.length === 0) {
-             return true;
-         }else{
-             return  testParams(params);
-         }
-    }*/
+    /* const checkParams = (params) => {
+          if(params.length === 0) {
+              return true;
+          }else{
+              return  testParams(params);
+          }
+     }*/
     /*const checkReturnValue = (returnValue) => {
         if(returnValue.length === 0) {
             return true;
@@ -176,9 +190,9 @@ export default function MultiStepFunctionForm(props) {
                                               isFirstStepDone={(value) => isFirstStepDone(value)}/>;
             case 1:
                 return <SecondStepFunctionForm {...functionData} saveData={(value) => saveData(step, value)}
-                                               /*isSecondStepDone={(value) => isSecondStepDone(value)}*//>;
+                    /*isSecondStepDone={(value) => isSecondStepDone(value)}*//>;
             case 2:
-               return <ThirdStepFunctionForm {...functionData} saveData={(value) => saveData(step, value)}/>
+                return <ThirdStepFunctionForm {...functionData} saveData={(value) => saveData(step, value)}/>
             default:
                 throw new Error('Unknown step');
         }
@@ -213,7 +227,8 @@ export default function MultiStepFunctionForm(props) {
                                     Thanks for your contribution
                                 </Typography>
                                 <Typography variant="subtitle1">
-                                    Your function will be visible in a minutes, you can find it in your profile (TODO
+                                    Your function will be visible in a minutes, you can find it in your profile
+                                    (TODO
                                     put a link).
                                 </Typography>
                             </React.Fragment>

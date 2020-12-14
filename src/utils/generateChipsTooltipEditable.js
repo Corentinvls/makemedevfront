@@ -12,7 +12,7 @@ export default function GenerateChipsTooltipEditable(props) {
             <h3>Default
                 value : {defaultValue}</h3></div>
         return<Grid item key={index} ><Tooltip title={tooltipContent}>
-            <Chip label={name} component="a"  onDelete={()=>handleDelete(index)} onClick={()=>handleClick(index)} size="medium"/>
+            <Chip label={name} component="a"  onDelete={()=>handleDelete(props.valueToEdit,index)} onClick={()=>handleClick(props.valueToEdit,index)} size="medium"/>
             </Tooltip></Grid>
     })
 }

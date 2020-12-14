@@ -42,7 +42,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ThirdStepFunctionForm(props) {
     const defaultProps = `function ${props.name}(${props.params.map((params) => params.name).join(',')}){
-        ${props.returnValue.name !== "" ? "return " + props.returnValue.name + ";" : ""}
+
+      ${props.returnValue.map((returnVal) => "return "+returnVal.name+ ";").join('\n    ')}
     }`
 
     const classes = useStyles();

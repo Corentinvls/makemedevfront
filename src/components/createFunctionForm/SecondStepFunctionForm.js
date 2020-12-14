@@ -33,15 +33,11 @@ export default function SecondStepFunctionForm(props) {
     const classes = useStyles();
     const type = ['', 'String', 'Number', 'Boolean', 'Array', 'Object', 'Function', 'BigInt', 'Null', 'Symbol', 'Other', 'Undefined'];
 
-    function useInput(initialValue, stateSaver) {
+    function useInput(initialValue) {
         const [value, setValue] = React.useState(initialValue);
 
         function handleChange(e) {
             setValue(e.target.value);
-            if (stateSaver) {
-                stateSaver()
-            }
-
         }
 
         function resetValue() {
@@ -51,7 +47,12 @@ export default function SecondStepFunctionForm(props) {
         return [value, handleChange, resetValue, setValue];
     }
 
-    const [params, setParams] = React.useState(props.params ? props.params :[{name: "", type: "", defaultValue: "", description: ""}]);
+    const [params, setParams] = React.useState(props.params ? props.params : [{
+        name: "",
+        type: "",
+        defaultValue: "",
+        description: ""
+    }]);
     const [paramsName, handleParamsName, resetParamsName, setParamsName] = useInput('');
     const [paramsDescription, handleParamsDescription, resetParamsDescription, setParamsDescription] = useInput('');
     const [paramsType, setParamsType] = React.useState('');
@@ -59,25 +60,50 @@ export default function SecondStepFunctionForm(props) {
     const [paramsIndex, setParamsIndex] = React.useState(0);
     const [showParamsChips, setShowParamsChips] = React.useState(!!props.params);
 
-    const [returnValue, setReturnValue] = React.useState(props.returnValue ? props.returnValue :[{name: "", type: "", defaultValue: "", description: ""}]);
-    const [returnValueName, handleReturnValueName] = useInput('', () => updateReturnValue());
-    const [returnValueDescription, handleReturnValueDescription] = useInput('', () => updateReturnValue());
+    const [returnValue, setReturnValue] = React.useState(props.returnValue ? props.returnValue : [{
+        name: "",
+        type: "",
+        defaultValue: "",
+        description: ""
+    }]);
+    const [returnValueName, handleReturnValueName, resetReturnValueName, setReturnValueName] = useInput('');
+    const [returnValueDescription, handleReturnValueDescription, resetReturnValueDescription, setReturnValueDescription] = useInput('')
     const [returnValueType, setReturnValueType] = React.useState('');
-    const [returnValueDefaultValue, handleReturnValueDefaultValue] = useInput('', () => updateReturnValue());
+    const [returnValueDefaultValue, handleReturnValueDefaultValue, resetReturnValueDefaultValue, setReturnValueDefaultValue] = useInput('');
+    const [returnValueIndex, setReturnValueIndex] = React.useState(0);
+    const [showReturnValueChips, setShowReturnValueChips] = React.useState(!!props.returnValue);
 
     let [, setState] = React.useState();
 
-    function handleDelete(index) {
-        params.splice(index, 1)
-        setParams(params);
-        setState({});
+    function handleDelete(valueToDelete, index) {
+        if (valueToDelete === "params") {
+            params.splice(index, 1)
+            setParams(params);
+            setState({});
+        }
+        if (valueToDelete === "returnValue") {
+            returnValue.splice(index, 1)
+            setReturnValue(returnValue);
+            setState({});
+        }
+
     }
 
-    function resetParams() {
-        resetParamsName()
-        resetParamsDescription()
-        resetParamsDefaultValue()
-        setParamsType("")
+    function resetValues(value) {
+        if (value === "params") {
+            resetParamsName();
+            setParamsType("");
+            resetParamsDefaultValue();
+            resetParamsDescription();
+        }
+        if (value === "returnValue") {
+            resetReturnValueName();
+            setReturnValueType('');
+            resetReturnValueDefaultValue();
+            resetReturnValueDescription();
+
+        }
+
     }
 
     function updateParams() {
@@ -88,33 +114,47 @@ export default function SecondStepFunctionForm(props) {
             description: paramsDescription
         });
         setParams(params)
-        resetParams()
+        resetValues("params")
         setParamsIndex(params.length)
         setShowParamsChips(true)
         setState({});
     }
 
     function updateReturnValue() {
-        let returnValue = {
+        returnValue.splice(returnValueIndex, 1, {
             name: returnValueName,
-            description: returnValueDescription,
             type: returnValueType,
-            defaultValue: returnValueDefaultValue
-        };
-        setReturnValue(returnValue);
+            defaultValue: returnValueDefaultValue,
+            description: returnValueDescription
+        });
+        setReturnValue(returnValue)
+        resetValues("returnValue")
+        setReturnValueIndex(returnValue.length)
+        setShowReturnValueChips(true)
+        setState({});
     }
 
-    function reEditParams(index) {
-        setParamsIndex(index)
-        setParamsName(params[index].name)
-        setParamsDescription(params[index].description)
-        setParamsType(params[index].type)
-        setParamsDefaultValue(params[index].defaultValue)
+    function reEdit(valueToEdit, index) {
+        if (valueToEdit === "params") {
+            setParamsIndex(index)
+            setParamsName(params[index].name)
+            setParamsDescription(params[index].description)
+            setParamsType(params[index].type)
+            setParamsDefaultValue(params[index].defaultValue)
+        }
+        if (valueToEdit === "returnValue") {
+            setReturnValueIndex(index)
+            setReturnValueName(returnValue[index].name)
+            setReturnValueDescription(returnValue[index].description)
+            setReturnValueType(returnValue[index].type)
+            setReturnValueDefaultValue(returnValue[index].defaultValue)
+        }
+
     }
 
     React.useEffect(() => {
         props.saveData({params: params, returnValue: returnValue})
-       /* props.isSecondStepDone({params: params, returnValue: returnValue})*/
+        /* props.isSecondStepDone({params: params, returnValue: returnValue})*/
     }, [params, returnValue]);
     return (
         <>
@@ -127,8 +167,8 @@ export default function SecondStepFunctionForm(props) {
                     <Grid container direction="row"
                           justify="flex-start"
                           alignItems="center" spacing={1}>
-                        <GenerateChipsTooltipEditable id={"chips"} chips={params} handleDelete={handleDelete}
-                                                      handleClick={reEditParams}/>
+                        <GenerateChipsTooltipEditable id={"chips"} chips={params} valueToEdit={"params"} handleDelete={handleDelete}
+                                                      handleClick={reEdit}/>
                     </Grid>
                     }
 
@@ -187,7 +227,7 @@ export default function SecondStepFunctionForm(props) {
                             size="small"
                             className={classes.button}
                             startIcon={<AddCircleIcon/>}
-                            onClick={updateParams}
+                            onClick={()=>updateParams()}
                         >
                             Add
                         </Button>
@@ -197,8 +237,16 @@ export default function SecondStepFunctionForm(props) {
                     </FormHelperText>
                 </Grid>
             </form>
-            <h2>Return value</h2>
+            <h2>Return</h2>
             <Grid container spacing={2}>
+                {showReturnValueChips &&
+                <Grid container direction="row"
+                      justify="flex-start"
+                      alignItems="center" spacing={1}>
+                    <GenerateChipsTooltipEditable id={"chips"} chips={returnValue} valueToEdit={"returnValue"} handleDelete={handleDelete}
+                                                  handleClick={reEdit}/>
+                </Grid>
+                }
                 <Grid item xs={4}>
                     <TextField
                         name="name"
@@ -216,7 +264,6 @@ export default function SecondStepFunctionForm(props) {
                         renderInput={(params) => <TextField {...params} label="Type *" variant="outlined"/>}
                         onChange={(event, value) => {
                             setReturnValueType(value)
-                            updateReturnValue()
                         }}
                         value={returnValueType}
                     />
@@ -226,7 +273,7 @@ export default function SecondStepFunctionForm(props) {
                         variant="outlined"
                         fullWidth
                         label="Default value"
-                        name="dafaultValue"
+                        name="defaultValue"
                         value={returnValueDefaultValue}
                         onChange={handleReturnValueDefaultValue}
                     />
@@ -244,8 +291,22 @@ export default function SecondStepFunctionForm(props) {
                         onChange={handleReturnValueDescription}
                     />
                 </Grid>
+                <Grid container direction="row"
+                      justify="flex-end"
+                      alignItems="flex-start">
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        className={classes.button}
+                        startIcon={<AddCircleIcon/>}
+                        onClick={()=>updateReturnValue()}
+                    >
+                        Add
+                    </Button>
+                </Grid>
                 <FormHelperText>
-                    Only one RETURN value if your return is ok click NEXT
+                    Don't forget to click on ADD if you want to save the return value
                 </FormHelperText>
             </Grid>
         </>

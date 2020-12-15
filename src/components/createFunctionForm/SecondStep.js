@@ -33,18 +33,25 @@ const useStyles = makeStyles((theme) => ({
     },
     width: {
         width: '100%'
-    }
+    },
+    buttons: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+    },
+    button: {
+        marginTop: theme.spacing(3),
+        marginLeft: theme.spacing(1),
+    },
 }));
 export default function SecondStepFunction(props) {
     const classes = useStyles();
     const type = ['String', 'Number', 'Boolean', 'Array', 'Object', 'Function', 'BigInt', 'Null', 'Symbol', 'Other'];
     const [, setState] = React.useState();
-    const [showParamsChips, setParamsChips] = React.useState(props.params ? props.params[0].name !== "" : false);
-    const [paramsIndex, setParamsIndex] = React.useState(0);
-    const [showReturnValueChips, setReturnValueChips] = React.useState(props.returnValue ? props.returnValue[0].name !== "" : false);
-    const [returnValueIndex, setReturnValueIndex] = React.useState(0);
-
-
+    const [showParamsChips, setParamsChips] = React.useState(props.params.length > 0 ? props.params[0].name !== "" : false);
+    const [paramsIndex, setParamsIndex] = React.useState(props.params.length-1);
+    const [showReturnValueChips, setReturnValueChips] = React.useState(props.returnValue.length > 0 ? props.returnValue[0].name !== "" : false);
+    const [returnValueIndex, setReturnValueIndex] = React.useState(props.returnValue.length-1);
+console.log(props)
     const validationSchema = yup.object({
         params: yup.array(
             yup.object({
@@ -66,26 +73,18 @@ export default function SecondStepFunction(props) {
 
     const formikParams = useFormik({
         initialValues: {
-            params: props.params ? props.params : [{
-                name: "",
-                type: "String",
-                description: "",
-                defaultValue: ""
-            }]
+            params:  props.params
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
             formikParams.values.params.push({
                 name: "",
-                type: "",
-                defaultValue: "String",
+                type: "String",
+                defaultValue: "",
                 description: ""
             })
             formikParams.values.params[0] ? setParamsChips(formikParams.values.params[0].name !== "") : setParamsChips(false)
             setParamsIndex(formikParams.values.params.length - 1)
-            let paramsToSave = formikParams.values.params;
-            paramsToSave.pop();
-            props.saveFunctionData("params",paramsToSave)
         },
     });
     const whichErrorParams = (index, field) => {
@@ -112,22 +111,19 @@ export default function SecondStepFunction(props) {
         }
         return false;
     }
+
     function handleDeleteParams(index) {
         formikParams.values.params.splice(index, 1)
         setParamsIndex(formikParams.values.params.length - 1)
     }
+
     function reEditParams(index) {
         setParamsIndex(index)
     }
 
     const formikReturnValue = useFormik({
         initialValues: {
-            returnValue: props.returnValue ? props.returnValue : [{
-                name: "",
-                type: "String",
-                description: "",
-                defaultValue: ""
-            }]
+            returnValue:  props.returnValue
         },
         validationSchema: validationSchemaReturn,
         onSubmit: (values) => {
@@ -139,9 +135,6 @@ export default function SecondStepFunction(props) {
             })
             formikReturnValue.values.returnValue[0] ? setReturnValueChips(formikReturnValue.values.returnValue[0].name !== "") : setReturnValueChips(false)
             setReturnValueIndex(formikReturnValue.values.returnValue.length - 1)
-            let returnValueToSave =formikReturnValue.values.returnValue;
-            returnValueToSave.pop();
-            props.saveFunctionData("returnValue",returnValueToSave)
         },
     });
     const isErrorReturnValue = (index, field) => {
@@ -168,243 +161,252 @@ export default function SecondStepFunction(props) {
         }
         return null;
     }
+
     function handleDeleteReturnValue(index) {
         formikReturnValue.values.returnValue.splice(index, 1)
         setReturnValueIndex(formikReturnValue.values.returnValue.length - 1)
     }
+
     function reEditReturnValue(index) {
         setReturnValueIndex(index)
     }
 
     React.useEffect(() => {
         setState({})
-    }, [paramsIndex,returnValueIndex]);
+    }, [paramsIndex, returnValueIndex]);
+
 
     return (<>
-        <form onSubmit={formikParams.handleSubmit}>
-            <h2>Params</h2>
-            <Grid container spacing={2}>
-                {showParamsChips &&
-                <Grid container direction="row"
-                      justify="flex-start"
-                      alignItems="center" spacing={1}>
-                    <GenerateChipsTooltipEditable id={"chips"} chips={formikParams.values.params}
-                                                  valueToEdit={"params"}
-                                                  handleDelete={handleDeleteParams}
-                                                  handleClick={reEditParams}/>
-                </Grid>
-                }
+            <form onSubmit={formikParams.handleSubmit}>
+                <h2>Params</h2>
+                <Grid container spacing={2}>
+                    {showParamsChips &&
+                    <Grid container direction="row"
+                          justify="flex-start"
+                          alignItems="center" spacing={1}>
+                        <GenerateChipsTooltipEditable id={"chips"} chips={formikParams.values.params}
+                                                      valueToEdit={"params"}
+                                                      handleDelete={handleDeleteParams}
+                                                      handleClick={reEditParams}/>
+                    </Grid>
+                    }
 
-                <Grid item xs={4}>
-                    <TextField
-                        name={`params[${paramsIndex}].name`}
-                        variant="outlined"
-                        fullWidth
-                        label="Name"
-                        autoFocus
-                        value={formikParams.values.params[paramsIndex].name}
-                        onChange={formikParams.handleChange}
-                        error={formikParams.touched.params && isErrorParams(paramsIndex, "name")}
-                        helperText={formikParams.touched.params && whichErrorParams(paramsIndex, "name")}
-                    />
-                </Grid>
-                <Grid item xs={4}>
-                    <Autocomplete
-                        id={`params[${paramsIndex}].type`}
-                        name={`params[${paramsIndex}].type`}
-                        options={type}
-                        getOptionLabel={option => option}
-                        getOptionSelected={(option,value) => option === value}
-                        value={formikParams.values.params[paramsIndex].type}
-                        onChange={(e, value) => {
-                            formikParams.setFieldValue(
-                                `params[${paramsIndex}].type`,
-                                value
-                            );
-                        }}
-                        renderInput={params => (
-                            <TextField
-                                label="Type"
-                                fullWidth
-                                required
-                                variant="outlined"
-
-                                name={`params[${paramsIndex}].type`}
-                                {...params}
-                            />
-                        )}
-                    />
-
-                </Grid>
-                <Grid item xs={4}>
-                    <TextField
-                        name={`params[${paramsIndex}].defaultValue`}
-                        variant="outlined"
-                        fullWidth
-                        label="Default value"
-                        value={formikParams.values.params[paramsIndex].defaultValue}
-                        onChange={formikParams.handleChange}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        name={`params[${paramsIndex}].description`}
-                        variant="outlined"
-                        fullWidth
-                        multiline
-                        required
-                        rows={4}
-                        label="Description"
-                        value={formikParams.values.params[paramsIndex].description}
-                        onChange={formikParams.handleChange}
-                    />
-                </Grid>
-                <Grid container direction="row"
-                      justify="flex-end"
-                      alignItems="flex-start">
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        className={classes.button}
-                        startIcon={paramsIndex !== formikParams.values.params.length - 1 ? <DoneIcon/> :
-                            <AddCircleIcon/>}
-                        type={paramsIndex !== formikParams.values.params.length - 1 ? null : "submit"}
-                        onClick={() => {
-                            if (paramsIndex !== formikParams.values.params.length - 1) {
-                                setParamsIndex(formikParams.values.params.length - 1)
-                            }
-                                console.log(formikParams.values.params)
-                        }}
-                    >
-                        {paramsIndex !== formikParams.values.params.length - 1 ? "Save" : "Add"}
-                    </Button>
-                </Grid>
-                <FormHelperText>
-                    Don't forget to click on ADD if you want to save the params
-                </FormHelperText>
-            </Grid>
-        </form>
-    <form onSubmit={formikReturnValue.handleSubmit}>
-        <h2>Params</h2>
-        <Grid container spacing={2}>
-            {showReturnValueChips &&
-            <Grid container direction="row"
-                  justify="flex-start"
-                  alignItems="center" spacing={1}>
-                <GenerateChipsTooltipEditable id={"chips"} chips={formikReturnValue.values.returnValue}
-                                              handleDelete={handleDeleteReturnValue}
-                                              handleClick={reEditReturnValue}/>
-            </Grid>
-            }
-
-            <Grid item xs={4}>
-                <TextField
-                    name={`returnValue[${returnValueIndex}].name`}
-                    variant="outlined"
-                    fullWidth
-                    label="Name"
-                    autoFocus
-                    value={formikReturnValue.values.returnValue[returnValueIndex].name}
-                    onChange={formikReturnValue.handleChange}
-                    error={formikReturnValue.touched.returnValue && isErrorReturnValue(returnValueIndex, "name")}
-                    helperText={formikReturnValue.touched.returnValue && whichErrorReturnValue(returnValueIndex, "name")}
-                />
-            </Grid>
-            <Grid item xs={4}>
-                <Autocomplete
-                    id={`returnValue[${returnValueIndex}].type`}
-                    name={`returnValue[${returnValueIndex}].type`}
-                    options={type}
-                    getOptionLabel={option => option}
-                    getOptionSelected={(option,value) => option === value}
-                    value={formikReturnValue.values.returnValue[returnValueIndex].type}
-                    onChange={(e, value) => {
-                        formikReturnValue.setFieldValue(
-                            `returnValue[${returnValueIndex}].type`,
-                            value
-                        );
-                    }}
-                    renderInput={params => (
+                    <Grid item xs={4}>
                         <TextField
-                            label="Type"
-                            fullWidth
-                            required
+                            name={`params[${paramsIndex}].name`}
                             variant="outlined"
-                            name={`returnValue[${returnValueIndex}].type`}
-                            {...params}
+                            fullWidth
+                            label="Name"
+                            autoFocus
+                            value={formikParams.values.params[paramsIndex].name}
+                            onChange={formikParams.handleChange}
+                            error={formikParams.touched.params && isErrorParams(paramsIndex, "name")}
+                            helperText={formikParams.touched.params && whichErrorParams(paramsIndex, "name")}
                         />
-                    )}
-                />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Autocomplete
+                            id={`params[${paramsIndex}].type`}
+                            name={`params[${paramsIndex}].type`}
+                            options={type}
+                            getOptionLabel={option => option}
+                            getOptionSelected={(option, value) => option === value}
+                            value={formikParams.values.params[paramsIndex].type}
+                            onChange={(e, value) => {
+                                formikParams.setFieldValue(
+                                    `params[${paramsIndex}].type`,
+                                    value
+                                );
+                            }}
+                            renderInput={params => (
+                                <TextField
+                                    label="Type"
+                                    fullWidth
+                                    required
+                                    variant="outlined"
 
-            </Grid>
-            <Grid item xs={4}>
-                <TextField
-                    name={`returnValue[${returnValueIndex}].defaultValue`}
-                    variant="outlined"
-                    fullWidth
-                    label="Default value"
-                    value={formikReturnValue.values.returnValue[returnValueIndex].defaultValue}
-                    onChange={formikReturnValue.handleChange}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                    name={`returnValue[${returnValueIndex}].description`}
-                    variant="outlined"
-                    fullWidth
-                    multiline
-                    required
-                    rows={4}
-                    label="Description"
-                    value={formikReturnValue.values.returnValue[returnValueIndex].description}
-                    onChange={formikReturnValue.handleChange}
-                />
-            </Grid>
-            <Grid container direction="row"
-                  justify="flex-end"
-                  alignItems="flex-start">
+                                    name={`params[${paramsIndex}].type`}
+                                    {...params}
+                                />
+                            )}
+                        />
+
+                    </Grid>
+                    <Grid item xs={4}>
+                        <TextField
+                            name={`params[${paramsIndex}].defaultValue`}
+                            variant="outlined"
+                            fullWidth
+                            label="Default value"
+                            value={formikParams.values.params[paramsIndex].defaultValue}
+                            onChange={formikParams.handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            name={`params[${paramsIndex}].description`}
+                            variant="outlined"
+                            fullWidth
+                            multiline
+                            required
+                            rows={4}
+                            label="Description"
+                            value={formikParams.values.params[paramsIndex].description}
+                            onChange={formikParams.handleChange}
+                        />
+                    </Grid>
+                    <Grid container direction="row"
+                          justify="flex-end"
+                          alignItems="flex-start">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            size="small"
+                            className={classes.button}
+                            startIcon={paramsIndex !== formikParams.values.params.length - 1 ? <DoneIcon/> :
+                                <AddCircleIcon/>}
+                            type={paramsIndex !== formikParams.values.params.length - 1 ? null : "submit"}
+                            onClick={() => {
+                                if (paramsIndex !== formikParams.values.params.length - 1) {
+                                    setParamsIndex(formikParams.values.params.length - 1)
+                                }
+                                console.log(formikParams.values.params)
+                            }}
+                        >
+                            {paramsIndex !== formikParams.values.params.length - 1 ? "Save" : "Add"}
+                        </Button>
+                    </Grid>
+                    <FormHelperText>
+                        Don't forget to click on ADD if you want to save the params
+                    </FormHelperText>
+                </Grid>
+            </form>
+            <form onSubmit={formikReturnValue.handleSubmit}>
+                <h2>Returns</h2>
+                <Grid container spacing={2}>
+                    {showReturnValueChips &&
+                    <Grid container direction="row"
+                          justify="flex-start"
+                          alignItems="center" spacing={1}>
+                        <GenerateChipsTooltipEditable id={"chips"} chips={formikReturnValue.values.returnValue}
+                                                      handleDelete={handleDeleteReturnValue}
+                                                      handleClick={reEditReturnValue}/>
+                    </Grid>
+                    }
+
+                    <Grid item xs={4}>
+                        <TextField
+                            name={`returnValue[${returnValueIndex}].name`}
+                            variant="outlined"
+                            fullWidth
+                            label="Name"
+                            autoFocus
+                            value={formikReturnValue.values.returnValue[returnValueIndex].name}
+                            onChange={formikReturnValue.handleChange}
+                            error={formikReturnValue.touched.returnValue && isErrorReturnValue(returnValueIndex, "name")}
+                            helperText={formikReturnValue.touched.returnValue && whichErrorReturnValue(returnValueIndex, "name")}
+                        />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Autocomplete
+                            id={`returnValue[${returnValueIndex}].type`}
+                            name={`returnValue[${returnValueIndex}].type`}
+                            options={type}
+                            getOptionLabel={option => option}
+                            getOptionSelected={(option, value) => option === value}
+                            value={formikReturnValue.values.returnValue[returnValueIndex].type}
+                            onChange={(e, value) => {
+                                formikReturnValue.setFieldValue(
+                                    `returnValue[${returnValueIndex}].type`,
+                                    value
+                                );
+                            }}
+                            renderInput={params => (
+                                <TextField
+                                    label="Type"
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    name={`returnValue[${returnValueIndex}].type`}
+                                    {...params}
+                                />
+                            )}
+                        />
+
+                    </Grid>
+                    <Grid item xs={4}>
+                        <TextField
+                            name={`returnValue[${returnValueIndex}].defaultValue`}
+                            variant="outlined"
+                            fullWidth
+                            label="Default value"
+                            value={formikReturnValue.values.returnValue[returnValueIndex].defaultValue}
+                            onChange={formikReturnValue.handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            name={`returnValue[${returnValueIndex}].description`}
+                            variant="outlined"
+                            fullWidth
+                            multiline
+                            required
+                            rows={4}
+                            label="Description"
+                            value={formikReturnValue.values.returnValue[returnValueIndex].description}
+                            onChange={formikReturnValue.handleChange}
+                        />
+                    </Grid>
+                    <Grid container direction="row"
+                          justify="flex-end"
+                          alignItems="flex-start">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            size="small"
+                            className={classes.button}
+                            startIcon={returnValueIndex !== formikReturnValue.values.returnValue.length - 1 ?
+                                <DoneIcon/> :
+                                <AddCircleIcon/>}
+                            type={returnValueIndex !== formikReturnValue.values.returnValue.length - 1 ? null : "submit"}
+                            onClick={() => {
+                                if (returnValueIndex !== formikReturnValue.values.returnValue.length - 1) {
+                                    setReturnValueIndex(formikReturnValue.values.returnValue.length - 1)
+                                }
+                            }}
+                        >
+                            {returnValueIndex !== formikReturnValue.values.returnValue.length - 1 ? "Save" : "Add"}
+                        </Button>
+                    </Grid>
+                    <FormHelperText>
+                        Don't forget to click on ADD if you want to save the return
+                    </FormHelperText>
+                </Grid>
+
+            </form>
+            <div className={classes.buttons}>
+                <Button onClick={props.handleBack} className={classes.button}>
+                    Back
+                </Button>
                 <Button
                     variant="contained"
                     color="primary"
-                    size="small"
                     className={classes.button}
-                    startIcon={returnValueIndex !== formikReturnValue.values.returnValue.length - 1 ? <DoneIcon/> :
-                        <AddCircleIcon/>}
-                    type={returnValueIndex !== formikReturnValue.values.returnValue.length - 1 ? null : "submit"}
                     onClick={() => {
-                        if (returnValueIndex !== formikReturnValue.values.returnValue.length - 1) {
-                            setReturnValueIndex(formikReturnValue.values.returnValue.length - 1)
-                        }
+                        let paramsToSave = formikParams.values.params;
+                        paramsToSave.pop();
+                        props.saveFunctionData("params", paramsToSave)
+                        let returnValueToSave = formikReturnValue.values.returnValue;
+                        returnValueToSave.pop();
+                        props.saveFunctionData("returnValue", returnValueToSave)
+                        props.handleNext()
                     }}
+                    disabled={(formikParams.values.params.length > 1 || formikReturnValue.values.returnValue > 1) &&
+                    Boolean(JSON.stringify(formikParams.errors) !== "{}" || JSON.stringify(formikReturnValue.errors) !== "{}")}
                 >
-                    {returnValueIndex !== formikReturnValue.values.returnValue.length - 1 ? "Save" : "Add"}
+                    Next
                 </Button>
-            </Grid>
-            <FormHelperText>
-                Don't forget to click on ADD if you want to save the return
-            </FormHelperText>
-        </Grid>
-        {/*const ButtonsStepper = (props) => {
-        <React.Fragment>
-        <div className={classes.buttons}>
-            <Button onClick={props.handleBack} className={classes.button}>
-                Back
-            </Button>
-        <Button
-        variant="contained"
-        color="primary"
-        className={classes.button}
-        disabled={props.disabled}
-
-        >
-        {activeStep === steps.length - 1 ? 'Publish my function' : 'Next'}
-        </Button>
-        </div>
-        </React.Fragment>
-    }*/}
-    </form>
-            {props.stepper}
+            </div>
         </>
     );
 }

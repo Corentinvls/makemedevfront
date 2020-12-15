@@ -1,4 +1,3 @@
-import logo from "../logo.svg";
 import React from "react";
 import Button from "@material-ui/core/Button";
 import SignUp from "../components/register/SignUp";

@@ -47,9 +47,9 @@ export default function SecondStepFunction(props) {
     const classes = useStyles();
     const type = ['String', 'Number', 'Boolean', 'Array', 'Object', 'Function', 'BigInt', 'Null', 'Symbol', 'Other'];
     const [, setState] = React.useState();
-    const [showParamsChips, setParamsChips] = React.useState(props.params.length > 0 ? props.params[0].name !== "" : false);
+    const [showParamsChips, setParamsChips] = React.useState(props.params.length > 1);
     const [paramsIndex, setParamsIndex] = React.useState(props.params.length-1);
-    const [showReturnValueChips, setReturnValueChips] = React.useState(props.returnValue.length > 0 ? props.returnValue[0].name !== "" : false);
+    const [showReturnValueChips, setReturnValueChips] = React.useState(props.returnValue.length > 1);
     const [returnValueIndex, setReturnValueIndex] = React.useState(props.returnValue.length-1);
 console.log(props)
     const validationSchema = yup.object({
@@ -83,6 +83,8 @@ console.log(props)
                 defaultValue: "",
                 description: ""
             })
+            let paramsToSave = formikParams.values.params;
+            props.saveFunctionData("params", paramsToSave)
             formikParams.values.params[0] ? setParamsChips(formikParams.values.params[0].name !== "") : setParamsChips(false)
             setParamsIndex(formikParams.values.params.length - 1)
         },
@@ -133,6 +135,8 @@ console.log(props)
                 defaultValue: "",
                 description: ""
             })
+            let returnValueToSave = formikReturnValue.values.returnValue;
+            props.saveFunctionData("returnValue", returnValueToSave)
             formikReturnValue.values.returnValue[0] ? setReturnValueChips(formikReturnValue.values.returnValue[0].name !== "") : setReturnValueChips(false)
             setReturnValueIndex(formikReturnValue.values.returnValue.length - 1)
         },

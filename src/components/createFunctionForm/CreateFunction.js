@@ -90,27 +90,26 @@ export default function MultiStepFunctionForm(props) {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            console.log(values);
             functionData.name = values.name;
             functionData.tags = values.tags;
             functionData.post =values.post
             if(!functionData.params){
-                functionData.params = {
+                functionData.params = [{
                     name: "",
                         type: "String",
                         description: "",
                         defaultValue: ""
-                }
+                }]
             }
             if(!functionData.returnValue){
-                functionData.returnValue = {
+                functionData.returnValue = [{
                     name: "",
                     type: "String",
                     description: "",
                     defaultValue: ""
-                }
+                }]
             }
-            console.log(functionData);
+            console.log("funcdata",functionData);
             setFunctionData(functionData)
             setTimeout(()=>handleNext(),500)
         },
@@ -130,7 +129,7 @@ export default function MultiStepFunctionForm(props) {
         setActiveStep(activeStep - 1);
     };
 
-    const ButtonsStepper = (props) => {
+    const ButtonsStepper = () => {
         return <Grid container direction="row"
                      justify="flex-end"
                     >
@@ -140,7 +139,6 @@ export default function MultiStepFunctionForm(props) {
                     </Button>
                 )}
                 <Button
-
                     variant="contained"
                     color="primary"
                     type="submit"
@@ -149,8 +147,6 @@ export default function MultiStepFunctionForm(props) {
                 </Button>
         </Grid>
     }
-
-
 
     const saveFunctionData = (field, value) => {
         if(field==="function"){

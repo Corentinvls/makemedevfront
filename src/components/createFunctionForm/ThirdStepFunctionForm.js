@@ -24,6 +24,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import generateChipsTooltip from "../../utils/generateChipsTooltip";
 import {Button} from "@material-ui/core";
 import {regexFindParams} from "../../utils/regex";
+import ValidationModal from "./ValidationModal";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -60,6 +61,19 @@ ${props.returnValue.map((returnVal) => "return " + returnVal.name + ";").join('\
     const classes = useStyles();
     const [functionValue, setFunctionValue] = useState(props.post.function ? props.post.function : defaultProps);
     const [functionError, setFunctionError] = useState(false)
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const handleOk=()=>{
+        props.handleNext()
+    }
+
     const converter = new Showdown.Converter({
         tables: true,
         simplifiedAutoLink: true,
@@ -86,8 +100,8 @@ ${props.returnValue.map((returnVal) => "return " + returnVal.name + ";").join('\
         let regexReturn = props.returnValue.map(ret => {
             return findWord(ret.name, functionValue)
         })
-        return !regexReturn.includes(false);
-
+        setFunctionError(regexReturn.includes(false))
+        return !functionError
     }
     return (
         <>
@@ -168,16 +182,18 @@ ${props.returnValue.map((returnVal) => "return " + returnVal.name + ";").join('\
                         color="primary"
                         className={classes.button}
                         onClick={() => {
+                            console.log(props)
                             if (checkFunctionParams() && checkFunctionReturn()) {
+                                console.log("salut")
                                 props.saveFunctionData("function", functionValue)
+                                handleClickOpen()
+                                console.log(open)
                             }
-                            /*props.handleNext()*/
                         }}
-
                     >
                         Publish my function
                     </Button>
-                </div>
+                </div>   <ValidationModal open={open} handleClose={()=>handleClose()} handleOk={()=>handleOk()}/>
             </Grid>
         </>
     );

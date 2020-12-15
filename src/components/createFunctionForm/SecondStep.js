@@ -64,8 +64,6 @@ export default function SecondStepFunction(props) {
             }))
     });
 
-
-
     const formikParams = useFormik({
         initialValues: {
             params: props.params ? props.params : [{
@@ -80,11 +78,14 @@ export default function SecondStepFunction(props) {
             formikParams.values.params.push({
                 name: "",
                 type: "",
-                defaultValue: "",
+                defaultValue: "String",
                 description: ""
             })
             formikParams.values.params[0] ? setParamsChips(formikParams.values.params[0].name !== "") : setParamsChips(false)
             setParamsIndex(formikParams.values.params.length - 1)
+            let paramsToSave = formikParams.values.params;
+            paramsToSave.pop();
+            props.saveFunctionData("params",paramsToSave)
         },
     });
     const whichErrorParams = (index, field) => {
@@ -132,12 +133,15 @@ export default function SecondStepFunction(props) {
         onSubmit: (values) => {
             formikReturnValue.values.returnValue.push({
                 name: "",
-                type: "",
+                type: "String",
                 defaultValue: "",
                 description: ""
             })
             formikReturnValue.values.returnValue[0] ? setReturnValueChips(formikReturnValue.values.returnValue[0].name !== "") : setReturnValueChips(false)
             setReturnValueIndex(formikReturnValue.values.returnValue.length - 1)
+            let returnValueToSave =formikReturnValue.values.returnValue;
+            returnValueToSave.pop();
+            props.saveFunctionData("returnValue",returnValueToSave)
         },
     });
     const isErrorReturnValue = (index, field) => {
@@ -253,9 +257,6 @@ export default function SecondStepFunction(props) {
                         label="Description"
                         value={formikParams.values.params[paramsIndex].description}
                         onChange={formikParams.handleChange}
-                        /*   error={(formikParams.touched.params && Boolean(formikParams.errors.params)) && Boolean(formikParams.errors[`params[${paramsIndex}].description`])}
-                           helperText={(formikParams.touched.params && Boolean(formikParams.errors.params)) && formikParams.errorsformikParams.errors[`params[${paramsIndex}].description`]}
-   */
                     />
                 </Grid>
                 <Grid container direction="row"
@@ -292,7 +293,6 @@ export default function SecondStepFunction(props) {
                   justify="flex-start"
                   alignItems="center" spacing={1}>
                 <GenerateChipsTooltipEditable id={"chips"} chips={formikReturnValue.values.returnValue}
-
                                               handleDelete={handleDeleteReturnValue}
                                               handleClick={reEditReturnValue}/>
             </Grid>
@@ -359,8 +359,6 @@ export default function SecondStepFunction(props) {
                     label="Description"
                     value={formikReturnValue.values.returnValue[returnValueIndex].description}
                     onChange={formikReturnValue.handleChange}
-                    error={formikReturnValue.touched.returnValue && isErrorReturnValue(returnValueIndex, "description")}
-                    helperText={formikReturnValue.touched.returnValue && isErrorReturnValue(returnValueIndex, "description")}
                 />
             </Grid>
             <Grid container direction="row"
@@ -378,7 +376,6 @@ export default function SecondStepFunction(props) {
                         if (returnValueIndex !== formikReturnValue.values.returnValue.length - 1) {
                             setReturnValueIndex(formikReturnValue.values.returnValue.length - 1)
                         }
-                        console.log(formikReturnValue.values.returnValue)
                     }}
                 >
                     {returnValueIndex !== formikReturnValue.values.returnValue.length - 1 ? "Save" : "Add"}
@@ -388,7 +385,27 @@ export default function SecondStepFunction(props) {
                 Don't forget to click on ADD if you want to save the return
             </FormHelperText>
         </Grid>
-    </form></>
+        {/*const ButtonsStepper = (props) => {
+        <React.Fragment>
+        <div className={classes.buttons}>
+            <Button onClick={props.handleBack} className={classes.button}>
+                Back
+            </Button>
+        <Button
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        disabled={props.disabled}
+
+        >
+        {activeStep === steps.length - 1 ? 'Publish my function' : 'Next'}
+        </Button>
+        </div>
+        </React.Fragment>
+    }*/}
+    </form>
+            {props.stepper}
+        </>
     );
 }
 

@@ -1,17 +1,18 @@
 import React from "react";
-import logo from './logo.svg';
 import './App.css';
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
-    Link
+    Route
 } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
 import Card from "./components/cards/cardFunction/cardFunction"
 import {ThemeProvider} from '@material-ui/core/styles';
 import mainTheme from "./assets/style/MainTheme";
 import Home from "./View/Home";
+import CreateFunctionView from "./View/CreateFunctionView";
+import DetailsFunctionView from "./View/DetailsFunctionView";
+import Results from "./View/Results";
 
 
 function App() {
@@ -21,13 +22,22 @@ function App() {
                 <div className="App">
                     <Navbar/>
                     <Switch>
+                        <Route path='/results/:id'>
+                            <Results/>
+                        </Route>
                         <Route path="/about">
                             <About/>
                             <Card/>
                         </Route>
-                        <Route path="/">
-                            <Home/>
+                        <Route path="/create">
+                            <CreateFunctionView/>
                         </Route>
+                        <Route path="/details">
+                            <DetailsFunctionView/>
+                        </Route>
+                        <Route path="/">
+                        <Home/>
+                    </Route>
                     </Switch>
                 </div>
             </ThemeProvider>

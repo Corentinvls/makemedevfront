@@ -13,14 +13,15 @@ import generateChipsLink from "../../../utils/generateChipsLink";
 import generateChipsTooltip from "../../../utils/generateChipsTooltip";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import responsiveFontSizes from "@material-ui/core/styles/responsiveFontSizes";
+import Typography from "@material-ui/core/Typography";
+import {useHistory} from "react-router-dom";
+import {connect} from "react-redux";
+import {getPost} from "../../../store/actions";
 
-
-const tags = [
-"js ","php ","react"
-];
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        margin: 20,
         minWidth: 345,
         maxWidth: 445,
         borderRadius: 20,
@@ -69,60 +70,11 @@ let themeFont = createMuiTheme();
 
 themeFont = responsiveFontSizes(themeFont);
 
-
-export default function RecipeReviewCard() {
+function RecipeReviewCard(props) {
+    const history = useHistory();
     const classes = useStyles();
     const accoladeOpen = '{' ;
     const accoladeClose = '}' ;
-    const returnvalue = [{
-        name: "Bob",
-        type: "string",
-        description: "zaeazeaea",
-        defaultValue: "null"
-    }]
-    const params = [{
-        name: "Bob",
-        type: "string",
-        description: "zaeazeaea",
-        defaultValue: "null"
-    },{
-        name: "Bob",
-        type: "string",
-        description: "zaeazeaea",
-        defaultValue: "null"
-    },{
-        name: "Bob",
-        type: "string",
-        description: "zaeazeaea",
-        defaultValue: "null"
-    },{
-        name: "Bob",
-        type: "string",
-        description: "Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.Praesent non nunc mollis, fermentum neque at, semper arcu.Nullam eget est sed sem iaculis gravida eget vitae justo",
-        defaultValue: "null"
-    }];
-
-    const post = [
-        {
-            "id": "",
-            "description": "Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.Praesent non nunc mollis, fermentum neque at, semper arcu.Nullam eget est sed sem iaculis gravida eget vitae justo",
-            "author": {
-                "pseudo": "",
-                "avatar": "",
-                "creationDate": ""
-            },
-            "function": "Ma function",
-            "like": 0,
-            "dislike": 0,
-            "commentary": [
-                {
-                    "pseudo": "",
-                    "commentary": "",
-                    "date": ""
-                }
-            ]
-        }
-    ]
 
     function getChipToolTip(array) {
         return <>
@@ -132,38 +84,50 @@ export default function RecipeReviewCard() {
         </>;
     }
 
-    return (
+    const handleClick = () =>{
+        props.sendPost(props.post)
+        history.push("/details")
+    }
 
-        <Card className={classes.root} elevation={2}>
+    return (
+        <Card className={classes.root} elevation={2} onClick={handleClick}>
             <CardHeader
                 className={classes.headerCard}
-                title="TITLE"
-                subheader={generateChipsLink(tags)}
+                title={props.post.name}
+                subheader={generateChipsLink(props.post.tag)}
             />
             <CardContent>
+                <Typography gutterBottom variant="h5" component="h2">
+                    Description
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                    {props.post.post[0].description}
+                </Typography>
+            </CardContent>
+            <CardContent>
                 <h4 className={classes.alignLeft}>
-                    {post[0].function}({getChipToolTip(params)}){accoladeOpen}
+                    {props.post.name}({getChipToolTip(props.post.params)}){accoladeOpen}
                 </h4>
                 <p className={classes.contentPL}>
-                    {post[0].description}
+                    {props.post.post[0].function}
                 </p>
                 <h4 className={classes.contentPL}>
-                    return {getChipToolTip(returnvalue)} {accoladeClose};
+                    return {getChipToolTip(props.post.returns)} {accoladeClose};
                 </h4>
             </CardContent>
             <CardContent className={classes.rowContain}>
                 <CardContent className={classes.row}>
-                <Icon aria-label="Comment">
+                <Icon aria-label="Comments">
                     <CommentIcon/>
                 </Icon>
                 <p>
-                    {post[0].like}
+                    {props.post.post[0].like}
                 </p>
                 <Icon aria-label="UpVote">
                     <ThumbUpIcon/>
                 </Icon>
                 <p>
-                    {post[0].dislike}
+                    {props.post.post[0].dislike}
                 </p>
                 <Icon aria-label="DownVote">
                     <ThumbDownIcon/>
@@ -177,3 +141,11 @@ export default function RecipeReviewCard() {
         </Card>
     );
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        sendPost: (post) => dispatch(getPost(post)),
+    };
+};
+
+export default connect(null, mapDispatchToProps)(RecipeReviewCard)

@@ -181,7 +181,6 @@ function MultiStepFunctionForm(props) {
     React.useEffect(() => {
         if (activeStep === steps.length) {
             sendPost(functionData).then((response) => {
-                console.log(response);
                 props.updateUser(response.success.user, response.token)
                 setTimeout(() => {
                     history.push("/details/" + response.success.post._id)
@@ -219,7 +218,7 @@ function MultiStepFunctionForm(props) {
                                     Thanks for your contribution
                                 </Typography>
                                 <Typography variant="subtitle1">
-                                    Your function will be visible in a minute
+                                    Your function will be visible in 2 seconds !
                                 </Typography>
                             </React.Fragment>
                         ) : getStepContent(activeStep)}

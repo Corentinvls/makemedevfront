@@ -18,6 +18,7 @@ import ThirdStepFunctionForm from "./ThirdStepFunctionForm";
 import {useFormik} from "formik";
 import * as yup from "yup";
 import Grid from "@material-ui/core/Grid";
+import {connect} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -57,8 +58,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function MultiStepFunctionForm(props) {
-
+function MultiStepFunctionForm(props) {
+console.log(props)
     const validationSchema = yup.object({
         name: yup
             .string('Enter a function name')
@@ -82,10 +83,6 @@ export default function MultiStepFunctionForm(props) {
             tags: props.tags ? props.tags : [],
             post: props.post ? props.post : {
                 description: "",
-                author: {
-                    pseudo: "",
-                    avatar: ""
-                },
             }
         },
         validationSchema: validationSchema,
@@ -93,6 +90,11 @@ export default function MultiStepFunctionForm(props) {
             functionData.name = values.name;
             functionData.tags = values.tags;
             functionData.post = values.post
+            functionData.post.author= {
+                userId:props.user._id,
+                    pseudo: props.user.pseudo,
+                    avatar: props.user.avatar
+            };
             if (!functionData.params) {
                 functionData.params = [{
                     name: "",
@@ -215,3 +217,10 @@ export default function MultiStepFunctionForm(props) {
         </React.Fragment>
     );
 }
+const mapStateToProps = state => {
+    return {
+        user: state.user,
+    };
+};
+
+export default connect(mapStateToProps)(MultiStepFunctionForm)

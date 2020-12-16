@@ -1,25 +1,78 @@
-import React, {useState} from 'react';
+import React from 'react';
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import Grid from "@material-ui/core/Grid";
 import LikeDislikeVote from "./LikeDislikeVote";
-import DisplayFunction from "./DisplayFunction";
-import ParamsReturn from "./ParamsReturn";
-import CreationBar from "./CreationBar";
-import ShowComments from "../comments/ShowComments";
-import {convertToRaw, EditorState} from 'draft-js';
-import Editor from 'draft-js-plugins-editor';
-import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
 import 'draft-js-static-toolbar-plugin/lib/plugin.css';
 import Button from "@material-ui/core/Button";
-import {sendCommentary} from "../../request/postRequest";
 import {updatePosts, updateUser} from "../../store/actions";
 import {connect} from "react-redux";
+import {Add} from "@material-ui/icons";
+import CardContent from "@material-ui/core/CardContent";
+import Card from "@material-ui/core/Card";
+import TitleDetails from "./TitleDetails";
+import DescriptionComponent from "../../utils/components/DescriptionComponent";
+import CodeMirrorRead from "../../utils/components/CodeMirrorRead";
+import CommentaryComponent from "./CommentaryComponent";
+import AddCommentaryComponent from "./AddCommentaryComponent";
 
+
+function DetailsFunction(props) {
+    const classes = useStyles();
+
+    return (
+        <>
+            {props.posts.post.map(post => {
+                console.log(post)
+                return (
+                    <Card>
+                        <TitleDetails
+                            pseudo={post.author.pseudo}
+                            avatar={post.author.avatar}
+                            title={"Solution by "}
+                            date={post.creationDate}
+                            action={
+                                <Button variant="contained" color="primary" startIcon={<Add/>}>
+                                    Improve
+                                </Button>
+                            }
+                        />
+                        <CardContent>
+                            <div className={classes.containerSolution}>
+                                <LikeDislikeVote post={post}/>
+                                <div className={classes.containerFunction}>
+                                    <DescriptionComponent description={post.description}/>
+                                    <CodeMirrorRead function={post.function}/>
+                                    <CommentaryComponent commentary={post.commentary}/>
+                                    <AddCommentaryComponent id={post._id}/>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                )
+            })}
+        </>
+
+    );
+}
 
 const useStyles = makeStyles((theme) => ({
     flexRow: {
         display: "flex",
         justifyContent: "center"
+    },
+    containerSolution: {
+        display: "flex",
+        flexGrow: 1
+    },
+    containerFunction: {
+        marginLeft: 10,
+        width: "100%"
+    },
+    functionCard: {
+        width: "100%",
+        marginBottom: 5
+    },
+    pos: {
+        marginBottom: 12,
     },
     editor: {
         minHeight: 140,
@@ -28,59 +81,17 @@ const useStyles = makeStyles((theme) => ({
         cursor: "text",
         borderRadius: 2,
         boxShadow: "inset 0px 1px 8px -3px #ABABAB",
-        background: "#fefefe",
-    }
+        background: "#ffffff",
+    },
+    containerTitle: {
+        display: "flex",
+        flexGrow: 1,
+        alignItems: "center"
+    },
+    titleElements: {
+        fontSize: 30,
+    },
 }));
-
-
-function DetailsFunction(props) {
-
-    const classes = useStyles();
-    const [editorState, setEditorState] = React.useState(
-        () => EditorState.createWithText("Add Comments"),
-    );
-    const staticToolbarPlugin = createToolbarPlugin();
-    const {Toolbar} = staticToolbarPlugin;
-    const plugins = [staticToolbarPlugin];
-
-    async function handleCommentary() {
-        const blocks = convertToRaw(editorState.getCurrentContent()).blocks;
-        const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
-        let resultCommentary = await sendCommentary(value, props.post._id);
-        if (resultCommentary.success) {
-            props.updateUser(resultCommentary.success.user, resultCommentary.token)
-            props.updatePosts(resultCommentary.success.post)
-        }
-    }
-    return (
-        <Grid container className={classes.flexRow}>
-            <Grid item xs={8} className={classes.flexRow}>
-                <LikeDislikeVote {...props}/>
-                <div style={{width: '100%'}}>
-                    <DisplayFunction function={props.post.function} description={props.post.description}/>
-                    <CreationBar {...props} />
-                </div>
-            </Grid>
-            <Grid item xs={2}>
-                <ParamsReturn {...props}/>
-            </Grid>
-            <Grid item xs={10}>
-                <div className={classes.editor}>
-                    <Toolbar/>
-                    <Editor editorState={editorState} onChange={setEditorState} plugins={plugins}/>
-                </div>
-                <Button onClick={handleCommentary}>
-                    Add a comment !
-                </Button>
-            </Grid>
-            <Grid item xs={10}>
-                    <ShowComments commentary={props.post.commentary}/>
-            </Grid>
-        </Grid>
-
-
-    );
-}
 
 const mapDispatchToProps = dispatch => {
     return {

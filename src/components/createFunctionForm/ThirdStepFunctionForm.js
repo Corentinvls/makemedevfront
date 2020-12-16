@@ -25,6 +25,7 @@ import generateChipsTooltip from "../../utils/generateChipsTooltip";
 import {Button} from "@material-ui/core";
 import {regexFindParams} from "../../utils/regex";
 import ValidationModal from "./ValidationModal";
+import "../../assets/codeMirror/codemirror.css";
 
 
 const useStyles = makeStyles((theme) => ({

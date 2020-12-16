@@ -24,7 +24,6 @@ function Results() {
     }, [id])
 
     async function getSearchPosts(id) {
-        console.log(id)
         let response = await searchPosts(id)
         response = await response
         if (response.success) {

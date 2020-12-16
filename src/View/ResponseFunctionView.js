@@ -1,6 +1,4 @@
 import React, {useEffect, useRef} from 'react';
-
-import CreateFunction from "../components/createFunctionForm/CreateFunction";
 import {useParams} from "react-router-dom";
 import {getPostById} from "../request/postRequest";
 import ResponseFunctionForm from "../components/ResponseFunctionFrom/ResponseFunctionForm";
@@ -24,6 +22,7 @@ export default function ResponseFunctionView(props) {
     }
 
     useEffect(() => {
+
         if (isInitialMount.current) {
             isInitialMount.current = false;
             getPost(mainId)
@@ -32,7 +31,7 @@ export default function ResponseFunctionView(props) {
         }
     }, [props])
 
-
+    console.log(props)
     return (
         <div>
             <ResponseFunctionForm postId={postId} {...post}/>

@@ -53,11 +53,16 @@ function DetailsFunctionView(props) {
                         avatar={posts.author.avatar}
                         title={"Post By "}
                         date={posts.author.creationDate}
-                        action={generateChipsLink(posts.tag)}
+                        variant={"h4"}
+                        action={
+                            <div style={{margin: 10}}>
+                                {generateChipsLink(posts.tag)}
+                            </div>
+                        }
                     />
                     <CardContent className={classes.containerTitle}>
                         <div className={classes.titleElements}>
-                            <Typography variant="h4" component="h2">
+                            <Typography variant="h3" component="h2">
                                 {posts.name}
                             </Typography>
                         </div>

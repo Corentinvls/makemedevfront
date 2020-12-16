@@ -3,8 +3,15 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 import TitleDetails from "./TitleDetails";
+import {Converter} from "showdown";
 
 export default function CommentaryComponent(props) {
+    const converter = new Converter({
+        tables: true,
+        simplifiedAutoLink: true,
+        strikethrough: true,
+        tasklists: true
+    });
 
     return (
         <div style={{marginTop: 20}}>
@@ -18,7 +25,7 @@ export default function CommentaryComponent(props) {
                         />
                         <CardContent>
                             <Typography variant="body2" component="p">
-                                {commentary.commentary}
+                                <div dangerouslySetInnerHTML={{__html: converter.makeHtml(commentary.commentary)}}/>
                             </Typography>
                         </CardContent>
                     </Card>

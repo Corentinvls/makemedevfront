@@ -29,22 +29,25 @@ function DetailsFunction(props) {
                             pseudo={post.author.pseudo}
                             avatar={post.author.avatar}
                             title={"Solution by "}
+                            variant={"h5"}
                             date={post.creationDate}
                             action={
-                                <Button variant="contained"
-                                        color="primary"
-                                        startIcon={<Add/>}
-                                        onClick={()=> history.push("/improve/" + props.mainId+"/"+post._id)}>
-                                    Improve
-                                </Button>
+                                <LikeDislikeVote post={post}/>
                             }
                         />
                         <CardContent>
                             <div className={classes.containerSolution}>
-                                <LikeDislikeVote post={post}/>
                                 <div className={classes.containerFunction}>
                                     <DescriptionComponent description={post.description}/>
                                     <CodeMirrorRead function={post.function}/>
+                                    <Button
+                                        style={{marginTop: 5}}
+                                        variant="contained"
+                                        color="primary"
+                                        startIcon={<Add/>}
+                                        onClick={()=> history.push("/improve/" + props.mainId+"/"+post._id)}>
+                                        Improve
+                                    </Button>
                                     <CommentaryComponent commentary={post.commentary}/>
                                     <AddCommentaryComponent id={post._id}/>
                                 </div>

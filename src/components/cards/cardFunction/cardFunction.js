@@ -1,80 +1,97 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
 import CommentIcon from '@material-ui/icons/Comment';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
-import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import generateChipsLink from "../../../utils/generateChipsLink";
 import generateChipsTooltip from "../../../utils/generateChipsTooltip";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
-import responsiveFontSizes from "@material-ui/core/styles/responsiveFontSizes";
 import Typography from "@material-ui/core/Typography";
 import {useHistory} from "react-router-dom";
-import {connect} from "react-redux";
-import {getPost} from "../../../store/actions";
+import Avatar from "@material-ui/core/Avatar";
+import * as Showdown from "showdown";
+import Grid from "@material-ui/core/Grid";
 
 
 const useStyles = makeStyles((theme) => ({
     root: {
         margin: 20,
-        minWidth: 345,
-        maxWidth: 445,
+        width: '80%',
+        padding: 10,
         borderRadius: 20,
-
     },
-    media: {
-        height: 0,
-        paddingTop: '56.25%', // 16:9
+    rowContain: {
+        display: "flex",
+        alignItems: 'center',
+        borderColor: "black",
+        borderBottom: "solid",
+        borderBottomWidth: 1,
+        [theme.breakpoints.down('sm')]:{
+            display: "block"
+        }
     },
-    expand: {
-        transform: 'rotate(0deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
-    },
-    headerCard:{
-        borderColor:"black",
-        borderBottom:"solid",
-        borderBottomWidth:1,
-    },
-    row:{
-        display:"flex",
-        alignItems:"center",
-        justifyContent: "space-around"
-    },
-    rowContain:{
-        display:"flex",
-        justifyContent: "space-between"
-    },
-    alignLeft:{
-        textAlign: "left",
-        wordBreak: "break-all"
-    },
-    contentPL:{
+    alignLeft: {
         textAlign: "left",
         wordBreak: "break-all",
-        paddingLeft : '10%'
+        fontSize: 18
+    },
+    contentPL: {
+        textAlign: "left",
+        wordBreak: "break-all",
+        paddingLeft: '10%',
+        fontSize: 18
+
+    }, large: {
+        width: theme.spacing(7),
+        height: theme.spacing(7),
+    },
+    descBox: {
+        maxHeight: 120,
+        position: "relative",
+        overflow: "hidden"
+    },
+    marginElementR: {
+        marginRight: 3
+    },
+    contentNameFunction :{
+        textAlign: 'center',
+        borderColor: 'black',
+        border: 'solid',
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 10,
+        [theme.breakpoints.down('sm')]:{
+            marginTop:5,
+            marginBottom:5
+        }
+    },
+    nameFunction:{
+        textTransform: 'capitalize',
+        wordBreak: 'break-word',
+
+    },
+    footerCard:{
+        backgroundColor: "rgba(107, 185, 240, 0.5)",
+        borderRadius: 5,
+        padding: 125
     }
 }));
 
-let themeFont = createMuiTheme();
-
-themeFont = responsiveFontSizes(themeFont);
 
 function RecipeReviewCard(props) {
     const history = useHistory();
     const classes = useStyles();
-    const accoladeOpen = '{' ;
-    const accoladeClose = '}' ;
+    const accoladeOpen = '{';
+    const accoladeClose = '}';
+    const converter = new Showdown.Converter({
+        tables: true,
+        simplifiedAutoLink: true,
+        strikethrough: true,
+        tasklists: true
+    });
 
     function getChipToolTip(array) {
         return <>
@@ -84,66 +101,95 @@ function RecipeReviewCard(props) {
         </>;
     }
 
-    const handleClick = () =>{
+    const handleClick = () => {
         history.push("/details/" + props.post._id)
     }
 
     return (
         <Card className={classes.root} elevation={2} onClick={handleClick}>
-            <CardHeader
-                className={classes.headerCard}
-                title={props.post.name}
-                subheader={generateChipsLink(props.post.tag)}
-            />
-            <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                    Description
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                    {props.post.post[0].description}
-                </Typography>
-            </CardContent>
-            <CardContent>
-                <h4 className={classes.alignLeft}>
-                    {props.post.name}({getChipToolTip(props.post.params)}){accoladeOpen}
-                </h4>
-                <p className={classes.contentPL}>
-                    {props.post.post[0].function}
-                </p>
-                <h4 className={classes.contentPL}>
-                    return {getChipToolTip(props.post.returns)} {accoladeClose};
-                </h4>
-            </CardContent>
-            <CardContent className={classes.rowContain}>
-                <CardContent className={classes.row}>
-                    <p>
-                        {props.post.post.length}
-                    </p>
-                <Icon aria-label="Comments">
-                    <CommentIcon/>
-                </Icon>
-                <p>
-                    {props.post.post[0].like}
-                </p>
-                <Icon aria-label="UpVote">
-                    <ThumbUpIcon/>
-                </Icon>
-                <p>
-                    {props.post.post[0].dislike}
-                </p>
-                <Icon aria-label="DownVote">
-                    <ThumbDownIcon/>
-                </Icon>
-                </CardContent>
-                <CardActions>
-                    <Button size="small">Learn More</Button>
-                </CardActions>
-            </CardContent>
+            <Grid container>
+                <Grid xs={12}>
+                    <CardContent className={classes.rowContain}>
+                        <Grid md={4} sm={12} style={{display: 'flex', alignItems: 'center'}}>
+                            <Avatar alt="Avatar" src={props.post.avatar} className={classes.large}/>
+                            <Grid style={{marginLeft: 10}}>
+                                <Typography>
+                                    By : {props.post.author.pseudo}
+                                </Typography>
+                                <Typography>
+                                    at : {props.post.post[0].author.creationDate}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid md={4} sm={12} className={classes.contentNameFunction}>
+                            <Typography variant="h4" component="h2"
+                                        className={classes.nameFunction}>
+                                {props.post.name}
+                            </Typography>
+                            <Typography>
+                                {generateChipsLink(props.post.tag)}
+                            </Typography>
+                        </Grid>
+                        <Grid style={{display: 'flex', justifyContent: 'center'}} sm={12} md={4}>
+                            <Typography className={classes.marginElementR}>
+                                {props.post.post.length}
+                            </Typography>
+                            <Icon aria-label="Comments" className={classes.marginElementR}>
+                                <CommentIcon/>
+                            </Icon>
+                            <Typography className={classes.marginElementR}>
+                                {props.post.post[0].like}
+                            </Typography>
+                            <Icon aria-label="UpVote" className={classes.marginElementR}>
+                                <ThumbUpIcon/>
+                            </Icon>
+                            <Typography className={classes.marginElementR}>
+                                {props.post.post[0].dislike}
+                            </Typography>
+                            <Icon aria-label="DownVote">
+                                <ThumbDownIcon/>
+                            </Icon>
+                        </Grid>
+                    </CardContent>
+                </Grid>
+                <Grid xs={12}>
+                    <CardContent>
+                        <Grid container className={classes.footerCard}>
+                            <Grid xs={6} spacing={2}>
+                                <Typography gutterBottom variant="h5" component="h2">
+                                    Description
+                                </Typography>
+                                <Typography variant="body2" color="textSecondary" component="div"
+                                            className={classes.descBox}>
+                                    <div
+                                        dangerouslySetInnerHTML={{__html: converter.makeHtml(props.post.post[0].description)}}>
+                                    </div>
+                                </Typography>
+                            </Grid>
+                            <Grid xs={6} spacing={2}>
+                                <Typography gutterBottom variant='h5' component="h2">
+                                    Function
+                                </Typography>
+                                <Typography component='h4' className={classes.alignLeft}>
+                                    {props.post.name}({getChipToolTip(props.post.params)}){accoladeOpen}
+                                </Typography>
+                                <Typography component='p' className={classes.contentPL}>
+                                    {props.post.post[0].function}
+                                </Typography>
+                                <Typography component="h4" className={classes.contentPL}>
+                                    return {getChipToolTip(props.post.returns)} {accoladeClose};
+                                </Typography>
+                            </Grid>
+
+                        </Grid>
+                    </CardContent>
+                </Grid>
+            </Grid>
 
         </Card>
-    );
+    )
+        ;
 }
-
 
 
 export default RecipeReviewCard

@@ -52,4 +52,13 @@ export async function sendPost(post){
     const urlSendPost = "http://185.163.126.173:4021/api/post"
     return await postPost(data, urlSendPost, config)
 }
+export async function sendResponseFunction(response, postId){
+    const config = {headers: {'Authorization': 'Bearer ' + new Cookies().get('token')}}
+    const data ={
+        "responsePost":response,
+        "idPost": postId
+    }
+    const urlSendPost = "http://185.163.126.173:4021/api/post-add-response"
+    return await postPost(data, urlSendPost, config)
+}
 

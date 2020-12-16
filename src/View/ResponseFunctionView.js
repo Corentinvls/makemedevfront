@@ -6,20 +6,19 @@ import {getPostById} from "../request/postRequest";
 import ResponseFunctionForm from "../components/ResponseFunctionFrom/ResponseFunctionForm";
 
 export default function ResponseFunctionView(props) {
-    let {mainId,postId} = useParams();
+    let {mainId, postId} = useParams();
     const [post, setPost] = React.useState({})
     const isInitialMount = useRef(true);
     const [, setState] = React.useState()
 
 
-    async function getPost(id,postId) {
+    async function getPost(id) {
         let response = await getPostById(id)
         response = await response
         if (response.success) {
             console.log(response)
-            let posts=response.success.post
-            setPost(posts.find((post)=>post._id===postId))
-          setState({})
+            setPost(response.success)
+            setState({})
         } else {
             setPost({})
         }
@@ -29,7 +28,7 @@ export default function ResponseFunctionView(props) {
         if (isInitialMount.current) {
             console.log("mount")
             isInitialMount.current = false;
-            getPost(mainId,postId)
+            getPost(mainId)
         } else {
             console.log("update")
             setPost(props.posts)
@@ -37,10 +36,9 @@ export default function ResponseFunctionView(props) {
     }, [props])
 
 
-
     return (
-        <div >
-           <ResponseFunctionForm {...post}/>
+        <div>
+            <ResponseFunctionForm postId={postId} {...post}/>
         </div>
     );
 }

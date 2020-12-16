@@ -24,7 +24,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import generateChipsTooltip from "../../utils/generateChipsTooltip";
 import {Button} from "@material-ui/core";
 import {regexFindParams} from "../../utils/regex";
-import ValidationModal from "./ValidationModal";
+import ValidationModal from "../../utils/components/ValidationModal";
 
 
 const useStyles = makeStyles((theme) => ({

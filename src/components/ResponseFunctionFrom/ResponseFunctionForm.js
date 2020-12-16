@@ -12,6 +12,10 @@ import CustomDraft from "../../utils/components/CustomDraft";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import {Controlled as CodeMirror} from "react-codemirror2";
 import {regexFindParams} from "../../utils/regex";
+import generateChipsTooltip from "../../utils/generateChipsTooltip";
+import {sendResponseFunction} from "../../request/postRequest";
+import {useHistory} from "react-router-dom";
+import ValidationModal from "../../utils/components/ValidationModal";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -53,26 +57,58 @@ const useStyles = makeStyles((theme) => ({
 
 function ResponseFunctionForm(props) {
 
-console.log(props)
     const classes = useStyles();
-    const [description, setDescription] = React.useState(props.description);
-    const [functionValue, setFunction] = React.useState(props.function);
-    const [functionError, setFunctionError] = useState(false)
-    const [, setState] = React.useState()
+    const [description, setDescription] = React.useState();
+    const [functionValue, setFunction] = React.useState();
+    const [paramsError, setParamsError] = useState(false)
+    const [returnsError, setReturnsError] = useState(false)
+    const [open, setOpen] = useState(false)
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const [state, setState] = React.useState()
+    const history = useHistory();
+
+    const handleOk = () => {
+        sendResponseFunction({"function": functionValue, description: description}, props._id).then((response) => {
+            props.updateUser(response.success.user, response.token)
+            history.push("/details/" + props._id)
+        })
+    }
     const checkFunctionParams = () => {
         let paramsFind = functionValue.match(regexFindParams)[0].split(',');
-        let paramsToHave = props.function.match(regexFindParams)[0].split(',');
+        let paramsToHave = props.params.map((param) => param.name);
         if (JSON.stringify(paramsToHave) !== JSON.stringify([])) {
-            setFunctionError(!(JSON.stringify(paramsFind) === JSON.stringify(paramsToHave)));
+            setParamsError(!(JSON.stringify(paramsFind) === JSON.stringify(paramsToHave)));
             return JSON.stringify(paramsFind) === JSON.stringify(paramsToHave);
         } else {
-            setFunctionError(false);
+            setParamsError(false);
             return true;
         }
     }
+    const checkFunctionReturn = () => {
+        function findWord(word, str) {
+            return new RegExp("\\b" + word + "\\b").test(str)
+        }
+
+        let regexReturn = props.returns.map(ret => {
+            return findWord(ret.name, functionValue)
+        })
+        setReturnsError(regexReturn.includes(false))
+        return !regexReturn.includes(false)
+    }
+
     React.useEffect(() => {
-        setState({})
+        if (props.post) {
+            let defineCurrentPost = props.post.find((post) => post._id === props.postId)
+            setDescription(defineCurrentPost.description)
+            setFunction(defineCurrentPost["function"])
+            setState("ready")
+        }
     }, [props])
     return (
         <Grid>
@@ -82,6 +118,21 @@ console.log(props)
                     <Typography component="h1" variant="h4" align="center">
                         Improve {props.name}
                     </Typography>
+                    {state === "ready" &&
+                    <Grid container direction="row" justify={'space-around'} spacing={3}>
+                        <Grid item xs={6}>
+                            <FormHelperText error={paramsError} variant="h4" align="center">Needed
+                                params</FormHelperText>
+                            {generateChipsTooltip(props.params)}
+                        </Grid>
+                        <Grid item xs={6}>
+                            <FormHelperText error={returnsError} variant="h4" align="center">Needed
+                                returns</FormHelperText>
+                            {generateChipsTooltip(props.returns)}
+                        </Grid>
+                    </Grid>
+                    }
+
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <CustomDraft
@@ -129,15 +180,14 @@ console.log(props)
                                 variant="contained"
                                 color="primary"
                                 onClick={() => {
-                                    if (checkFunctionParams() ) {
-                                        console.log("good")
-                                    } else {
-                                        console.log("bad");
+                                    if (checkFunctionParams() && checkFunctionReturn()) {
+                                        handleClickOpen()
                                     }
                                 }}
                             >
                                 Submit
                             </Button>
+                            <ValidationModal open={open} handleClose={() => handleClose()} handleOk={() => handleOk()}/>
                         </Grid>
                     </Grid>
                 </Paper>

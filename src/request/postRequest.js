@@ -38,3 +38,10 @@ export async function sendVote(vote, id){
     const urlSendPost = "http://185.163.126.173:4021/api/post-vote"
     return await postPost(data, urlSendPost, config)
 }
+
+export async function sendPost(post){
+    const config = {headers: {'Authorization': 'Bearer ' + new Cookies().get('token')}}
+    const data = {"post": post}
+    const urlSendPost = "http://185.163.126.173:4021/api/post"
+    return await postPost(data, urlSendPost, config)
+}

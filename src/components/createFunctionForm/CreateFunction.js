@@ -18,6 +18,12 @@ import ThirdStepFunctionForm from "./ThirdStepFunctionForm";
 import {useFormik} from "formik";
 import * as yup from "yup";
 import Grid from "@material-ui/core/Grid";
+import {connect} from "react-redux";
+import {sendPost} from "../../request/postRequest";
+import {updateUser} from "../../store/actions";
+import {useHistory} from "react-router-dom";
+
+
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -56,15 +62,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-export default function MultiStepFunctionForm(props) {
+function MultiStepFunctionForm(props) {
 
     const validationSchema = yup.object({
         name: yup
             .string('Enter a function name')
             .matches(regexFunctionName, 'Enter a valid function name')
             .required('Function name is required'),
-        tags: yup
+        tag: yup
             .array(yup.string().matches(regexTags, 'Enter a valid Tag name').max(50, "max 50 character"))
             .min(1, "One tags required")
             .max(5, "5 tags max")
@@ -79,20 +84,17 @@ export default function MultiStepFunctionForm(props) {
     const formik = useFormik({
         initialValues: {
             name: props.name ? props.name : "",
-            tags: props.tags ? props.tags : [],
+            tag: props.tag ? props.tag : [],
             post: props.post ? props.post : {
                 description: "",
-                author: {
-                    pseudo: "",
-                    avatar: ""
-                },
             }
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
             functionData.name = values.name;
-            functionData.tags = values.tags;
+            functionData.tag = values.tag;
             functionData.post = values.post
+
             if (!functionData.params) {
                 functionData.params = [{
                     name: "",
@@ -101,26 +103,24 @@ export default function MultiStepFunctionForm(props) {
                     defaultValue: ""
                 }]
             }
-            if (!functionData.returnValue) {
-                functionData.returnValue = [{
+            if (!functionData.returns) {
+                functionData.returns = [{
                     name: "",
                     type: "String",
                     description: "",
                     defaultValue: ""
                 }]
             }
-            console.log("funcdata", functionData);
             setFunctionData(functionData)
             setTimeout(() => handleNext(), 500)
         },
     });
     const classes = useStyles();
-
+    const history = useHistory();
     const [activeStep, setActiveStep] = React.useState(0);
     const [functionData, setFunctionData] = React.useState({});
-
-
     const steps = ['What is your function', 'What are your params and return value', 'Your function'];
+
     const handleNext = () => {
         setActiveStep(activeStep + 1);
     }
@@ -152,12 +152,15 @@ export default function MultiStepFunctionForm(props) {
         if (field === "function") {
             functionData.post[field] = value;
             setFunctionData(functionData)
+        } else if (field === "post") {
+            functionData.post = [functionData.post]
+            setFunctionData(functionData)
         } else {
             functionData[field] = value;
             setFunctionData(functionData)
         }
 
-        console.log(functionData)
+
     }
 
     function getStepContent(step) {
@@ -175,6 +178,17 @@ export default function MultiStepFunctionForm(props) {
         }
     }
 
+    React.useEffect(() => {
+        if (activeStep === steps.length) {
+            sendPost(functionData).then((response) => {
+                props.updateUser(response.success.user, response.token)
+                setTimeout(() => {
+                    history.push("/details/" + response.success.post._id)
+                }, 3000)
+            })
+
+        }
+    }, [activeStep]);
     return (
         <React.Fragment>
             <CssBaseline/>
@@ -204,7 +218,7 @@ export default function MultiStepFunctionForm(props) {
                                     Thanks for your contribution
                                 </Typography>
                                 <Typography variant="subtitle1">
-                                    Your function will be visible in a minute
+                                    Your function will be visible in 2 seconds !
                                 </Typography>
                             </React.Fragment>
                         ) : getStepContent(activeStep)}
@@ -215,3 +229,11 @@ export default function MultiStepFunctionForm(props) {
         </React.Fragment>
     );
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        updateUser: (user, token) => dispatch(updateUser(user, token)),
+    };
+};
+
+export default connect(null, mapDispatchToProps)(MultiStepFunctionForm)

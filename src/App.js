@@ -16,6 +16,7 @@ import MenuDrawer from "./components/drawer/MenuDrawer";
 import {setUser} from "./store/actions";
 import {connect} from "react-redux";
 import ProfileView from "./View/ProfileView";
+import ResponseFunctionView from "./View/ResponseFunctionView";
 
 
 function App(props) {
@@ -38,6 +39,9 @@ function App(props) {
             </Route>
             <Route path="/details/:id">
                 <DetailsFunctionView/>
+            </Route>
+            <Route path="/improve/:mainId/:postId">
+                <ResponseFunctionView/>
             </Route>
             <Route path="/">
                 <Home/>

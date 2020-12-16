@@ -36,7 +36,8 @@ function DetailsFunctionView(props) {
 
     return (
         <div>
-            {Array.isArray(posts.post) ? posts.post.map(post => <DetailsFunction post={post}
+            {Array.isArray(posts.post) ? posts.post.map(post => <DetailsFunction mainId={posts._id}
+                                                                                 post={post}
                                                                                  tag={posts.tag}
                                                                                  params={posts.params}
                                                                                  returns={posts.returns}

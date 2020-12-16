@@ -36,12 +36,15 @@ export default function reducer(state = initialState, action) {
             const cookies = new Cookies();
             const token = cookies.get('token')
             let decoded
+            let newToken
             if (token && typeof token !== "undefined") {
                 decoded = jwt_decode(token);
+                newToken = token
             } else {
                 decoded = {}
+                newToken = ""
             }
-            nextState = {...state, user: decoded.success};
+            nextState = {...state, user: decoded.success, token: newToken};
             return nextState || state;
         }
         case ActionType.LOG_OUT: {

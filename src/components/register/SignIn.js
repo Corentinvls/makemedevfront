@@ -76,6 +76,7 @@ function SignIn(props) {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <TextField
+                                            autoFocus
                                             className={classes.textField}
                                             variant="outlined"
                                             label="Login or E-mail"

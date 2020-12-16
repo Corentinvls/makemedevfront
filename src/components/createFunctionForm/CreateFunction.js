@@ -15,8 +15,9 @@ import SecondStepFunctionForm from "./SecondStep";
 import {regexFunctionName, regexTags} from "../../utils/regex";
 
 import ThirdStepFunctionForm from "./ThirdStepFunctionForm";
-import { useFormik} from "formik";
+import {useFormik} from "formik";
 import * as yup from "yup";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -54,38 +55,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(1),
     },
 }));
-const defaultProps = {
-    "name": "testName",
-    "author": {
-        "pseudo": "",
-        "avatar": ""
-    },
-    "params": [
-        {
-            "name": "",
-            "type": "",
-            "description": "",
-            "defaultValue": ""
-        }
-    ],
-    "return":
-        {
-            "name": "",
-            "type": "",
-            "description": "",
-            "defaultValue": ""
-        },
-    "tag": ["test", "tags"],
-    "post":
-        {
-            "description": "tstDesc",
-            "author": {
-                "pseudo": "",
-                "avatar": ""
-            },
-            "function": ""
-        }
-}
+
 
 export default function MultiStepFunctionForm(props) {
 
@@ -95,7 +65,7 @@ export default function MultiStepFunctionForm(props) {
             .matches(regexFunctionName, 'Enter a valid function name')
             .required('Function name is required'),
         tags: yup
-            .array(yup.string().matches(regexTags, 'Enter a valid Tag name'))
+            .array(yup.string().matches(regexTags, 'Enter a valid Tag name').max(50, "max 50 character"))
             .min(1, "One tags required")
             .max(5, "5 tags max")
             .required('tags is required'),
@@ -103,10 +73,7 @@ export default function MultiStepFunctionForm(props) {
             .object()
             .shape({
                 description: yup.string('Enter a description').required("A description is required"),
-
             }),
-        params: yup.array(),
-        return: yup.array()
     });
 
     const formik = useFormik({
@@ -119,25 +86,32 @@ export default function MultiStepFunctionForm(props) {
                     pseudo: "",
                     avatar: ""
                 },
-                "function": ""
-            },
-            params: props.params ? props.params : [{
-                name: "",
-                type: "String",
-                description: "",
-                defaultValue: ""
-            }],
-            returnValue: props.returnValue ? props.returnValue : [{
-                name: "",
-                type: "String",
-                description: "",
-                defaultValue: ""
-            }]
+            }
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            setFunctionData(values)
-            handleNext()
+            functionData.name = values.name;
+            functionData.tags = values.tags;
+            functionData.post = values.post
+            if (!functionData.params) {
+                functionData.params = [{
+                    name: "",
+                    type: "String",
+                    description: "",
+                    defaultValue: ""
+                }]
+            }
+            if (!functionData.returnValue) {
+                functionData.returnValue = [{
+                    name: "",
+                    type: "String",
+                    description: "",
+                    defaultValue: ""
+                }]
+            }
+            console.log("funcdata", functionData);
+            setFunctionData(functionData)
+            setTimeout(() => handleNext(), 500)
         },
     });
     const classes = useStyles();
@@ -155,61 +129,35 @@ export default function MultiStepFunctionForm(props) {
         setActiveStep(activeStep - 1);
     };
 
-    const ButtonsStepper = (props) => {
-        return <React.Fragment>
-            <div className={classes.buttons}>
-                {activeStep !== 0 && (
-                    <Button onClick={handleBack} className={classes.button}>
-                        Back
-                    </Button>
-                )}
-                <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                    type="submit"
-                    disabled={props.disabled}
-
-                >
-                    {activeStep === steps.length - 1 ? 'Publish my function' : 'Next'}
+    const ButtonsStepper = () => {
+        return <Grid container direction="row"
+                     justify="flex-end"
+        >
+            {activeStep !== 0 && (
+                <Button onClick={handleBack}>
+                    Back
                 </Button>
-            </div>
-        </React.Fragment>
-    }
-
-
-    const saveData = (step, data) => {
-        switch (step) {
-            case 0:
-                functionData.name = data.name;
-                functionData.tags = data.tags;
-                if (functionData.post) {
-                    functionData.post.description = data.description;
-                } else {
-                    functionData.post = {
-                        "description": data.description,
-                        "author": {
-                            "pseudo": "",
-                            "avatar": ""
-                        },
-                        "function": ""
-                    };
-                }
-                setFunctionData(functionData)
-                break;
-            case 1:
-                functionData.params = data.params;
-                functionData.returnValue = data.returnValue;
-                setFunctionData(functionData)
-                break;
-
-        }
+            )}
+            <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+            >
+                {activeStep === steps.length - 1 ? 'Publish my function' : 'Next'}
+            </Button>
+        </Grid>
     }
 
     const saveFunctionData = (field, value) => {
-        functionData[field] = value;
-        setFunctionData(functionData)
-        setTimeout(()=>{alert(functionData)})
+        if (field === "function") {
+            functionData.post[field] = value;
+            setFunctionData(functionData)
+        } else {
+            functionData[field] = value;
+            setFunctionData(functionData)
+        }
+
+        console.log(functionData)
     }
 
     function getStepContent(step) {
@@ -218,9 +166,10 @@ export default function MultiStepFunctionForm(props) {
                 return <FirstStepFunctionForm {...functionData} formik={formik} stepper={<ButtonsStepper/>}/>;
             case 1:
                 return <SecondStepFunctionForm  {...functionData} handleBack={handleBack} handleNext={handleNext}
-                                                saveFunctionData={(value) => saveFunctionData(value)}/>;
+                                                saveFunctionData={(field, value) => saveFunctionData(field, value)}/>;
             case 2:
-                return <ThirdStepFunctionForm {...functionData} saveData={(value) => saveData(step, value)}/>
+                return <ThirdStepFunctionForm {...functionData} handleBack={handleBack} handleNext={handleNext}
+                                              saveFunctionData={(field, value) => saveFunctionData(field, value)}/>
             default:
                 throw new Error('Unknown step');
         }
@@ -255,9 +204,7 @@ export default function MultiStepFunctionForm(props) {
                                     Thanks for your contribution
                                 </Typography>
                                 <Typography variant="subtitle1">
-                                    Your function will be visible in a minutes, you can find it in your profile
-                                    (TODO
-                                    put a link).
+                                    Your function will be visible in a minute
                                 </Typography>
                             </React.Fragment>
                         ) : getStepContent(activeStep)}

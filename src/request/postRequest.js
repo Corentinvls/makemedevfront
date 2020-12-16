@@ -17,6 +17,7 @@ async function getPosts(data, url) {
         return result.data
     }).catch(
         err => {
+            console.log(err.response.data)
             return err.response.data;
         }
     )
@@ -36,5 +37,12 @@ export async function sendVote(vote, id){
     const config = {headers: {'Authorization': 'Bearer ' + new Cookies().get('token')}}
     const data = {"vote": vote, "idPost": id}
     const urlSendPost = "http://185.163.126.173:4021/api/post-vote"
+    return await postPost(data, urlSendPost, config)
+}
+
+export async function sendPost(post){
+    const config = {headers: {'Authorization': 'Bearer ' + new Cookies().get('token')}}
+    const data = {"post": post}
+    const urlSendPost = "http://185.163.126.173:4021/api/post"
     return await postPost(data, urlSendPost, config)
 }

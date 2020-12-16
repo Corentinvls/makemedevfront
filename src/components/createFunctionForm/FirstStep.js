@@ -34,17 +34,17 @@ const{formik} = props;
                 </Grid>
                 <Grid item xs={12}>
                     <ChipInput
-                        name="tags"
+                        name="tag"
                         variant="outlined"
                         fullWidth
-                        id="tags"
-                        label="Tags"
-                        defaultValue={formik.values.tags}
+                        id="tag"
+                        label="Tag"
+                        defaultValue={formik.values.tag}
                         newChipKeyCodes={[13, 32, 10]}
                         newChipKeys={[",", ";"]}
-                        onChange={(chip)=>formik.values.tags=chip}
-                        error={formik.touched.tags && Boolean(formik.errors.tags)}
-                        helperText={formik.touched.tags && formik.errors.tags} />
+                        onChange={(chip)=>formik.values.tag=chip}
+                        error={formik.touched.tag && Boolean(formik.errors.tag)}
+                        helperText={formik.touched.tag && formik.errors.tag} />
                 </Grid>
                 <Grid item xs={12}>
                     <CustomDraft

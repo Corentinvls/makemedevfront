@@ -29,7 +29,7 @@ export default function reducer(state = initialState, action) {
             const cookies = new Cookies();
             cookies.remove('token');
             cookies.set('token', action.token, { path: '/' });
-            nextState = {...state, user: action.user};
+            nextState = {...state, user: action.user,token:action.token};
             return nextState || state;
         }
         case ActionType.SET_USER: {

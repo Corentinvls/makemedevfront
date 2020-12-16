@@ -19,6 +19,11 @@ import {useFormik} from "formik";
 import * as yup from "yup";
 import Grid from "@material-ui/core/Grid";
 import {connect} from "react-redux";
+import {sendPost} from "../../request/postRequest";
+import {updateUser} from "../../store/actions";
+import {useHistory} from "react-router-dom";
+
+
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -57,15 +62,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
 function MultiStepFunctionForm(props) {
-console.log(props)
+
     const validationSchema = yup.object({
         name: yup
             .string('Enter a function name')
             .matches(regexFunctionName, 'Enter a valid function name')
             .required('Function name is required'),
-        tags: yup
+        tag: yup
             .array(yup.string().matches(regexTags, 'Enter a valid Tag name').max(50, "max 50 character"))
             .min(1, "One tags required")
             .max(5, "5 tags max")
@@ -80,7 +84,7 @@ console.log(props)
     const formik = useFormik({
         initialValues: {
             name: props.name ? props.name : "",
-            tags: props.tags ? props.tags : [],
+            tag: props.tag ? props.tag : [],
             post: props.post ? props.post : {
                 description: "",
             }
@@ -88,13 +92,9 @@ console.log(props)
         validationSchema: validationSchema,
         onSubmit: (values) => {
             functionData.name = values.name;
-            functionData.tags = values.tags;
+            functionData.tag = values.tag;
             functionData.post = values.post
-            functionData.post.author= {
-                userId:props.user._id,
-                    pseudo: props.user.pseudo,
-                    avatar: props.user.avatar
-            };
+
             if (!functionData.params) {
                 functionData.params = [{
                     name: "",
@@ -103,26 +103,24 @@ console.log(props)
                     defaultValue: ""
                 }]
             }
-            if (!functionData.returnValue) {
-                functionData.returnValue = [{
+            if (!functionData.returns) {
+                functionData.returns = [{
                     name: "",
                     type: "String",
                     description: "",
                     defaultValue: ""
                 }]
             }
-            console.log("funcdata", functionData);
             setFunctionData(functionData)
             setTimeout(() => handleNext(), 500)
         },
     });
     const classes = useStyles();
-
+    const history = useHistory();
     const [activeStep, setActiveStep] = React.useState(0);
     const [functionData, setFunctionData] = React.useState({});
-
-
     const steps = ['What is your function', 'What are your params and return value', 'Your function'];
+
     const handleNext = () => {
         setActiveStep(activeStep + 1);
     }
@@ -154,12 +152,15 @@ console.log(props)
         if (field === "function") {
             functionData.post[field] = value;
             setFunctionData(functionData)
+        } else if (field === "post") {
+            functionData.post = [functionData.post]
+            setFunctionData(functionData)
         } else {
             functionData[field] = value;
             setFunctionData(functionData)
         }
 
-        console.log(functionData)
+
     }
 
     function getStepContent(step) {
@@ -177,6 +178,18 @@ console.log(props)
         }
     }
 
+    React.useEffect(() => {
+        if (activeStep === steps.length) {
+            sendPost(functionData).then((response) => {
+                console.log(response);
+                props.updateUser(response.success.user, response.token)
+                setTimeout(() => {
+                    history.push("/details/" + response.success.post._id)
+                }, 3000)
+            })
+
+        }
+    }, [activeStep]);
     return (
         <React.Fragment>
             <CssBaseline/>
@@ -217,10 +230,11 @@ console.log(props)
         </React.Fragment>
     );
 }
-const mapStateToProps = state => {
+
+const mapDispatchToProps = dispatch => {
     return {
-        user: state.user,
+        updateUser: (user, token) => dispatch(updateUser(user, token)),
     };
 };
 
-export default connect(mapStateToProps)(MultiStepFunctionForm)
+export default connect(null, mapDispatchToProps)(MultiStepFunctionForm)

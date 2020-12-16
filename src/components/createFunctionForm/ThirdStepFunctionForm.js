@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ThirdStepFunctionForm(props) {
     const defaultProps = `function ${props.name}(${props.params.map((params) => params.name).join(',')}){
 
-${props.returnValue.map((returnVal) => "return " + returnVal.name + ";").join('\n    ')}
+${props.returns.map((returnVal) => "return " + returnVal.name + ";").join('\n    ')}
     }`
 
     const classes = useStyles();
@@ -71,6 +71,7 @@ ${props.returnValue.map((returnVal) => "return " + returnVal.name + ";").join('\
         setOpen(false);
     };
     const handleOk = () => {
+        props.saveFunctionData("post")
         props.handleNext()
     }
 
@@ -97,7 +98,7 @@ ${props.returnValue.map((returnVal) => "return " + returnVal.name + ";").join('\
             return new RegExp("\\b" + word + "\\b").test(str)
         }
 
-        let regexReturn = props.returnValue.map(ret => {
+        let regexReturn = props.returns.map(ret => {
             return findWord(ret.name, functionValue)
         })
         setFunctionError(regexReturn.includes(false))
@@ -115,10 +116,10 @@ ${props.returnValue.map((returnVal) => "return " + returnVal.name + ";").join('\
                     <h3>Your Params </h3>
                     {generateChipsTooltip(props.params)}
                 </Grid>}
-                {props.returnValue.length > 0 &&
+                {props.returns.length > 0 &&
                 <Grid item xs={12}>
                     <h3>Your returns </h3>
-                    {generateChipsTooltip(props.returnValue)}
+                    {generateChipsTooltip(props.returns)}
                 </Grid>}
                 <Grid item xs={12}>
                     <h3>Your function</h3>
@@ -165,14 +166,14 @@ ${props.returnValue.map((returnVal) => "return " + returnVal.name + ";").join('\
                             defaultValue: ""
                         });
                         props.saveFunctionData("params", paramsToSave)
-                        let returnValueToSave = props.returnValue;
-                        returnValueToSave.push({
+                        let returnsToSave = props.returns;
+                        returnsToSave.push({
                             name: "",
                             type: "String",
                             description: "",
                             defaultValue: ""
                         });
-                        props.saveFunctionData("returnValue", returnValueToSave)
+                        props.saveFunctionData("returns", returnsToSave)
                         props.handleBack()
                     }} className={classes.button}>
                         Back
@@ -191,7 +192,7 @@ ${props.returnValue.map((returnVal) => "return " + returnVal.name + ";").join('\
                         Publish my function
                     </Button>
                 </div>
-                <ValidationModal open={open} handleClose={() => handleClose()} handleOk={() => handleOk()}/>
+                <ValidationModal open={open} handleClose={() => handleClose()} handleOk={() => handleOk()} />
             </Grid>
         </>
     );

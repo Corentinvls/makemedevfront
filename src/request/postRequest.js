@@ -17,7 +17,6 @@ async function getPosts(data, url) {
         return result.data
     }).catch(
         err => {
-            console.log(err.response.data)
             return err.response.data;
         }
     )

@@ -13,10 +13,12 @@ import DescriptionComponent from "../../utils/components/DescriptionComponent";
 import CodeMirrorRead from "../../utils/components/CodeMirrorRead";
 import CommentaryComponent from "./CommentaryComponent";
 import AddCommentaryComponent from "./AddCommentaryComponent";
+import {useHistory} from "react-router";
 
 
 function DetailsFunction(props) {
     const classes = useStyles();
+    const history = useHistory()
 
     return (
         <>

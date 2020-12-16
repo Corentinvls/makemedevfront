@@ -21,7 +21,7 @@ function Results() {
 
     useEffect(() => {
         getSearchPosts(id)
-    })
+    }, [])
 
     async function getSearchPosts(id) {
         let response = await searchPosts(id)

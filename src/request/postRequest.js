@@ -35,6 +35,14 @@ export async function getPostById(id){
 export async function sendVote(vote, id){
     const config = {headers: {'Authorization': 'Bearer ' + new Cookies().get('token')}}
     const data = {"vote": vote, "idPost": id}
-    const urlSendPost = "http://185.163.126.173:4021/api/post-vote"
-    return await postPost(data, urlSendPost, config)
+    const urlSendVote = "http://185.163.126.173:4021/api/post-vote"
+    return await postPost(data, urlSendVote, config)
 }
+
+export async function sendCommentary(commentary, id){
+    const config = {headers: {'Authorization': 'Bearer ' + new Cookies().get('token')}}
+    const data = {"commentaryPost": {"commentary": commentary}, "idPost": id}
+    const urlSendCommentary = "http://185.163.126.173:4021/api/post-add-commentary"
+    return await postPost(data, urlSendCommentary, config)
+}
+

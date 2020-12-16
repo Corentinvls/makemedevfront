@@ -102,6 +102,7 @@ function MenuDrawer(props) {
 
     function keyPress(event) {
         if (event.keyCode === 13) {
+            console.log(event)
             history.push("/results/" + event.target.value)
         }
     }

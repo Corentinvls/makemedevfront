@@ -20,19 +20,18 @@ function Results() {
     const [posts, setPosts] = React.useState([])
 
     useEffect(() => {
-        async function getSearchPosts(id) {
-            let response = await searchPosts(id)
-            response = await response
-            if (response.success) {
-                setPosts(response.success)
-            } else {
-                setPosts([])
-            }
-        }
         getSearchPosts(id)
-    }, [])
+    })
 
-
+    async function getSearchPosts(id) {
+        let response = await searchPosts(id)
+        response = await response
+        if (response.success) {
+            setPosts(response.success)
+        } else {
+            setPosts([])
+        }
+    }
 
     return(
         <div className={classes.root}>

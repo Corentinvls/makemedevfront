@@ -43,7 +43,6 @@ function LikeDislikeVote(props){
         if (resultVote.success) {
             props.updateUser(resultVote.success.user, resultVote.token)
             props.updatePosts(resultVote.success.post)
-            history.push(history.push("/details/" + resultVote.success.post._id))
         }
     }
 

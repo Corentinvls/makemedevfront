@@ -14,15 +14,7 @@ function DetailsFunctionView(props) {
     useEffect(() => {
         if (isInitialMount.current) {
             console.log("mount")
-            async function getPosts(id) {
-                let response = await getPostById(id)
-                response = await response
-                if (response.success) {
-                    setPosts(response.success)
-                } else {
-                    setPosts({})
-                }
-            }
+
             isInitialMount.current = false;
             getPosts(id)
         } else {
@@ -32,6 +24,15 @@ function DetailsFunctionView(props) {
     }, [props])
 
 
+    async function getPosts(id) {
+        let response = await getPostById(id)
+        response = await response
+        if (response.success) {
+            setPosts(response.success)
+        } else {
+            setPosts({})
+        }
+    }
 
     return (
         <div>

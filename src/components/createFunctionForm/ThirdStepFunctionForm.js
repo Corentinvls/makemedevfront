@@ -70,7 +70,7 @@ ${props.returnValue.map((returnVal) => "return " + returnVal.name + ";").join('\
     const handleClose = () => {
         setOpen(false);
     };
-    const handleOk=()=>{
+    const handleOk = () => {
         props.handleNext()
     }
 
@@ -182,18 +182,16 @@ ${props.returnValue.map((returnVal) => "return " + returnVal.name + ";").join('\
                         color="primary"
                         className={classes.button}
                         onClick={() => {
-                            console.log(props)
                             if (checkFunctionParams() && checkFunctionReturn()) {
-                                console.log("salut")
                                 props.saveFunctionData("function", functionValue)
                                 handleClickOpen()
-                                console.log(open)
                             }
                         }}
                     >
                         Publish my function
                     </Button>
-                </div>   <ValidationModal open={open} handleClose={()=>handleClose()} handleOk={()=>handleOk()}/>
+                </div>
+                <ValidationModal open={open} handleClose={() => handleClose()} handleOk={() => handleOk()}/>
             </Grid>
         </>
     );

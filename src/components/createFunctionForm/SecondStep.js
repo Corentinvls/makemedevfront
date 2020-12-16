@@ -51,7 +51,7 @@ export default function SecondStepFunction(props) {
     const [paramsIndex, setParamsIndex] = React.useState(props.params.length-1);
     const [showReturnValueChips, setReturnValueChips] = React.useState(props.returnValue.length > 1);
     const [returnValueIndex, setReturnValueIndex] = React.useState(props.returnValue.length-1);
-console.log(props)
+
     const validationSchema = yup.object({
         params: yup.array(
             yup.object({
@@ -113,12 +113,10 @@ console.log(props)
         }
         return false;
     }
-
     function handleDeleteParams(index) {
         formikParams.values.params.splice(index, 1)
         setParamsIndex(formikParams.values.params.length - 1)
     }
-
     function reEditParams(index) {
         setParamsIndex(index)
     }
@@ -165,12 +163,10 @@ console.log(props)
         }
         return null;
     }
-
     function handleDeleteReturnValue(index) {
         formikReturnValue.values.returnValue.splice(index, 1)
         setReturnValueIndex(formikReturnValue.values.returnValue.length - 1)
     }
-
     function reEditReturnValue(index) {
         setReturnValueIndex(index)
     }
@@ -179,6 +175,16 @@ console.log(props)
         setState({})
     }, [paramsIndex, returnValueIndex]);
 
+
+    function isError(formik,field) {
+        if (JSON.stringify(formik.errors) !== "{}") {
+            let errors = (formik.errors[field].map((error) => {
+                return typeof error
+            }));
+            errors.pop()
+            return errors.includes("object");
+        }
+    }
 
     return (<>
             <form onSubmit={formikParams.handleSubmit}>
@@ -204,8 +210,8 @@ console.log(props)
                             autoFocus
                             value={formikParams.values.params[paramsIndex].name}
                             onChange={formikParams.handleChange}
-                            error={formikParams.touched.params && isErrorParams(paramsIndex, "name")}
-                            helperText={formikParams.touched.params && whichErrorParams(paramsIndex, "name")}
+                            error={ isErrorParams(paramsIndex, "name")}
+                            helperText={ whichErrorParams(paramsIndex, "name")}
                         />
                     </Grid>
                     <Grid item xs={4}>
@@ -214,6 +220,7 @@ console.log(props)
                             name={`params[${paramsIndex}].type`}
                             options={type}
                             getOptionLabel={option => option}
+                            disableClearable={true}
                             getOptionSelected={(option, value) => option === value}
                             value={formikParams.values.params[paramsIndex].type}
                             onChange={(e, value) => {
@@ -307,8 +314,8 @@ console.log(props)
                             autoFocus
                             value={formikReturnValue.values.returnValue[returnValueIndex].name}
                             onChange={formikReturnValue.handleChange}
-                            error={formikReturnValue.touched.returnValue && isErrorReturnValue(returnValueIndex, "name")}
-                            helperText={formikReturnValue.touched.returnValue && whichErrorReturnValue(returnValueIndex, "name")}
+                            error={isErrorReturnValue(returnValueIndex, "name")}
+                            helperText={whichErrorReturnValue(returnValueIndex, "name")}
                         />
                     </Grid>
                     <Grid item xs={4}>
@@ -316,6 +323,7 @@ console.log(props)
                             id={`returnValue[${returnValueIndex}].type`}
                             name={`returnValue[${returnValueIndex}].type`}
                             options={type}
+                            disableClearable={true}
                             getOptionLabel={option => option}
                             getOptionSelected={(option, value) => option === value}
                             value={formikReturnValue.values.returnValue[returnValueIndex].type}
@@ -405,8 +413,7 @@ console.log(props)
                         props.saveFunctionData("returnValue", returnValueToSave)
                         props.handleNext()
                     }}
-                    disabled={(formikParams.values.params.length > 1 || formikReturnValue.values.returnValue > 1) &&
-                    Boolean(JSON.stringify(formikParams.errors) !== "{}" || JSON.stringify(formikReturnValue.errors) !== "{}")}
+                    disabled={isError(formikParams,"params")||isError(formikReturnValue,"returnValue")}
                 >
                     Next
                 </Button>

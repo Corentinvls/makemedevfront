@@ -15,7 +15,7 @@ import SecondStepFunctionForm from "./SecondStep";
 import {regexFunctionName, regexTags} from "../../utils/regex";
 
 import ThirdStepFunctionForm from "./ThirdStepFunctionForm";
-import { useFormik} from "formik";
+import {useFormik} from "formik";
 import * as yup from "yup";
 import Grid from "@material-ui/core/Grid";
 
@@ -65,7 +65,7 @@ export default function MultiStepFunctionForm(props) {
             .matches(regexFunctionName, 'Enter a valid function name')
             .required('Function name is required'),
         tags: yup
-            .array(yup.string().matches(regexTags, 'Enter a valid Tag name'))
+            .array(yup.string().matches(regexTags, 'Enter a valid Tag name').max(50, "max 50 character"))
             .min(1, "One tags required")
             .max(5, "5 tags max")
             .required('tags is required'),
@@ -92,16 +92,16 @@ export default function MultiStepFunctionForm(props) {
         onSubmit: (values) => {
             functionData.name = values.name;
             functionData.tags = values.tags;
-            functionData.post =values.post
-            if(!functionData.params){
+            functionData.post = values.post
+            if (!functionData.params) {
                 functionData.params = [{
                     name: "",
-                        type: "String",
-                        description: "",
-                        defaultValue: ""
+                    type: "String",
+                    description: "",
+                    defaultValue: ""
                 }]
             }
-            if(!functionData.returnValue){
+            if (!functionData.returnValue) {
                 functionData.returnValue = [{
                     name: "",
                     type: "String",
@@ -109,9 +109,9 @@ export default function MultiStepFunctionForm(props) {
                     defaultValue: ""
                 }]
             }
-            console.log("funcdata",functionData);
+            console.log("funcdata", functionData);
             setFunctionData(functionData)
-            setTimeout(()=>handleNext(),500)
+            setTimeout(() => handleNext(), 500)
         },
     });
     const classes = useStyles();
@@ -132,27 +132,27 @@ export default function MultiStepFunctionForm(props) {
     const ButtonsStepper = () => {
         return <Grid container direction="row"
                      justify="flex-end"
-                    >
-                {activeStep !== 0 && (
-                    <Button onClick={handleBack}  >
-                        Back
-                    </Button>
-                )}
-                <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                >
-                    {activeStep === steps.length - 1 ? 'Publish my function' : 'Next'}
+        >
+            {activeStep !== 0 && (
+                <Button onClick={handleBack}>
+                    Back
                 </Button>
+            )}
+            <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+            >
+                {activeStep === steps.length - 1 ? 'Publish my function' : 'Next'}
+            </Button>
         </Grid>
     }
 
     const saveFunctionData = (field, value) => {
-        if(field==="function"){
+        if (field === "function") {
             functionData.post[field] = value;
             setFunctionData(functionData)
-        }else{
+        } else {
             functionData[field] = value;
             setFunctionData(functionData)
         }
@@ -166,10 +166,10 @@ export default function MultiStepFunctionForm(props) {
                 return <FirstStepFunctionForm {...functionData} formik={formik} stepper={<ButtonsStepper/>}/>;
             case 1:
                 return <SecondStepFunctionForm  {...functionData} handleBack={handleBack} handleNext={handleNext}
-                                                saveFunctionData={(field,value) => saveFunctionData(field,value)}/>;
+                                                saveFunctionData={(field, value) => saveFunctionData(field, value)}/>;
             case 2:
                 return <ThirdStepFunctionForm {...functionData} handleBack={handleBack} handleNext={handleNext}
-                                              saveFunctionData={(field,value) => saveFunctionData(field,value)}/>
+                                              saveFunctionData={(field, value) => saveFunctionData(field, value)}/>
             default:
                 throw new Error('Unknown step');
         }

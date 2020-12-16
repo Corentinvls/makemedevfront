@@ -32,8 +32,6 @@ function LikeDislikeVote(props){
             props.updatePosts(resultVote.success.post)
         }
     }
-
-    console.log(props)
     return(
             <div className={classes.voteElements}>
                 <TextWithLogoButton text={props.post.like} icon={<ThumbUpIcon/>} onClick={() => userVote(1)}/>

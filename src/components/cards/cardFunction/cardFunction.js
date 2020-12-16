@@ -15,8 +15,6 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import responsiveFontSizes from "@material-ui/core/styles/responsiveFontSizes";
 import Typography from "@material-ui/core/Typography";
 import {useHistory} from "react-router-dom";
-import {connect} from "react-redux";
-import {getPost} from "../../../store/actions";
 
 
 const useStyles = makeStyles((theme) => ({

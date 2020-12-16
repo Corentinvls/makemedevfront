@@ -16,7 +16,6 @@ export default function ResponseFunctionView(props) {
         let response = await getPostById(id)
         response = await response
         if (response.success) {
-            console.log(response)
             setPost(response.success)
             setState({})
         } else {
@@ -26,11 +25,9 @@ export default function ResponseFunctionView(props) {
 
     useEffect(() => {
         if (isInitialMount.current) {
-            console.log("mount")
             isInitialMount.current = false;
             getPost(mainId)
         } else {
-            console.log("update")
             setPost(props.posts)
         }
     }, [props])

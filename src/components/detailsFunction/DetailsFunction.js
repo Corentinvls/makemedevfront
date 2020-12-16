@@ -23,7 +23,6 @@ function DetailsFunction(props) {
     return (
         <>
             {props.posts.post.map(post => {
-                console.log(post)
                 return (
                     <Card>
                         <TitleDetails

@@ -23,14 +23,23 @@ function SignIn(props) {
     async function submitValidation(values, action) {
         const data = {user: {login: values.login, password: values.password}}
         let response = await setSignIn(data)
+        console.log(response);
         if (response.error === "login incorrect") {
             action.setErrors({
-                login: "Pseudo or E-mail is incorrect !",
-                password: "Pseudo or E-mail is incorrect !"
+                login: "Pseudo or E-mail is incorrect !"
+            });
+        } else if (response.error === "mot de passe incorrect"){
+            action.setErrors({
+                password: "Password is incorrect !"
             });
         } else if (response.success) {
             props.sendUser(response.success, response.token)
             onClose()
+        } else {
+            action.setErrors({
+                login: "Pseudo or E-mail is incorrect !",
+                password: "Password is incorrect !"
+            });
         }
     }
 

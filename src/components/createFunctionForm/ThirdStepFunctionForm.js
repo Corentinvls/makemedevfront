@@ -54,7 +54,6 @@ export default function ThirdStepFunctionForm(props) {
         strikethrough: true,
         tasklists: true
     });
-    console.log(defaultProps)
     return (
         <>
             <form className={classes.form} noValidate>

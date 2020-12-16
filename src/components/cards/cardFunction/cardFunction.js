@@ -85,8 +85,7 @@ function RecipeReviewCard(props) {
     }
 
     const handleClick = () =>{
-        props.sendPost(props.post)
-        history.push("/details")
+        history.push("/details/" + props.post._id)
     }
 
     return (
@@ -117,6 +116,9 @@ function RecipeReviewCard(props) {
             </CardContent>
             <CardContent className={classes.rowContain}>
                 <CardContent className={classes.row}>
+                    <p>
+                        {props.post.post.length}
+                    </p>
                 <Icon aria-label="Comments">
                     <CommentIcon/>
                 </Icon>
@@ -142,10 +144,6 @@ function RecipeReviewCard(props) {
     );
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        sendPost: (post) => dispatch(getPost(post)),
-    };
-};
 
-export default connect(null, mapDispatchToProps)(RecipeReviewCard)
+
+export default RecipeReviewCard

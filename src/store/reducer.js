@@ -1,9 +1,9 @@
-import {GET_POST, GET_USER, LOG_OUT, SET_USER} from "./actions";
+import * as ActionType from "./actions";
 import Cookies from 'universal-cookie';
 import jwt_decode from "jwt-decode";
 
 const initialState = {
-    post: {},
+    posts: [],
     user: {},
     token: ""
 };
@@ -11,17 +11,28 @@ const initialState = {
 export default function reducer(state = initialState, action) {
     let nextState;
     switch (action.type) {
-        case GET_POST: {
-            nextState = {...state, post: action.post};
+        case ActionType.GET_POST: {
+            nextState = {...state, posts: action.posts};
             return nextState || state;
         }
-        case GET_USER: {
+        case ActionType.UPDATE_POSTS: {
+            nextState = {...state, posts: action.posts};
+            return nextState || state;
+        }
+        case ActionType.GET_USER: {
             const cookies = new Cookies();
+            cookies.set('token', action.token, { path: '/' });
+            nextState = {...state, user: action.user, token: action.token};
+            return nextState || state;
+        }
+        case ActionType.UPDATE_USER: {
+            const cookies = new Cookies();
+            cookies.remove('token');
             cookies.set('token', action.token, { path: '/' });
             nextState = {...state, user: action.user};
             return nextState || state;
         }
-        case SET_USER: {
+        case ActionType.SET_USER: {
             const cookies = new Cookies();
             const token = cookies.get('token')
             let decoded
@@ -33,10 +44,10 @@ export default function reducer(state = initialState, action) {
             nextState = {...state, user: decoded.success};
             return nextState || state;
         }
-        case LOG_OUT: {
+        case ActionType.LOG_OUT: {
             const cookies = new Cookies();
             cookies.remove('token');
-            nextState = {...state, user: {}};
+            nextState = {...state, user: {}, token: ""};
             return nextState || state;
         }
         default:

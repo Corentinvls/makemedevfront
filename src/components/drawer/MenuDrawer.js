@@ -40,7 +40,6 @@ function MenuDrawer(props) {
     const [displaySignUp, setDisplaySignUp] = React.useState(false);
     const [displaySignIn, setDisplaySignIn] = React.useState(false);
 
-    console.log(props)
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -109,9 +108,10 @@ function MenuDrawer(props) {
 
 
     function showIfLoginOrNot() {
-        if (props.user && typeof props.user !== "undefined") {
+        if (props.token.length > 0) {
+            console.log(props)
             return <>
-                <ListItem button onClick={""}>
+                <ListItem button onClick={() => history.push("/profile")}>
                     <ListItemIcon>
                         <AccountCircle/>
                     </ListItemIcon>
@@ -130,7 +130,7 @@ function MenuDrawer(props) {
                 <ListItem button onClick={() => {
                     props.logOut()
                     history.push("/")
-                    window.location.reload(false)
+                    // window.location.reload(false)
                 }}>
                     <ListItemIcon>
                         <ExitToAppIcon/>
@@ -155,14 +155,14 @@ function MenuDrawer(props) {
     }
 
     function showUserIfLoginOrNot() {
-        if (props.user && typeof props.user !== "undefined") {
+        if (props.token.length > 0) {
             return <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
                 <Avatar alt={props.user.pseudo} src={props.user.avatar}/>
                 <div style={{marginLeft: 10}}>{props.user.pseudo}</div>
             </div>;
         } else {
             return <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                <Avatar alt="Guest" src="/static/images/avatar/1.jpg"/>
+                <Avatar alt="Guest"/>
                 <div style={{marginLeft: 10}}>Guest</div>
             </div>;
         }
@@ -236,7 +236,6 @@ function MenuDrawer(props) {
                 <Divider/>
                 <List>
                     {showIfLoginOrNot()}
-
                 </List>
             </Drawer>
             <div className={classes.content}>
@@ -364,6 +363,7 @@ const useStyles = makeStyles((theme) => ({
 const mapStateToProps = state => {
     return {
         user: state.user,
+        token: state.token
     };
 };
 

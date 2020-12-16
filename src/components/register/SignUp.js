@@ -24,7 +24,7 @@ function SignUp(props) {
     async function submitValidation(values, action) {
         const data = {user: {pseudo: values.pseudo, mail: values.mail, password: values.password}}
         let response = await setSignUp(data)
-        console.log(response)
+
         if (response.error) {
             action.setErrors({
                 pseudo: response.error.pseudo ? "Pseudo is already used" : null,

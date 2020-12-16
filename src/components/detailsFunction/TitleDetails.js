@@ -1,6 +1,7 @@
 import {CardHeader} from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import Moment from "react-moment";
+import 'moment-timezone';
 import {formatTime} from "../../utils/format";
 import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";

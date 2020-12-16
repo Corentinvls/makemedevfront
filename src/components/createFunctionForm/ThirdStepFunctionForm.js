@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
 import {Controlled as CodeMirror} from 'react-codemirror2'
@@ -24,8 +23,9 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import generateChipsTooltip from "../../utils/generateChipsTooltip";
 import {Button} from "@material-ui/core";
 import {regexFindParams} from "../../utils/regex";
-import ValidationModal from "./ValidationModal";
 import "../../assets/codeMirror/codemirror.css";
+import ValidationModal from "../../utils/components/ValidationModal";
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -125,7 +125,7 @@ ${props.returns.map((returnVal) => "return " + returnVal.name + ";").join('\n   
                 <Grid item xs={12}>
                     <h3>Your function</h3>
                     <FormHelperText error={functionError}>
-                        Don't change you params and return name here !
+                        Don't change you params and return name here ! You can put return in comment if you don't want to create a variable
                     </FormHelperText>
                     <Paper style={{borderRadius: 10, overflow: 'hidden'}}>
                         <CodeMirror

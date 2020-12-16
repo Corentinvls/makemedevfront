@@ -30,7 +30,10 @@ function DetailsFunction(props) {
                             title={"Solution by "}
                             date={post.creationDate}
                             action={
-                                <Button variant="contained" color="primary" startIcon={<Add/>}>
+                                <Button variant="contained"
+                                        color="primary"
+                                        startIcon={<Add/>}
+                                        onClick={()=> history.push("/improve/" + props.mainId+"/"+post._id)}>
                                     Improve
                                 </Button>
                             }

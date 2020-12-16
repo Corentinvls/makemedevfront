@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
@@ -6,6 +6,10 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import EditIcon from '@material-ui/icons/Edit';
+import {sendVote} from "../../request/postRequest";
+import {setUser, updatePosts, updateUser} from "../../store/actions";
+import {connect} from "react-redux";
+import {useHistory} from "react-router";
 
 const useStyles = makeStyles((theme) => ({
     flexCol: {
@@ -27,18 +31,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function LikeDislikeVote(props){
+function LikeDislikeVote(props){
     const classes = useStyles();
     const {post} = props;
-    const [vote, setVote] = useState(0);
+    const history = useHistory()
 
 
-    function userVote(value) {
-        let newVote = value
-        if (vote === value) {
-            newVote = 0
+
+    async function userVote(vote) {
+        let resultVote = await sendVote(vote, props.post._id);
+        if (resultVote.success) {
+            props.updateUser(resultVote.success.user, resultVote.token)
+            props.updatePosts(resultVote.success.post)
         }
-        setVote(newVote);
     }
 
     return(
@@ -70,3 +75,12 @@ export default function LikeDislikeVote(props){
         </div>
     )
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        updateUser: (user, token) => dispatch(updateUser(user, token)),
+        updatePosts: (posts) => dispatch(updatePosts(posts))
+    };
+};
+
+export default connect(null, mapDispatchToProps)(LikeDislikeVote)

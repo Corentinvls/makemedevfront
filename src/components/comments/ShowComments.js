@@ -34,7 +34,6 @@ export default function ShowComments(props) {
 
     return (
         <Grid>
-            {console.log(props)}
             <div className={classes.contain}>
                 <div>{showCommentaries()}</div>
             </div>

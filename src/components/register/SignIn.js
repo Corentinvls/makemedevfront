@@ -8,7 +8,123 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import Typography from "@material-ui/core/Typography";
+import {Formik} from 'formik';
+import DialogActions from "@material-ui/core/DialogActions";
+import {getUser} from "../../store/actions";
+import {connect} from "react-redux";
+import {SignInSchema} from "../../utils/validationForm";
+import {setSignIn} from "../../request/userRequest";
 
+
+function SignIn(props) {
+    const classes = useStyles();
+    const {open, onClose, toggleSignDialogs} = props;
+
+    async function submitValidation(values, action) {
+        const data = {user: {login: values.login, password: values.password}}
+        let response = await setSignIn(data)
+        console.log(response);
+        if (response.error === "login incorrect") {
+            action.setErrors({
+                login: "Pseudo or E-mail is incorrect !"
+            });
+        } else if (response.error === "mot de passe incorrect"){
+            action.setErrors({
+                password: "Password is incorrect !"
+            });
+        } else if (response.success) {
+            props.sendUser(response.success, response.token)
+            onClose()
+        } else {
+            action.setErrors({
+                login: "Pseudo or E-mail is incorrect !",
+                password: "Password is incorrect !"
+            });
+        }
+    }
+
+    return (
+        <Dialog
+            style={{textAlign: 'center'}}
+            open={open}
+            onClose={onClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description">
+            <DialogTitle id="simple-dialog-title" col={12}>
+                <Typography variant={"h2"}>Sign In</Typography>
+            </DialogTitle>
+            <DialogContent>
+                <Formik
+                    initialValues={{login: '', password: ''}}
+                    onSubmit={async (values, action) => {
+                        await submitValidation(values, action);
+                    }}
+
+                    validationSchema={SignInSchema}
+                >
+                    {(props) => {
+                        const {
+                            values,
+                            touched,
+                            errors,
+                            handleChange,
+                            handleBlur,
+                            handleSubmit,
+                        } = props;
+                        return (
+                            <form className={classes.form} onSubmit={handleSubmit}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            className={classes.textField}
+                                            variant="outlined"
+                                            label="Login or E-mail"
+                                            name="login"
+                                            value={values.login}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            error={errors.login && touched.login}
+                                            helperText={(errors.login && touched.login) && errors.login}
+                                            margin="normal"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            className={classes.textField}
+                                            variant="outlined"
+                                            label="Password"
+                                            name="password"
+                                            type="password"
+                                            value={values.password}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            error={errors.password && touched.password}
+                                            helperText={(errors.password && touched.password) && errors.password}
+                                            margin="normal"
+                                        />
+                                    </Grid>
+                                </Grid>
+
+                                <DialogActions>
+                                    <Button type="submit" disabled={(errors.password && touched.password) && errors.password}>
+                                        Submit
+                                    </Button>
+                                </DialogActions>
+                                <Grid container justify="flex-end">
+                                    <Grid item>
+                                        <Link onClick={toggleSignDialogs} variant="body2">
+                                            No account? Sign Up
+                                        </Link>
+                                    </Grid>
+                                </Grid>
+                            </form>
+                        );
+                    }}
+                </Formik>
+            </DialogContent>
+        </Dialog>
+    );
+}
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -25,68 +141,17 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(3, 0, 2),
         backgroundColor: theme.palette.secondary.dark,
     },
+    textField: {
+        width: '100%'
+    }
 }));
 
-export default function SignIn(props) {
-    const classes = useStyles();
-    const {open, onClose, toggleSignDialogs} = props;
-    return (
-        <Dialog
-            style={{textAlign: 'center'}}
-            open={open}
-            onClose={onClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description">
-            <DialogTitle id="simple-dialog-title" col={12}>
-                <Typography variant={"h2"}>Sign In</Typography>
-            </DialogTitle>
-            <DialogContent>
-                <form className={classes.form} noValidate>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                autoComplete="uname"
-                                name="username"
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="username"
-                                label="User Name or Email"
-                                autoFocus
-                            />
-                        </Grid>
+const mapDispatchToProps = dispatch => {
+    return {
+        sendUser: (user, token) => dispatch(getUser(user, token)),
+    };
+};
 
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
-                                id="password"
-                                autoComplete="current-password"
-                            />
-                        </Grid>
-                    </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Sign In
-                    </Button>
-                    <Grid container justify="flex-end">
-                        <Grid item>
-                            <Link onClick={toggleSignDialogs} variant="body2">
-                                No account? Sign Up
-                            </Link>
-                        </Grid>
-                    </Grid>
-                </form>
-            </DialogContent>
-        </Dialog>
-    );
-}
+export default connect(null, mapDispatchToProps)(SignIn)
+
+

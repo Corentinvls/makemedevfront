@@ -1,10 +1,10 @@
-import React from "react";
-import axios from 'axios'
+import React, {useEffect} from "react";
 import {
     useParams
 } from "react-router-dom";
 import RecipeReviewCard from "../components/cards/cardFunction/cardFunction";
 import {makeStyles} from "@material-ui/core/styles";
+import {searchPosts} from "../request/postRequest";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,18 +19,23 @@ function Results() {
     let { id } = useParams();
     const [posts, setPosts] = React.useState([])
 
-    function getSearchPost (search) {
-        axios.get("http://185.163.126.173:4021/api/post?search=" + search).then( result => {
-            setPosts(result.data.success)
-        }).catch(
-            err => {
-                setPosts(err);
-            }
-        )
+    useEffect(() => {
+        getSearchPosts(id)
+    })
+
+    async function getSearchPosts(id) {
+        let response = await searchPosts(id)
+        response = await response
+        if (response.success) {
+            setPosts(response.success)
+        } else {
+            setPosts([])
+        }
     }
+
     return(
         <div className={classes.root}>
-            {posts.length > 0 ? posts.map(post => <RecipeReviewCard post={post}/>) : getSearchPost(id)}
+            {posts.map(post => <RecipeReviewCard post={post}/>)}
         </div>
     )
 }

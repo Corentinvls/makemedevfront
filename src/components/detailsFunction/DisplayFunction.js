@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DisplayFunction(props){
     const classes = useStyles();
-    const {post} = props;
     return(
         <Grid className={classes.inline}>
             <span>Description:</span>

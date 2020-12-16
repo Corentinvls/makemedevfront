@@ -274,7 +274,6 @@ export default function SecondStepFunction(props) {
                             if (paramsIndex !== formikParams.values.params.length - 1) {
                                 setParamsIndex(formikParams.values.params.length - 1)
                             }
-                                console.log(formikParams.values.params)
                         }}
                     >
                         {paramsIndex !== formikParams.values.params.length - 1 ? "Save" : "Add"}

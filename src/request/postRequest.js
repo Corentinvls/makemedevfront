@@ -46,3 +46,10 @@ export async function sendCommentary(commentary, id){
     return await postPost(data, urlSendCommentary, config)
 }
 
+export async function sendPost(post){
+    const config = {headers: {'Authorization': 'Bearer ' + new Cookies().get('token')}}
+    const data = {"post": post}
+    const urlSendPost = "http://185.163.126.173:4021/api/post"
+    return await postPost(data, urlSendPost, config)
+}
+

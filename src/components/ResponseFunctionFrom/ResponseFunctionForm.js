@@ -145,11 +145,12 @@ function ResponseFunctionForm(props) {
                         <Grid item xs={12}>
                             <h3>Your function</h3>
                             <FormHelperText>
-                                Don't change params and return !
+                                Don't change params and return ! You can put return in comment if you don't want to create a variable
                             </FormHelperText>
-                            <Paper style={{borderRadius: 10, overflow: 'hidden'}}>
+                            <Paper style={{borderRadius: 10, overflow: 'hidden',fontSize: "1.2rem"}}>
                                 <CodeMirror
                                     value={functionValue}
+
                                     options={{
                                         mode: 'javascript',
                                         theme: 'ambiance',

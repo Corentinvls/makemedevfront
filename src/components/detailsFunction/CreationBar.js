@@ -32,9 +32,6 @@ export default function DisplayFunction(props) {
                 </div>
             </div>
             <div>
-                <Button onClick={onClick}>
-                    Add a comment !
-                </Button>
                 { showResults ? <CreateComments {...props} /> : null }
             </div>
         </Grid>

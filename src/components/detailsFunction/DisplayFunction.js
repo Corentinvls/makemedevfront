@@ -11,18 +11,23 @@ const useStyles = makeStyles((theme) => ({
     },
     block: {
         width: '100%',
-        height: 500,
-        backgroundColor: '#343538',
+        minHeight: 200
+        // backgroundColor: '#c2c2c2',
     }
 }));
 
 
 export default function DisplayFunction(props){
     const classes = useStyles();
+    console.log(props.function)
     return(
         <Grid className={classes.inline}>
             <span>Description:</span>
+            <div>{props.description}</div>
             <Grid className={classes.block}>
+                <div>
+                    {props.function}
+                </div>
             </Grid>
         </Grid>
     )

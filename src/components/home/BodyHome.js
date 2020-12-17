@@ -1,7 +1,6 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core";
 import MediaCard from "../cards/cardsHome/CardMedia";
-import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import Grid from "@material-ui/core/Grid";

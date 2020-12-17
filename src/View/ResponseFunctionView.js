@@ -29,9 +29,9 @@ export default function ResponseFunctionView(props) {
         } else {
             setPost(props.posts)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props])
 
-    console.log(props)
     return (
         <div>
             <ResponseFunctionForm postId={postId} {...post}/>

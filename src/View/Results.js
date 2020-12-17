@@ -36,7 +36,7 @@ function Results() {
 
     return(
         <div className={classes.root}>
-            {posts.map(post => <RecipeReviewCard post={post}/>)}
+            {posts.map((post,index) => <RecipeReviewCard post={post} key={index}/>)}
         </div>
     )
 }

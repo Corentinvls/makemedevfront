@@ -120,7 +120,7 @@ function ProfileView(props) {
             <Paper className={classes.paperProfile}>
                 <h2>My posts</h2>
             <div className={classes.root}>
-                <GridList className={classes.gridList} cols={2.5}>
+                <GridList className={classes.gridList} cols={6}>
                     {myPost.length >= 1 &&
                     myPost.map((post, key) => {
                         return <RecipeReviewCard post={post} key={key} />

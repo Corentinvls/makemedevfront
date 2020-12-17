@@ -15,9 +15,9 @@ export default function CommentaryComponent(props) {
 
     return (
         <div style={{marginTop: 20}}>
-            {props.commentary.map(commentary => {
+            {props.commentary.map((commentary,key) => {
                 return (
-                    <Card variant="outlined" style={{marginBottom: 5}}>
+                    <Card variant="outlined" style={{marginBottom: 5}} key={key}>
                         <TitleDetails
                             pseudo={commentary.author.pseudo}
                             avatar={commentary.author.avatar}

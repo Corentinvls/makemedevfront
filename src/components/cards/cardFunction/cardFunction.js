@@ -9,7 +9,7 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
-import generateChipsLink from "../../../utils/generateChipsLink";
+import GenerateChipsLinks from "../../../utils/GenerateChipsLink";
 import generateChipsTooltip from "../../../utils/generateChipsTooltip";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import responsiveFontSizes from "@material-ui/core/styles/responsiveFontSizes";
@@ -91,7 +91,7 @@ function RecipeReviewCard(props) {
             <CardHeader
                 className={classes.headerCard}
                 title={props.post.name}
-                subheader={generateChipsLink(props.post.tag)}
+                subheader={<GenerateChipsLinks tags={props.post.tag}/>}
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">

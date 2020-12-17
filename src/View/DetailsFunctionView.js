@@ -8,11 +8,12 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import generateChipsTooltip from "../utils/generateChipsTooltip";
-import generateChipsLink from "../utils/generateChipsLink";
+import GenerateChipsLinks from "../utils/GenerateChipsLink";
 import "../assets/codeMirror/codemirror.css";
 import 'draft-js-static-toolbar-plugin/lib/plugin.css';
 import 'moment-timezone';
 import TitleDetails from "../components/detailsFunction/TitleDetails";
+
 
 
 function DetailsFunctionView(props) {
@@ -56,7 +57,7 @@ function DetailsFunctionView(props) {
                         variant={"h4"}
                         action={
                             <div style={{margin: 10}}>
-                                {generateChipsLink(posts.tag)}
+                                <GenerateChipsLinks tags={posts.tag} />
                             </div>
                         }
                     />

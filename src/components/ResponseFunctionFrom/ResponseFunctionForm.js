@@ -101,6 +101,13 @@ function ResponseFunctionForm(props) {
         setReturnsError(regexReturn.includes(false))
         return !regexReturn.includes(false)
     }
+    const checkValidity = () => {
+        let params = checkFunctionParams()
+        let returns = checkFunctionReturn()
+        return params && returns
+
+    }
+
 
     React.useEffect(() => {
         if (props.post) {
@@ -145,9 +152,10 @@ function ResponseFunctionForm(props) {
                         <Grid item xs={12}>
                             <h3>Your function</h3>
                             <FormHelperText>
-                                Don't change params and return ! You can put return in comment if you don't want to create a variable
+                                Don't change params and return ! You can put return in comment if you don't want to
+                                create a variable
                             </FormHelperText>
-                            <Paper style={{borderRadius: 10, overflow: 'hidden',fontSize: "1.2rem"}}>
+                            <Paper style={{borderRadius: 10, overflow: 'hidden', fontSize: "1.2rem"}}>
                                 <CodeMirror
                                     value={functionValue}
 
@@ -181,7 +189,7 @@ function ResponseFunctionForm(props) {
                                 variant="contained"
                                 color="primary"
                                 onClick={() => {
-                                    if (checkFunctionParams() && checkFunctionReturn()) {
+                                    if (checkValidity()) {
                                         handleClickOpen()
                                     }
                                 }}

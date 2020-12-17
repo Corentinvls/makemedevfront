@@ -23,6 +23,7 @@ function AddCommentaryComponent(props) {
         <>
             <CustomDraft
                 value={commentary}
+                isCode
                 onChange={(value) => {
                     setCommentary(value);
                 }}

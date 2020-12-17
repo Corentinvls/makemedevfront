@@ -24,7 +24,10 @@ function DetailsFunction(props) {
         <>
             {props.posts.post.map(post => {
                 return (
-                    <Card>
+                    <Card style={{
+                        backgroundColor: "#f4f5f7",
+                        marginBottom: 15
+                    }}>
                         <TitleDetails
                             pseudo={post.author.pseudo}
                             avatar={post.author.avatar}
@@ -45,7 +48,7 @@ function DetailsFunction(props) {
                                         variant="contained"
                                         color="primary"
                                         startIcon={<Add/>}
-                                        onClick={()=> history.push("/improve/" + props.mainId+"/"+post._id)}>
+                                        onClick={() => history.push("/improve/" + props.mainId + "/" + post._id)}>
                                         Improve
                                     </Button>
                                     <CommentaryComponent commentary={post.commentary}/>

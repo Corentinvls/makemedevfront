@@ -8,9 +8,14 @@ import EditableAvatar from "../components/profile/EditableAvatar";
 import {logOut, updateUser} from "../store/actions";
 import {setUpdateUser} from "../request/userRequest";
 import EditableField from "../components/profile/EditableField";
-import {getPostById, searchPosts} from "../request/postRequest";
+import {getPostById} from "../request/postRequest";
 import RecipeReviewCard from "../components/cards/cardFunction/cardFunction";
 import GridList from "@material-ui/core/GridList";
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import ActivityCards from "../components/profile/ActivityCards";
+import ThumbDownIcon from '@material-ui/icons/ThumbDown';
+import PostAddIcon from '@material-ui/icons/PostAdd';
+import CommentIcon from '@material-ui/icons/Comment';
 
 const useStyles = makeStyles((theme) => ({
     large: {
@@ -45,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 
 function ProfileView(props) {
     const classes = useStyles();
-    console.log(props)
+
 
     const [user, setUser] = React.useState({
         "id": "",
@@ -54,6 +59,10 @@ function ProfileView(props) {
         "avatar": ""
     })
     const [myPost, setMyPost] = React.useState([])
+    const [myLike, setLike] = React.useState([])
+    const [myDislike, setDislike] = React.useState([])
+    const [myResponse, setResponse] = React.useState([])
+    const [myComment, setComment] = React.useState([])
     const [, setState] = React.useState()
     const handleChange = (field, value) => {
         const data = {
@@ -62,17 +71,38 @@ function ProfileView(props) {
             }
         }
         setUpdateUser(data).then((response) => {
-            console.log(response)
             props.updateUser(response.success, response.token)
         })
     }
     React.useEffect(() => {
         if (props.user) {
             setUser(props.user)
-            if(myPost.length===0){
-                props.user.post.map((id) => {getPost(id)})
+            if (myPost.length === 0) {
+                props.user.post.map((id) => {
+                    getPost(id)
+                })
             }
-
+            if (myLike.length === 0) {
+                props.user.activities.like.map((id) => {
+                    getPostActivity(id, "like")
+                })
+            }
+            if (myDislike.length === 0) {
+                props.user.activities.dislike.map((id) => {
+                    getPostActivity(id, "dislike")
+                })
+            }
+            if (myResponse.length === 0) {
+                props.user.activities.response.map((id) => {
+                    getPostActivity(id, "response")
+                })
+            }
+            if (myComment.length === 0) {
+                props.user.activities.commentary.map((id) => {
+                    console.log("test")
+                    getPostActivity(id, "comment")
+                })
+            }
             setState("ready")
         }
     }, [props])
@@ -81,12 +111,43 @@ function ProfileView(props) {
         let response = await getPostById(id)
         response = await response
         if (response.success) {
-            if(!myPost.includes(response.success)) {
+            if (!myPost.includes(response.success)) {
                 myPost.push(response.success)
                 setMyPost(myPost)
                 setState({})
             }
         }
+    }
+
+    async function getPostActivity(id, activity) {
+        console.log("response")
+        let response = await getPostById(id);
+        response = await response
+        console.log("couille")
+        if (response.success) {
+
+                switch (activity) {
+                    case "like":
+                        myLike.push(response.success)
+                        setLike(myLike)
+                        break;
+                    case "dislike":
+                        myDislike.push(response.success)
+                        setDislike(myDislike)
+                        break;
+                    case "response":
+                        myResponse.push(response.success)
+                        setResponse(myResponse)
+                        break;
+                    case "comment":
+                        myComment.push(response.success)
+                        setComment(myComment)
+                        break;
+
+                }
+                setState({})
+            }
+
     }
 
     return (
@@ -119,15 +180,59 @@ function ProfileView(props) {
             </Paper>
             <Paper className={classes.paperProfile}>
                 <h2>My posts</h2>
-            <div className={classes.root}>
-                <GridList className={classes.gridList} cols={6}>
-                    {myPost.length >= 1 &&
-                    myPost.map((post, key) => {
-                        return <RecipeReviewCard post={post} key={key} />
-                    })
-                    }
-                </GridList>
-            </div>
+                <div className={classes.root}>
+                    <GridList className={classes.gridList} cols={9}>
+                        {myPost.length >= 1 &&
+                        myPost.map((post, key) => {
+                            return <RecipeReviewCard post={post} key={key}/>
+                        })
+                        }
+                    </GridList>
+                </div>
+            </Paper>
+
+            <Paper className={classes.paperProfile}>
+
+                <h2>My activity</h2>
+                <Grid container>
+                    <Grid item xs={12} sm={6}>
+                        <h3>Like</h3>
+                        <Paper className={classes.paperProfile}
+                               style={{maxHeight: 400, overflow: 'auto', minHeight: 200,}}>
+                            {myLike.length >= 1 &&
+                            myLike.map((post, key) => {
+                                return <ActivityCards icon={<ThumbUpIcon/>} post={post} key={key}/>
+                            })}
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} sm={6}><h3>Dislike</h3>
+                        <Paper className={classes.paperProfile}
+                               style={{maxHeight: 400, overflow: 'auto', minHeight: 200,}}>
+                            {myDislike.length >= 1 &&
+                            myDislike.map((post, key) => {
+                                return <ActivityCards icon={<ThumbDownIcon/>} post={post} key={key}/>
+                            })}
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} sm={6}><h3>Response</h3>
+                        <Paper className={classes.paperProfile}
+                               style={{maxHeight: 400, overflow: 'auto', minHeight: 200,}}>
+                            {myResponse.length >= 1 &&
+                            myResponse.map((post, key) => {
+                                return <ActivityCards icon={<PostAddIcon/>} post={post} key={key}/>
+                            })}
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} sm={6}><h3>comment</h3>
+                        <Paper className={classes.paperProfile}
+                               style={{maxHeight: 400, overflow: 'auto', minHeight: 200,}}>
+                            {myComment.length >= 1 &&
+                            myComment.map((post, key) => {
+                                return <ActivityCards icon={<CommentIcon/>} post={post} key={key}/>
+                            })}
+                        </Paper>
+                    </Grid>
+                </Grid>
             </Paper>
 
         </Grid>

@@ -9,7 +9,6 @@ import Icon from "@material-ui/core/Icon";
 import generateChipsTooltip from "../../../utils/generateChipsTooltip";
 import Typography from "@material-ui/core/Typography";
 import {useHistory} from "react-router-dom";
-import Avatar from "@material-ui/core/Avatar";
 import * as Showdown from "showdown";
 import Grid from "@material-ui/core/Grid";
 import GenerateChipsLinks from "../../../utils/GenerateChipsLink";
@@ -27,37 +26,24 @@ function RecipeReviewCard(props) {
         tasklists: true
     });
 
-    function getChipToolTip(array) {
-        return <>
-            {generateChipsTooltip(array).map((component, index) => {
-                return <span key={index}> {index === 0 ? null : ','} {component} </span>
-            })}
-        </>;
-    }
 
     const handleClick = () => {
         history.push("/details/" + props.post._id)
     }
 
-    console.log(props)
     return (
         <Card className={classes.root} elevation={2} onClick={handleClick}>
             <Grid container item>
                 <Grid item xs={12}>
                     <CardContent className={classes.rowContain}>
-                        <Grid item md={4} sm={12} style={{display: 'flex', alignItems: 'center'}}>
-                            <Avatar alt="Avatar" src={props.post.avatar} className={classes.large}/>
-                            <Grid item style={{marginLeft: 10}}>
-                                <Typography>
-                                    By : {props.post.post[0].author.pseudo}
-                                </Typography>
-                                <Typography>
-                                    {console.log(props.post.post[0].creationDate)}
-                                    {<Moment local format="YYYY/MM/DD HH:MM:SS">{props.post.post[0].creationDate*1000}</Moment>}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid item md={4} sm={12} className={classes.contentNameFunction}>
+                        <Grid
+                            container
+                            direction="column"
+                            justify="space-between"
+                            alignItems="center"
+                            spacing={3}
+                        >
+                            <Grid item>
                             <Typography variant="h4" component="h2" className={classes.nameFunction}>
                                 {props.post.name}
                                 ({generateChipsTooltip(props.post.params)})
@@ -66,7 +52,20 @@ function RecipeReviewCard(props) {
                             <Typography>
                                 <GenerateChipsLinks tags={props.post.tag}/>
                             </Typography>
-                        </Grid>
+                             </Grid>
+                            <Grid container
+                                  direction="row"
+                                  justify="space-evenly">
+                                <Grid item style={{marginLeft: 10}}>
+                                <Typography>
+                                    By : {props.post.post[0].author.pseudo}
+                                </Typography>
+                                <Typography>
+                                    {<Moment local format="YYYY/MM/DD HH:MM:SS">{props.post.post[0].creationDate*1000}</Moment>}
+                                </Typography>
+                            </Grid>
+
+
                         <Grid item style={{display: 'flex', justifyContent: 'flex-end'}} sm={12} md={4}>
                             <Typography className={classes.marginElementR}>
                                 {props.post.post.length}
@@ -86,6 +85,8 @@ function RecipeReviewCard(props) {
                             <Icon aria-label="DownVote">
                                 <ThumbDownIcon/>
                             </Icon>
+                        </Grid>
+                            </Grid>
                         </Grid>
                     </CardContent>
                 </Grid>
@@ -124,6 +125,7 @@ const useStyles = makeStyles((theme) => ({
         margin: 20,
         width: '80%',
         borderRadius: 10,
+        minWidth:320
     },
     rowContain: {
         display: "flex",
@@ -172,7 +174,7 @@ const useStyles = makeStyles((theme) => ({
         wordBreak: 'break-word',
     },
     footerCard:{
-        padding: 75,
+        padding: 5,
         backgroundColor: "rgba(250, 250, 250, 0.5)",
         [theme.breakpoints.down('sm')]:{
             padding: 50

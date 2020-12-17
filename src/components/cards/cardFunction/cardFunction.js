@@ -8,7 +8,6 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import Icon from "@material-ui/core/Icon";
 import generateChipsLink from "../../../utils/generateChipsLink";
 import generateChipsTooltip from "../../../utils/generateChipsTooltip";
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import Typography from "@material-ui/core/Typography";
 import {useHistory} from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
@@ -20,8 +19,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         margin: 20,
         width: '80%',
-        padding: 10,
-        borderRadius: 20,
+        borderRadius: 10,
     },
     rowContain: {
         display: "flex",
@@ -29,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
         borderColor: "black",
         borderBottom: "solid",
         borderBottomWidth: 1,
+        backgroundColor: "rgba(107, 185, 240, 0.5)",
         [theme.breakpoints.down('sm')]:{
             display: "block"
         }
@@ -74,9 +73,10 @@ const useStyles = makeStyles((theme) => ({
 
     },
     footerCard:{
-        backgroundColor: "rgba(107, 185, 240, 0.5)",
-        borderRadius: 5,
-        padding: 125
+        padding: 125,
+        [theme.breakpoints.down('sm')]:{
+            padding: 50
+        }
     }
 }));
 
@@ -107,12 +107,12 @@ function RecipeReviewCard(props) {
 
     return (
         <Card className={classes.root} elevation={2} onClick={handleClick}>
-            <Grid container>
-                <Grid xs={12}>
+            <Grid container item>
+                <Grid item xs={12}>
                     <CardContent className={classes.rowContain}>
-                        <Grid md={4} sm={12} style={{display: 'flex', alignItems: 'center'}}>
+                        <Grid item md={4} sm={12} style={{display: 'flex', alignItems: 'center'}}>
                             <Avatar alt="Avatar" src={props.post.avatar} className={classes.large}/>
-                            <Grid style={{marginLeft: 10}}>
+                            <Grid item style={{marginLeft: 10}}>
                                 <Typography>
                                     By : {props.post.author.pseudo}
                                 </Typography>
@@ -121,16 +121,15 @@ function RecipeReviewCard(props) {
                                 </Typography>
                             </Grid>
                         </Grid>
-                        <Grid md={4} sm={12} className={classes.contentNameFunction}>
-                            <Typography variant="h4" component="h2"
-                                        className={classes.nameFunction}>
+                        <Grid item md={4} sm={12} className={classes.contentNameFunction}>
+                            <Typography variant="h4" component="h2" className={classes.nameFunction}>
                                 {props.post.name}
                             </Typography>
                             <Typography>
                                 {generateChipsLink(props.post.tag)}
                             </Typography>
                         </Grid>
-                        <Grid style={{display: 'flex', justifyContent: 'center'}} sm={12} md={4}>
+                        <Grid item style={{display: 'flex', justifyContent: 'center'}} sm={12} md={4}>
                             <Typography className={classes.marginElementR}>
                                 {props.post.post.length}
                             </Typography>
@@ -152,10 +151,10 @@ function RecipeReviewCard(props) {
                         </Grid>
                     </CardContent>
                 </Grid>
-                <Grid xs={12}>
-                    <CardContent>
-                        <Grid container className={classes.footerCard}>
-                            <Grid xs={6} spacing={2}>
+                <Grid item xs={12}>
+                    <CardContent style={{padding:0}}>
+                        <Grid item container className={classes.footerCard}>
+                            <Grid item md={6} sm={12} spacing={2}>
                                 <Typography gutterBottom variant="h5" component="h2">
                                     Description
                                 </Typography>
@@ -166,7 +165,7 @@ function RecipeReviewCard(props) {
                                     </div>
                                 </Typography>
                             </Grid>
-                            <Grid xs={6} spacing={2}>
+                            <Grid item md={6} sm={12} spacing={2}>
                                 <Typography gutterBottom variant='h5' component="h2">
                                     Function
                                 </Typography>

@@ -1,5 +1,6 @@
 {
-  "name": "react-test",
+  "name": "makemedev",
+  "description": "search your function",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -15,7 +16,7 @@
     "draft-js": "^0.11.7",
     "draft-js-plugins-editor": "^3.0.0",
     "draft-js-static-toolbar-plugin": "^3.0.1",
-    "electron": "^11.0.3",
+    "electron-packager": "^15.2.0",
     "formik": "^2.2.6",
     "jwt-decode": "^3 .1.2",
     "material-ui-chip-input": "^1.1.0",
@@ -82,6 +83,7 @@
     "@storybook/preset-create-react-app": "^3.1.5",
     "@storybook/react": "^6.1.10",
     "babel-loader": "8.1.0",
+    "electron": "^11.0.3",
     "electron-builder": "^22.9.1",
     "react-is": "^17.0.1",
     "react-router-dom": "^5.2.0"

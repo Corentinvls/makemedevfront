@@ -2,7 +2,6 @@ import {CardHeader} from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import Moment from "react-moment";
 import 'moment-timezone';
-import {formatTime} from "../../utils/format";
 import React from "react";
 
 
@@ -16,7 +15,7 @@ export default function TitleDetails(props) {
             </div>
         }
         titleTypographyProps={{variant:props.variant}}
-        subheader={<Moment format="YYYY/MM/DD HH:MM:SS">{formatTime(props.date)}</Moment>}
+        subheader={<Moment local format="YYYY/MM/DD HH:MM:SS">{props.date*1000}</Moment>}
         action={props.action}
     />;
 }

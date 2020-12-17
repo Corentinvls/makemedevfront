@@ -38,7 +38,7 @@ function DetailsFunction(props) {
                                 <LikeDislikeVote post={post}/>
                             }
                         />
-                        <CardContent>
+                        <xontent>
                             <div className={classes.containerSolution}>
                                 <div className={classes.containerFunction}>
                                     <DescriptionComponent description={post.description}/>
@@ -55,7 +55,7 @@ function DetailsFunction(props) {
                                     <AddCommentaryComponent id={post._id}/>
                                 </div>
                             </div>
-                        </CardContent>
+                        </xontent>
                     </Card>
                 )
             })}

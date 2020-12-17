@@ -53,7 +53,7 @@ function DetailsFunctionView(props) {
                         pseudo={posts.author.pseudo}
                         avatar={posts.author.avatar}
                         title={"Post By "}
-                        date={posts.author.creationDate}
+                        date={posts.creationDate}
                         variant={"h4"}
                         action={
                             <div style={{margin: 10}}>

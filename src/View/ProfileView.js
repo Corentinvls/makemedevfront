@@ -125,38 +125,37 @@ function ProfileView(props) {
         let response = await getPostById(id);
         response = await response
         if (response.success) {
-                switch (activity) {
-                    case "like":
-                        myLike.push(response.success)
-                        setLike(myLike)
-                        break;
-                    case "dislike":
-                        myDislike.push(response.success)
-                        setDislike(myDislike)
-                        break;
-                    case "response":
-                        myResponse.push(response.success)
-                        setResponse(myResponse)
-                        break;
-                    case "comment":
-                        myComment.push(response.success)
-                        setComment(myComment)
-                        break;
-                    default:
-                       console.log("activity not found");
-                }
-                setState({})
+            switch (activity) {
+                case "like":
+                    myLike.push(response.success)
+                    setLike(myLike)
+                    break;
+                case "dislike":
+                    myDislike.push(response.success)
+                    setDislike(myDislike)
+                    break;
+                case "response":
+                    myResponse.push(response.success)
+                    setResponse(myResponse)
+                    break;
+                case "comment":
+                    myComment.push(response.success)
+                    setComment(myComment)
+                    break;
+                default:
+                    console.log("activity not found");
             }
+            setState({})
+        }
 
     }
 
     return (
         <Container container
-            maxWidth="lg"
-            direction="column"
-            justify="space-between"
-            alignItems="center"
-
+                   direction="column"
+                   justify="space-between"
+                   alignItems="center"
+                   fixed
         >
             <Paper className={classes.paperProfile}>
                 <Grid

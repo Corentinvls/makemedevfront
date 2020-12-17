@@ -101,8 +101,14 @@ function MenuDrawer(props) {
     );
 
     function keyPress(event) {
+        const search = event.target.value
+        let refactorSearch = []
+        search.split("").map((character) => {
+            character === "?" ? refactorSearch.push("3F") : refactorSearch.push(character)
+        })
         if (event.keyCode === 13) {
-            history.push("/results/" + event.target.value)
+            let finalSearch = refactorSearch.length === 0 ? " " : refactorSearch.join("")
+            history.push("/results/" + finalSearch)
         }
     }
 

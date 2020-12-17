@@ -93,7 +93,7 @@ function RecipeReviewCard(props) {
                 <Grid item xs={12}>
                     <CardContent style={{padding:0}}>
                         <Grid item container className={classes.footerCard}>
-                            <Grid item md={6} sm={12} spacing={2}>
+                            <Grid item md={6} sm={12} >
                                 <Typography gutterBottom variant="h5" component="h2">
                                     Description
                                 </Typography>
@@ -103,7 +103,7 @@ function RecipeReviewCard(props) {
                                     </div>
                                 </Typography>
                             </Grid>
-                            <Grid item md={6} sm={12} spacing={2} style={{ padding:10, borderRadius:5}}>
+                            <Grid item md={6} sm={12}  style={{ padding:10, borderRadius:5}}>
                                 <Typography gutterBottom variant='h5' component="h2">
                                     Function
                                 </Typography>

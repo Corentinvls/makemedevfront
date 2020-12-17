@@ -22,12 +22,13 @@ function DetailsFunction(props) {
 
     return (
         <>
-            {props.posts.post.map(post => {
+            {props.posts.post.map((post, key) => {
                 return (
                     <Card style={{
                         backgroundColor: "#f4f5f7",
                         marginBottom: 15
-                    }}>
+                    }}
+                          key={key}>
                         <TitleDetails
                             pseudo={post.author.pseudo}
                             avatar={post.author.avatar}
@@ -38,7 +39,7 @@ function DetailsFunction(props) {
                                 <LikeDislikeVote post={post}/>
                             }
                         />
-                        <xontent>
+                        <CardContent>
                             <div className={classes.containerSolution}>
                                 <div className={classes.containerFunction}>
                                     <DescriptionComponent description={post.description}/>
@@ -48,6 +49,7 @@ function DetailsFunction(props) {
                                         variant="contained"
                                         color="primary"
                                         startIcon={<Add/>}
+                                        disabled={(!props.token.length > 0)}
                                         onClick={() => history.push("/improve/" + props.mainId + "/" + post._id)}>
                                         Improve
                                     </Button>
@@ -55,7 +57,7 @@ function DetailsFunction(props) {
                                     <AddCommentaryComponent id={post._id}/>
                                 </div>
                             </div>
-                        </xontent>
+                        </CardContent>
                     </Card>
                 )
             })}
@@ -103,6 +105,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const mapStateToProps = state => {
+    return {
+
+        token: state.token
+    };
+};
+
 const mapDispatchToProps = dispatch => {
     return {
         updateUser: (user, token) => dispatch(updateUser(user, token)),
@@ -110,6 +119,6 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(DetailsFunction)
+export default connect(mapStateToProps, mapDispatchToProps)(DetailsFunction)
 
 

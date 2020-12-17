@@ -16,6 +16,7 @@ import ActivityCards from "../components/profile/ActivityCards";
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import CommentIcon from '@material-ui/icons/Comment';
+import Container from "@material-ui/core/Container";
 
 const useStyles = makeStyles((theme) => ({
     large: {
@@ -51,7 +52,6 @@ const useStyles = makeStyles((theme) => ({
 function ProfileView(props) {
     const classes = useStyles();
 
-    console.log(props)
     const [user, setUser] = React.useState({
         "id": "",
         "pseudo": "",
@@ -78,33 +78,35 @@ function ProfileView(props) {
         if (props.user) {
             setUser(props.user)
             if (myPost.length === 0) {
-                props.user.post.map((id) => {
+                props.user.post.forEach((id) => {
                     getPost(id)
                 })
             }
             if (myLike.length === 0) {
-                props.user.activities.like.map((id) => {
+                props.user.activities.like.forEach((id) => {
                     getPostActivity(id, "like")
                 })
             }
             if (myDislike.length === 0) {
-                props.user.activities.dislike.map((id) => {
+                props.user.activities.dislike.forEach((id) => {
                     getPostActivity(id, "dislike")
+
                 })
             }
             if (myResponse.length === 0) {
-                props.user.activities.response.map((id) => {
+                props.user.activities.response.forEach((id) => {
                     getPostActivity(id, "response")
+                    return null
                 })
             }
             if (myComment.length === 0) {
-                props.user.activities.commentary.map((id) => {
-                    console.log("test")
+                props.user.activities.commentary.forEach((id) => {
                     getPostActivity(id, "comment")
                 })
             }
             setState("ready")
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props])
 
     async function getPost(id) {
@@ -120,12 +122,9 @@ function ProfileView(props) {
     }
 
     async function getPostActivity(id, activity) {
-        console.log("response")
         let response = await getPostById(id);
         response = await response
-        console.log("couille")
         if (response.success) {
-
                 switch (activity) {
                     case "like":
                         myLike.push(response.success)
@@ -143,7 +142,8 @@ function ProfileView(props) {
                         myComment.push(response.success)
                         setComment(myComment)
                         break;
-
+                    default:
+                       console.log("activity not found");
                 }
                 setState({})
             }
@@ -151,11 +151,12 @@ function ProfileView(props) {
     }
 
     return (
-        <Grid
-            container
+        <Container container
+            maxWidth="lg"
             direction="column"
             justify="space-between"
             alignItems="center"
+
         >
             <Paper className={classes.paperProfile}>
                 <Grid
@@ -235,7 +236,7 @@ function ProfileView(props) {
                 </Grid>
             </Paper>
 
-        </Grid>
+        </Container>
 
     );
 }
@@ -243,7 +244,6 @@ function ProfileView(props) {
 const mapStateToProps = state => {
     return {
         user: state.user,
-
     };
 };
 

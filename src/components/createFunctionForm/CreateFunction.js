@@ -22,7 +22,7 @@ import {connect} from "react-redux";
 import {sendPost} from "../../request/postRequest";
 import {updateUser} from "../../store/actions";
 import {useHistory} from "react-router-dom";
-
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -188,6 +188,7 @@ function MultiStepFunctionForm(props) {
             })
 
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeStep]);
     return (
         <React.Fragment>
@@ -213,14 +214,22 @@ function MultiStepFunctionForm(props) {
                     </Stepper>
                     <React.Fragment>
                         {activeStep === steps.length ? (
-                            <React.Fragment>
+                            <>
                                 <Typography variant="h5" gutterBottom>
                                     Thanks for your contribution
                                 </Typography>
                                 <Typography variant="subtitle1">
                                     Your function will be visible in 2 seconds !
                                 </Typography>
-                            </React.Fragment>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="center"
+                                >
+                                    <CircularProgress/>
+                                </Grid>
+                            </>
                         ) : getStepContent(activeStep)}
 
                     </React.Fragment>

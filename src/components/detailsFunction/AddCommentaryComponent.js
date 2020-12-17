@@ -1,14 +1,11 @@
 import React from "react";
 import {sendCommentary} from "../../request/postRequest";
 import Button from "@material-ui/core/Button";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import {updatePosts, updateUser} from "../../store/actions";
 import {connect} from "react-redux";
 import CustomDraft from "../../utils/components/CustomDraft";
 
-
 function AddCommentaryComponent(props) {
-    const classes = useStyles();
     const [commentary, setCommentary] = React.useState()
 
     async function handleCommentary() {
@@ -32,15 +29,17 @@ function AddCommentaryComponent(props) {
                 style={{marginTop: 5}}
                 color="primary"
                 variant="contained"
-                onClick={handleCommentary}>Add comment !</Button>
+                onClick={handleCommentary}
+                disabled={(!props.token.length > 0)}>
+                Add comment !</Button>
         </>
     );
 }
-
-const useStyles = makeStyles((theme) => ({
-
-}));
-
+const mapStateToProps = state => {
+    return {
+        token: state.token
+    };
+};
 const mapDispatchToProps = dispatch => {
     return {
         updateUser: (user, token) => dispatch(updateUser(user, token)),
@@ -48,4 +47,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(AddCommentaryComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(AddCommentaryComponent)

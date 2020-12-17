@@ -33,7 +33,6 @@ export default function EditableField(props) {
     return (
         <div>{!edit ?
             <Button
-
                 color="primary"
                 size="large"
                 className={classes.button}
@@ -43,28 +42,31 @@ export default function EditableField(props) {
                 {field}
             </Button>
             : <>
-                <TextField value={field} onChange={(event) => {
-                    setField(event.target.value)
-                }}/>
+                <TextField autoFocus
+                           value={field}
+                           onChange={(event) => {
+                               setField(event.target.value)
+                           }}/>
                 <ButtonGroup>
                     <Button
                         variant="contained"
                         color="secondary"
                         className={classes.button}
                         onClick={handleClickOpen}
-                    ><SaveIcon  size="small"/>
+                    ><SaveIcon size="small"/>
                     </Button>
                     <Button
                         variant="contained"
-                        style={{backgroundColor:"#e34b4b"}}
+                        style={{backgroundColor: "#e34b4b"}}
                         size="small"
                         className={classes.button}
                         onClick={() => setEdit(false)}
-                    ><CancelIcon  />
+                    ><CancelIcon/>
                     </Button>
                 </ButtonGroup>
 
-                <DialogChangeField open={open} handleClose={handleClose} handleChangeField={()=> props.handleChangeField(field)}/>
+                <DialogChangeField open={open} handleClose={handleClose}
+                                   handleChangeField={() => props.handleChangeField(field)}/>
 
             </>
         }

@@ -12,7 +12,7 @@ export default function DialogChangeField(props) {
     return (
         <div>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Change Avatar</DialogTitle>
+                <DialogTitle id="form-dialog-title">Change Pseudo or Mail</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         You're about to change your Pseudo or Mail !<br/>

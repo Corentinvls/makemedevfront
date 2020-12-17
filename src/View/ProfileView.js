@@ -7,9 +7,6 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import EditableAvatar from "../components/profile/EditableAvatar";
 import {logOut, updateUser} from "../store/actions";
 import {setUpdateUser} from "../request/userRequest";
-import EditIcon from "@material-ui/icons/Edit";
-import Badge from "@material-ui/core/Badge";
-import Button from "@material-ui/core/Button";
 import EditableField from "../components/profile/EditableField";
 
 const useStyles = makeStyles((theme) => ({

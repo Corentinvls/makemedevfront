@@ -53,9 +53,10 @@ export default function BodyHome() {
             </Grid>
             <Grid container spacing={0} className={classes.body} >
                 <Grid container item xs={4} spacing={1} className={classes.card}>
-                    <MediaCard title={"TEST"} buttonLabel={"buttonTest"}
+                    <MediaCard title={"Share"} buttonLabel={"buttonTest"}
                                image={"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fthumbs.dreamstime.com%2Ft%2Fmaterial-design-background-mountain-landscape-vector-blue-illustration-92941969.jpg&f=1&nofb=1"}>
-                        Level up with Stack Overflow while you work. Share knowledge privately with your coworkers using our flagship Q&A engine.
+                        Share your best Functions even the worst ! the community will test them and may be improved them !
+                        Don't be shy !
                     </MediaCard>
                 </Grid>
                 <Grid container item xs={4} spacing={1} className={classes.cardMargin}>

@@ -39,18 +39,6 @@ export default function MediaCard(props) {
                     {children}
                 </Typography>
             </CardContent>
-            <CardActions>
-                <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                >
-                    <Button variant="contained" color="primary" size={"small"}>
-                        {buttonLabel}
-                    </Button>
-                </Grid>
-            </CardActions>
 
         </Card>
     );

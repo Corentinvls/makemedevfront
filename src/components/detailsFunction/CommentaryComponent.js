@@ -23,8 +23,8 @@ export default function CommentaryComponent(props) {
                             avatar={commentary.author.avatar}
                             date={commentary.date}
                         />
-                        <CardContent>
-                            <Typography variant="body2" component="p">
+                        <CardContent style={{paddingTop:0,paddingBottom:0}}>
+                            <Typography style={{paddingTop:0,paddingBottom:0}} variant="body2" component="p">
                                 <div dangerouslySetInnerHTML={{__html: converter.makeHtml(commentary.commentary)}}/>
                             </Typography>
                         </CardContent>

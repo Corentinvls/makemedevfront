@@ -1,9 +1,6 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
-import SignUp from "../register/SignUp";
-import Container from "@material-ui/core/Container";
+
 import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
@@ -15,7 +12,7 @@ const bigTitle = "We <3 people who share code";
 
 
 export default function HeaderHome () {
-    const [displaySignUp, setDisplaySignUp] = React.useState(false);
+
     const classes = useStyles();
     return(
         <Grid className={classes.header}>
@@ -24,7 +21,6 @@ export default function HeaderHome () {
                 and connect with a community of passionate developers<br/>
                 help them, and be help.<br/>
             </h3>
-
         </Grid>
         )
 

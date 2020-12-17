@@ -13,6 +13,6 @@ export default function generateChipsTooltip(chipArray) {
             <h3>Default value : {chip.defaultValue}</h3>
             }
        </div>
-        return <Tooltip title={tooltipContent}><Chip label={chip.name} key={index} component="a" href="#chip" size="small" /></Tooltip>
+        return <Tooltip title={tooltipContent}  key={index}><Chip label={chip.name} component="a" href="#chip" size="small" /></Tooltip>
     })
 }

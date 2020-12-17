@@ -31,6 +31,7 @@ function DetailsFunctionView(props) {
         } else {
             setPosts(props.posts)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props])
 
 
@@ -53,7 +54,7 @@ function DetailsFunctionView(props) {
                         pseudo={posts.author.pseudo}
                         avatar={posts.author.avatar}
                         title={"Post By "}
-                        date={posts.author.creationDate}
+                        date={posts.creationDate}
                         variant={"h4"}
                         action={
                             <div style={{margin: 10}}>

@@ -109,7 +109,6 @@ function MenuDrawer(props) {
 
     function showIfLoginOrNot() {
         if (props.token.length > 0) {
-            console.log(props)
             return <>
                 <ListItem button onClick={() => history.push("/profile")}>
                     <ListItemIcon>

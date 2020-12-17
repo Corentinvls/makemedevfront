@@ -23,7 +23,6 @@ function SignIn(props) {
     async function submitValidation(values, action) {
         const data = {user: {login: values.login, password: values.password}}
         let response = await setSignIn(data)
-        console.log(response);
         if (response.error === "login incorrect") {
             action.setErrors({
                 login: "Pseudo or E-mail is incorrect !"

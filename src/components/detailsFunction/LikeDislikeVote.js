@@ -1,15 +1,11 @@
 import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
+import {sendVote} from "../../request/postRequest";
+import {updatePosts, updateUser} from "../../store/actions";
+import {connect} from "react-redux";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
-import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import EditIcon from '@material-ui/icons/Edit';
-import {sendVote} from "../../request/postRequest";
-import {setUser, updatePosts, updateUser} from "../../store/actions";
-import {connect} from "react-redux";
-import {useHistory} from "react-router";
+import TextWithLogoButton from "../../utils/components/TextWithLogoButton";
 
 const useStyles = makeStyles((theme) => ({
     flexCol: {
@@ -19,24 +15,15 @@ const useStyles = makeStyles((theme) => ({
     flexRow: {
         display: "flex",
     },
-    p: {
-        alignSelf: "center",
-        width: 50,
-        backgroundColor: 'grey',
-        textAlign: "center",
-        color: "whitesmoke",
-        borderRadius: 2,
-        margin: 0
-    },
+    voteElements: {
+        display: "flex",
+        flexDirection: "column",
+        marginRight: 10
+    }
 }));
-
 
 function LikeDislikeVote(props){
     const classes = useStyles();
-    const {post} = props;
-    const history = useHistory()
-
-
 
     async function userVote(vote) {
         let resultVote = await sendVote(vote, props.post._id);
@@ -45,34 +32,11 @@ function LikeDislikeVote(props){
             props.updatePosts(resultVote.success.post)
         }
     }
-
     return(
-        <div>
-            <Grid className={classes.flexCol}>
-                <div className={classes.flexRow}>
-                    <IconButton size="small" aria-label={'up vote'} onClick={() => userVote(1)}>
-                        <ThumbUpIcon/>
-                    </IconButton>
-                    <p className={classes.p}>{post.like}</p>
-                </div>
-                <div className={classes.flexRow}>
-                    <IconButton size="small" aria-label={'down vote'} onClick={() => userVote(-1)}>
-                        <ThumbDownIcon/>
-                    </IconButton>
-                    <p className={classes.p}>{post.dislike}</p>
-                </div>
-                <div>
-                    <IconButton size="small">
-                        <FavoriteBorderIcon/>
-                    </IconButton>
-                </div>
-                <div>
-                    <IconButton size="small">
-                        <EditIcon/>
-                    </IconButton>
-                </div>
-            </Grid>
-        </div>
+            <div className={classes.voteElements}>
+                <TextWithLogoButton text={props.post.like} icon={<ThumbUpIcon/>} onClick={() => userVote(1)}/>
+                <TextWithLogoButton text={props.post.dislike} icon={<ThumbDownIcon/>} onClick={() => userVote(-1)}/>
+            </div>
     )
 }
 

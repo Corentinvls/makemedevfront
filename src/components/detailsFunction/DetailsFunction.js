@@ -1,57 +1,115 @@
-import React, {useState} from 'react';
+import React from 'react';
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import Grid from "@material-ui/core/Grid";
-import generateChipsLink from "../../utils/generateChipsLink";
-import generateChipsTooltip from "../../utils/generateChipsTooltip";
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import ThumbDownIcon from '@material-ui/icons/ThumbDown';
-import IconButton from "@material-ui/core/IconButton";
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import Button from "@material-ui/core/Button";
 import LikeDislikeVote from "./LikeDislikeVote";
-import DisplayFunction from "./DisplayFunction";
-import ParamsReturn from "./ParamsReturn";
-import CreationBar from "./CreationBar";
-import ShowComments from "../comments/ShowComments";
+import 'draft-js-static-toolbar-plugin/lib/plugin.css';
+import Button from "@material-ui/core/Button";
+import {updatePosts, updateUser} from "../../store/actions";
 import {connect} from "react-redux";
-
-
-const useStyles = makeStyles((theme) => ({
-    flexRow: {
-        display: "flex",
-    }
-}));
+import {Add} from "@material-ui/icons";
+import CardContent from "@material-ui/core/CardContent";
+import Card from "@material-ui/core/Card";
+import TitleDetails from "./TitleDetails";
+import DescriptionComponent from "../../utils/components/DescriptionComponent";
+import CodeMirrorRead from "../../utils/components/CodeMirrorRead";
+import CommentaryComponent from "./CommentaryComponent";
+import AddCommentaryComponent from "./AddCommentaryComponent";
+import {useHistory} from "react-router";
 
 
 function DetailsFunction(props) {
-
     const classes = useStyles();
+    const history = useHistory()
 
     return (
-        <Grid container className={classes.flexRow}>
-            <Grid item xs={2}>
-            </Grid>
-            <Grid item xs={8} className={classes.flexRow}>
-                <LikeDislikeVote {...props}/>
-                <div style={{width:'100%'}}>
-                    <DisplayFunction />
-                    <CreationBar {...props} />
-                </div>
-            </Grid>
-            <Grid item xs={2}>
-                <ParamsReturn {...props}/>
-            </Grid>
-            <Grid item xs={2}>
-            </Grid>
-            <Grid item xs={10}>
-                <div>
-                    <ShowComments commentary={props.post.commentary}/>
-                </div>
-            </Grid>
-        </Grid>
-
+        <>
+            {props.posts.post.map(post => {
+                return (
+                    <Card style={{
+                        backgroundColor: "#f4f5f7",
+                        marginBottom: 15
+                    }}>
+                        <TitleDetails
+                            pseudo={post.author.pseudo}
+                            avatar={post.author.avatar}
+                            title={"Solution by "}
+                            variant={"h5"}
+                            date={post.creationDate}
+                            action={
+                                <LikeDislikeVote post={post}/>
+                            }
+                        />
+                        <xontent>
+                            <div className={classes.containerSolution}>
+                                <div className={classes.containerFunction}>
+                                    <DescriptionComponent description={post.description}/>
+                                    <CodeMirrorRead function={post.function}/>
+                                    <Button
+                                        style={{marginTop: 5}}
+                                        variant="contained"
+                                        color="primary"
+                                        startIcon={<Add/>}
+                                        onClick={() => history.push("/improve/" + props.mainId + "/" + post._id)}>
+                                        Improve
+                                    </Button>
+                                    <CommentaryComponent commentary={post.commentary}/>
+                                    <AddCommentaryComponent id={post._id}/>
+                                </div>
+                            </div>
+                        </xontent>
+                    </Card>
+                )
+            })}
+        </>
 
     );
 }
 
-export default DetailsFunction
+const useStyles = makeStyles((theme) => ({
+    flexRow: {
+        display: "flex",
+        justifyContent: "center"
+    },
+    containerSolution: {
+        display: "flex",
+        flexGrow: 1
+    },
+    containerFunction: {
+        marginLeft: 10,
+        width: "100%"
+    },
+    functionCard: {
+        width: "100%",
+        marginBottom: 5
+    },
+    pos: {
+        marginBottom: 12,
+    },
+    editor: {
+        minHeight: 140,
+        boxSizing: "border-box",
+        border: "1 solid #ddd",
+        cursor: "text",
+        borderRadius: 2,
+        boxShadow: "inset 0px 1px 8px -3px #ABABAB",
+        background: "#ffffff",
+    },
+    containerTitle: {
+        display: "flex",
+        flexGrow: 1,
+        alignItems: "center"
+    },
+    titleElements: {
+        fontSize: 30,
+    },
+}));
+
+const mapDispatchToProps = dispatch => {
+    return {
+        updateUser: (user, token) => dispatch(updateUser(user, token)),
+        updatePosts: (posts) => dispatch(updatePosts(posts))
+    };
+};
+
+export default connect(null, mapDispatchToProps)(DetailsFunction)
+
+

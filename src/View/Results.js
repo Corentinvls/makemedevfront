@@ -21,7 +21,7 @@ function Results() {
 
     useEffect(() => {
         getSearchPosts(id)
-    },[])
+    }, [id])
 
     async function getSearchPosts(id) {
         let response = await searchPosts(id)
@@ -32,6 +32,7 @@ function Results() {
             setPosts([])
         }
     }
+
 
     return(
         <div className={classes.root}>

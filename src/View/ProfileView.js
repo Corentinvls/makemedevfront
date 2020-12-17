@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 function ProfileView(props) {
     const classes = useStyles();
 
-
+    console.log(props)
     const [user, setUser] = React.useState({
         "id": "",
         "pseudo": "",

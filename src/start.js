@@ -13,7 +13,7 @@ function createWindow() {
             nodeIntegration: true,
         },
     })
-
+    mainWindow.setMenu(null)
     mainWindow.loadURL(isDev())
 
     mainWindow.on('closed', () => {

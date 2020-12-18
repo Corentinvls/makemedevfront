@@ -10,8 +10,18 @@ import InputBase from "@material-ui/core/InputBase";
 import SignUp from "../register/SignUp";
 import SignIn from "../register/SignIn";
 import React from "react";
+import SearchTuto from "./SearchTuto";
 
 export default function AppBarComponent(props) {
+    const [anchorElSearch, setAnchorElSearch] = React.useState(null);
+    const handleClickSearch = (event) => {
+        setAnchorElSearch(event.currentTarget);
+    };
+    const handleCloseSearch = () => {
+        setAnchorElSearch(null);
+    };
+    const openSearch = Boolean(anchorElSearch);
+
     return <AppBar
         position="fixed"
         className={clsx(props.classes.appBar, {
@@ -33,11 +43,12 @@ export default function AppBarComponent(props) {
             <Link style={{textDecoration: "none"}} to={"/"}>
                 <BrandName className={props.classes.iconDesktop}/>
             </Link>
-            <div className={props.classes.search}>
+            <div className={props.classes.search} >
                 <IconButton type={"submit"} className={props.classes.searchIcon} aria-label="search">
                     <SearchIcon/>
                 </IconButton>
                 <InputBase
+                    onClick={(e)=>handleClickSearch(e)}
                     placeholder="Search…"
                     classes={{
                         root: props.classes.inputRoot,
@@ -45,7 +56,9 @@ export default function AppBarComponent(props) {
                     }}
                     inputProps={{"aria-label": "search"}}
                     onKeyDown={props.onKeyDown}
+
                 />
+                <SearchTuto open={openSearch} anchorEl={anchorElSearch} handleClose={handleCloseSearch}/>
             </div>
             <SignUp open={props.open1} onClose={props.onClose}
                     toggleSignDialogs={props.toggleSignDialogs}/>

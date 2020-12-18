@@ -29,7 +29,6 @@ function MenuDrawer(props) {
     const [displaySignUp, setDisplaySignUp] = React.useState(false);
     const [displaySignIn, setDisplaySignIn] = React.useState(false);
 
-
     const handleDrawerOpen = () => {
         setOpen(true);
     };

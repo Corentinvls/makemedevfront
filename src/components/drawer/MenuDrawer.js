@@ -2,32 +2,21 @@ import React from 'react';
 import clsx from 'clsx';
 import {fade, makeStyles, useTheme} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import PostAddIcon from '@material-ui/icons/PostAdd';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import {Link, useHistory} from "react-router-dom";
-import {ReactComponent as BrandName} from "../../assets/image/title.svg";
-import SearchIcon from "@material-ui/icons/Search";
-import InputBase from "@material-ui/core/InputBase";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import SignUp from "../register/SignUp";
-import SignIn from "../register/SignIn";
+import {useHistory} from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import Avatar from "@material-ui/core/Avatar";
 import {connect} from "react-redux";
 import {logOut} from "../../store/actions";
+import AppBarComponent from "./AppBarComponent";
+import MenuLogged from "./MenuLogged";
+import MenuLogOut from "./MenuLogOut";
+import AvatarWithPseudo from "../../utils/components/AvatarWithPseudo";
 
 const drawerWidth = 240;
 
@@ -115,61 +104,28 @@ function MenuDrawer(props) {
 
     function showIfLoginOrNot() {
         if (props.token.length > 0) {
-            return <>
-                <ListItem button onClick={() => history.push("/profile")}>
-                    <ListItemIcon>
-                        <AccountCircle/>
-                    </ListItemIcon>
-                    <ListItemText>
-                        Profile
-                    </ListItemText>
-                </ListItem>
-                <ListItem button onClick={() => history.push("/create")}>
-                    <ListItemIcon>
-                        <PostAddIcon/>
-                    </ListItemIcon>
-                    <ListItemText>
-                        Post a function
-                    </ListItemText>
-                </ListItem>
-                <ListItem button onClick={() => {
-                    props.logOut()
-                    history.push("/")
-                    // window.location.reload(false)
-                }}>
-                    <ListItemIcon>
-                        <ExitToAppIcon/>
-                    </ListItemIcon>
-                    <ListItemText>
-                        Log out
-                    </ListItemText>
-                </ListItem>
-            </>
+            return <MenuLogged onClick={() => history.push("/profile")}
+                               onClick1={() => history.push("/create")}
+                               onClick2={() => {
+                                     props.logOut()
+                                     history.push("/")
+                                 }}/>
         } else {
-            return <>
-                <ListItem button onClick={handleProfileMenuOpen}>
-                    <ListItemIcon>
-                        <AccountCircle/>
-                    </ListItemIcon>
-                    <ListItemText>
-                        SignIn or SignUp
-                    </ListItemText>
-                    {renderMenu}
-                </ListItem></>
+            return <MenuLogOut
+                onClick={handleProfileMenuOpen}
+                renderMenu={renderMenu}/>
         }
     }
 
     function showUserIfLoginOrNot() {
         if (props.token.length > 0) {
-            return <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                <Avatar alt={props.user.pseudo} src={props.user.avatar}/>
-                <div style={{marginLeft: 10}}>{props.user.pseudo}</div>
-            </div>;
+            return <AvatarWithPseudo pseudo={props.user.pseudo}
+                                     avatar={props.user.avatar}
+                                     marginLeft={10}/>;
         } else {
-            return <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                <Avatar alt="Guest"/>
-                <div style={{marginLeft: 10}}>Guest</div>
-            </div>;
+            return <AvatarWithPseudo pseudo={"Guest"}
+                                     avatar={"Guest"}
+                                     marginLeft={10}/>
         }
 
     }
@@ -177,48 +133,15 @@ function MenuDrawer(props) {
     return (
         <div className={classes.root}>
             <CssBaseline/>
-            <AppBar
-                position="fixed"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
-                })}
-            >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        className={clsx(classes.menuButton, {
-                            [classes.hide]: open,
-                        })}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                    <Link style={{textDecoration: 'none'}} to={"/"}>
-                        <BrandName className={classes.iconDesktop}/>
-                    </Link>
-                    <div className={classes.search}>
-                        <IconButton type={"submit"} className={classes.searchIcon} aria-label="search">
-                            <SearchIcon/>
-                        </IconButton>
-                        <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            inputProps={{'aria-label': 'search'}}
-                            onKeyDown={keyPress}
-                        />
-                    </div>
-                    <Link to="/about">About</Link>
-                    <SignUp open={displaySignUp} onClose={handleSignUp}
-                            toggleSignDialogs={toggleSignDialogs}/>
-                    <SignIn open={displaySignIn} onClose={handleSignIn}
-                            toggleSignDialogs={toggleSignDialogs}/>
-                </Toolbar>
-            </AppBar>
+            <AppBarComponent classes={classes}
+                             open={open}
+                             onClick={handleDrawerOpen}
+                             onKeyDown={keyPress}
+                             open1={displaySignUp}
+                             onClose={handleSignUp}
+                             toggleSignDialogs={toggleSignDialogs}
+                             open2={displaySignIn}
+                             onClose1={handleSignIn}/>
             <Drawer
                 variant="permanent"
                 className={clsx(classes.drawer, {
@@ -346,6 +269,7 @@ const useStyles = makeStyles((theme) => ({
     },
     inputRoot: {
         color: 'inherit',
+        width: "100%"
     },
     inputInput: {
         padding: theme.spacing(1, 1, 1, 0),
@@ -354,7 +278,7 @@ const useStyles = makeStyles((theme) => ({
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('md')]: {
-            width: '20ch',
+            width: '100%',
         },
     },
     iconDesktop: {

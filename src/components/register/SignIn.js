@@ -50,7 +50,7 @@ function SignIn(props) {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description">
             <DialogTitle id="simple-dialog-title" col={12}>
-                <Typography variant={"h2"}>Sign In</Typography>
+                <Typography variant={"h2"} component={"div"}>Sign In</Typography>
             </DialogTitle>
             <DialogContent>
                 <Formik

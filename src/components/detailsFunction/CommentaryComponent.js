@@ -24,7 +24,7 @@ export default function CommentaryComponent(props) {
                             date={commentary.date}
                         />
                         <CardContent style={{paddingTop:0,paddingBottom:0}}>
-                            <Typography style={{paddingTop:0,paddingBottom:0}} variant="body2" component="p">
+                            <Typography style={{paddingTop:0,paddingBottom:0}} variant="body2" component="div">
                                 <div dangerouslySetInnerHTML={{__html: converter.makeHtml(commentary.commentary)}}/>
                             </Typography>
                         </CardContent>

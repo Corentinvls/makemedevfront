@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function Results() {
+function ResultsView() {
     const classes = useStyles();
     let { id } = useParams();
     const [posts, setPosts] = React.useState([])
@@ -41,4 +41,4 @@ function Results() {
     )
 }
 
-export default Results
+export default ResultsView

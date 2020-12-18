@@ -24,16 +24,16 @@ export default function ActivityCards(props) {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={2}>
+                <Grid container spacing={2} alignItems="center" justify="space-around">
+                    <Grid item>
                         {props.icon}
                     </Grid>
-                    <Grid item xs={8} sm container>
+                    <Grid item sm container>
                         <Typography gutterBottom variant="subtitle1">
                             {props.post.name}
                         </Typography>
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item >
                         <Button
                             variant="contained"
                             size="small"

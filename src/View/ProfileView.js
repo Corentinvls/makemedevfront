@@ -1,6 +1,5 @@
 import React from 'react';
-import {connect} from "react-redux/";
-
+import {connect} from "react-redux";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -9,7 +8,6 @@ import {logOut, updateUser} from "../store/actions";
 import {setUpdateUser} from "../request/userRequest";
 import EditableField from "../components/profile/EditableField";
 import {getPostById} from "../request/postRequest";
-import RecipeReviewCard from "../components/cards/cardFunction/cardFunction";
 import GridList from "@material-ui/core/GridList";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ActivityCards from "../components/profile/ActivityCards";
@@ -17,6 +15,7 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import CommentIcon from '@material-ui/icons/Comment';
 import Container from "@material-ui/core/Container";
+import CardFunctionNameProfile from "../components/cards/cardProfile/CardFunctionNameProfile";
 
 const useStyles = makeStyles((theme) => ({
     large: {
@@ -151,19 +150,16 @@ function ProfileView(props) {
     }
 
     return (
-        <Container container
-                   direction="column"
+        <Container direction="column"
                    justify="space-between"
-                   alignItems="center"
                    fixed
         >
             <Paper className={classes.paperProfile}>
-                <Grid
-                    container
-                    direction="column"
-                    justify="space-between"
-                    alignItems="center"
-                    spacing={3}
+                <Grid container
+                      direction="column"
+                      justify="space-between"
+                      alignItems="center"
+                      spacing={3}
                 >
                     <Grid item>
                         <EditableAvatar pseudo={user.pseudo} avatar={user.avatar}
@@ -184,7 +180,7 @@ function ProfileView(props) {
                     <GridList className={classes.gridList} cols={9}>
                         {myPost.length >= 1 &&
                         myPost.map((post, key) => {
-                            return <RecipeReviewCard post={post} key={key}/>
+                            return <CardFunctionNameProfile post={post} key={key}/>
                         })
                         }
                     </GridList>
@@ -193,10 +189,10 @@ function ProfileView(props) {
 
             <Paper className={classes.paperProfile}>
 
-                <h2>My activity</h2>
+                <h2>My activities</h2>
                 <Grid container>
                     <Grid item xs={12} sm={6}>
-                        <h3>Like</h3>
+                        <h3>Likes</h3>
                         <Paper className={classes.paperProfile}
                                style={{maxHeight: 400, overflow: 'auto', minHeight: 200,}}>
                             {myLike.length >= 1 &&
@@ -205,7 +201,7 @@ function ProfileView(props) {
                             })}
                         </Paper>
                     </Grid>
-                    <Grid item xs={12} sm={6}><h3>Dislike</h3>
+                    <Grid item xs={12} sm={6}><h3>Dislikes</h3>
                         <Paper className={classes.paperProfile}
                                style={{maxHeight: 400, overflow: 'auto', minHeight: 200,}}>
                             {myDislike.length >= 1 &&
@@ -214,7 +210,7 @@ function ProfileView(props) {
                             })}
                         </Paper>
                     </Grid>
-                    <Grid item xs={12} sm={6}><h3>Response</h3>
+                    <Grid item xs={12} sm={6}><h3>Responses</h3>
                         <Paper className={classes.paperProfile}
                                style={{maxHeight: 400, overflow: 'auto', minHeight: 200,}}>
                             {myResponse.length >= 1 &&
@@ -223,7 +219,7 @@ function ProfileView(props) {
                             })}
                         </Paper>
                     </Grid>
-                    <Grid item xs={12} sm={6}><h3>comment</h3>
+                    <Grid item xs={12} sm={6}><h3>Comments</h3>
                         <Paper className={classes.paperProfile}
                                style={{maxHeight: 400, overflow: 'auto', minHeight: 200,}}>
                             {myComment.length >= 1 &&

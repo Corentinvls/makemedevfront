@@ -6,9 +6,14 @@ async function postUser(data, url) {
         return result.data
     }).catch(
         err => {
-            return err.response.data;
+            if(err.response){
+                return err.response.data;
+            }else{
+                return err
+            }
+
         }
-    );
+    )
 }
 
 async function updateUser(data, url, config = {}) {
@@ -16,9 +21,14 @@ async function updateUser(data, url, config = {}) {
         return result.data
     }).catch(
         err => {
-            return err.response.data;
+            if(err.response){
+                return err.response.data;
+            }else{
+                return err
+            }
+
         }
-    );
+    )
 }
 
 export async function setSignUp(data) {

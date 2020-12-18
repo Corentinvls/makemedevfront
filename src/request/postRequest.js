@@ -7,17 +7,26 @@ async function postPost(data, url, config = {}) {
         return result.data
     }).catch(
         err => {
-            return err.response.data;
-        }
-    );
-}
+            if(err.response){
+                return err.response.data;
+            }else{
+                return err
+            }
 
+        }
+    )
+}
 async function getPosts(data, url) {
     return await axios.get( url + data).then(result => {
         return result.data
     }).catch(
         err => {
-            return err.response.data;
+            if(err.response){
+                return err.response.data;
+            }else{
+                return err
+            }
+
         }
     )
 }

@@ -62,6 +62,7 @@ function ProfileView(props) {
     const [myDislike, setDislike] = React.useState([])
     const [myResponse, setResponse] = React.useState([])
     const [myComment, setComment] = React.useState([])
+
     const [, setState] = React.useState()
     const handleChange = (field, value) => {
         const data = {
@@ -70,7 +71,13 @@ function ProfileView(props) {
             }
         }
         setUpdateUser(data).then((response) => {
-            props.updateUser(response.success, response.token)
+            if (response.error) {
+                alert(response.error.pseudo ? "Pseudo is already used" : null,
+                    response.error.mail ? "E-mail is already used" : null)
+                setState({})
+            } else if (response.success) {
+                props.updateUser(response.success, response.token)
+            }
         })
     }
     React.useEffect(() => {

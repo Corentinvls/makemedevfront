@@ -22,6 +22,7 @@ export default function EditableField(props) {
     };
 
     const handleClose = () => {
+        setField(props.field)
         setOpen(false);
     };
     const isInitialMount = useRef(true);
@@ -60,13 +61,22 @@ export default function EditableField(props) {
                         style={{backgroundColor: "#e34b4b"}}
                         size="small"
                         className={classes.button}
-                        onClick={() => setEdit(false)}
+                        onClick={() => {
+                            setField(props.field)
+                            setEdit(false)
+                        }}
                     ><CancelIcon/>
                     </Button>
                 </ButtonGroup>
 
-                <DialogChangeField open={open} handleClose={handleClose}
-                                   handleChangeField={() => props.handleChangeField(field)}/>
+                <DialogChangeField open={open} handleClose={() => {
+                    handleClose()
+                    setEdit(false)
+                }}
+                                   handleChangeField={() => {
+                                       props.handleChangeField(field)
+                                       setEdit(false)
+                                   }}/>
 
             </>
         }

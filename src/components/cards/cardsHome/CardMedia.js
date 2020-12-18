@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 
 export default function MediaCard(props) {
     const classes = useStyles();
-    const {title, description, buttonLabel, image, children} = props
+    const {title, description, image, children} = props
     return (
         <Card className={classes.root}>
             {image &&

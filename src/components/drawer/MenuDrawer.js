@@ -92,9 +92,7 @@ function MenuDrawer(props) {
     function keyPress(event) {
         const search = event.target.value
         let refactorSearch = []
-        search.split("").map((character) => {
-            character === "?" ? refactorSearch.push("3F") : refactorSearch.push(character)
-        })
+        search.split("").map((character) => character === "?" ? refactorSearch.push("3F") : refactorSearch.push(character))
         if (event.keyCode === 13) {
             let finalSearch = refactorSearch.length === 0 ? " " : refactorSearch.join("")
             history.push("/results/" + finalSearch)

@@ -5,7 +5,7 @@ import SignIn from "../components/register/SignIn";
 import HeaderHome from "../components/home/HeaderHome";
 import BodyHome from "../components/home/BodyHome";
 
-export default function Home() {
+export default function HomeView() {
     const [displaySignUp, setDisplaySignUp] = React.useState(false);
     const [displaySignIn, setDisplaySignIn] = React.useState(false);
     const toggleSignDialogs = () => {

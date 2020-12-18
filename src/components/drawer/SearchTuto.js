@@ -109,7 +109,8 @@ const content="  #### Function name\n" +
             >
             <Grid container justify="center"
                   alignItems="center"
-                  textAlign="center"spacing={3}>
+                  textAlign="center"spacing={3}
+            style={{padding:10 , overflow: 'hidden'}}>
                 <Grid item xs={12}>
                     <h3>Which are criteria to search function</h3>
                     <p>  You can search function by: name, params type, returns type, description, tags</p>

@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     body: {
         textAlign: "center",
         justifyContent:"center",
-        padding:30
+        padding: 10
     },
     cardMargin:{
         textAlign: "center",
@@ -47,9 +47,6 @@ export default function BodyHome() {
         <Grid>
             <Grid className={classes.body}>
                 <Typography className={classes.margin} variant="h2">For developers, by developers</Typography>
-                <Typography className={classes.margin} variant="body1">Make me Dev is an open community for anyone that codes. We post some functions, we help you get answers to your toughest coding questions, share knowledge with your coworkers in private, and find your next dream job.
-
-                </Typography>
             </Grid>
             <Grid container spacing={0} className={classes.body} >
                 <Grid container item xs={4} spacing={1} className={classes.card}>
@@ -60,15 +57,15 @@ export default function BodyHome() {
                     </MediaCard>
                 </Grid>
                 <Grid container item xs={4} spacing={1} className={classes.cardMargin}>
-                    <MediaCard title={"TEST"} buttonLabel={"buttonTest"}
+                    <MediaCard title={"Improve"} buttonLabel={"buttonTest"}
                                image={"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fthumbs.dreamstime.com%2Ft%2Fmaterial-design-background-mountain-landscape-vector-blue-illustration-92941969.jpg&f=1&nofb=1"}>
-                        Level up with Stack Overflow while you work. Share knowledge privately with your coworkers using our flagship Q&A engine.
+                        Post your functions ! Our community can be a help for you to improve your functions and skills.
                     </MediaCard>
                 </Grid>
                 <Grid container item xs={4} spacing={1} className={classes.card}>
-                    <MediaCard title={"TEST"} buttonLabel={"buttonTest"}
+                    <MediaCard title={"Find"} buttonLabel={"buttonTest"}
                                image={"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fthumbs.dreamstime.com%2Ft%2Fmaterial-design-background-mountain-landscape-vector-blue-illustration-92941969.jpg&f=1&nofb=1"}>
-                        Level up with Stack Overflow while you work. Share knowledge privately with your coworkers using our flagship Q&A engine.
+                        Want you find a function fast? Thanks to our research system it's fast and intuitive !
                     </MediaCard>
                 </Grid>
             </Grid>
